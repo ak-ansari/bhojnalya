@@ -1,0 +1,11 @@
+@import 'tailwindcss';
+/* The design tokens live once, in the shared preset. */
+@config '@bhojnalya/config/tailwind';
+/* The shared components' class names, which v4's automatic scan does not reach. */
+@source '../../../packages/ui/src';
+
+@layer base {
+  body {
+    @apply bg-canvas font-sans text-fg antialiased;
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "common": {
+    "brand": "Bhojnalya",
+    "loading": "Loading…",
+    "offline": {
+      "title": "You're offline."
+    }
+  },
+  "device": {
+    "register": {
+      "title": "Set up this tablet once.",
+      "intro": "Pick what this screen is for. It stays ready for your staff from then on.",
+      "question": "What is this screen for?",
+      "pos": {
+        "name": "Billing counter",
+        "hint": "Take orders, print bills and KOTs. Works without internet."
+      },
+      "kds": {
+        "name": "Kitchen display",
+        "hint": "Shows tickets to the kitchen. Needs internet."
+      },
+      "stubNote": "Owner sign-in and device pairing are not built yet; this choice is stored on this device only."
+    }
+  },
+  "pos": {
+    "title": "Billing counter",
+    "nav": {
+      "label": "Billing counter sections",
+      "order": "Order"
+    },
+    "home": {
+      "empty": "No open orders yet."
+    },
+    "offline": {
+      "body": "Keep billing as usual. Bills are saved on this tablet and sync on their own when the internet is back. QR and Swiggy/Zomato orders are paused."
+    }
+  },
+  "kds": {
+    "title": "Kitchen display",
+    "home": {
+      "empty": "No tickets right now."
+    },
+    "offline": {
+      "body": "Reconnecting… New tickets appear when the internet is back. Use the printed KOTs until then."
+    }
+  }
+}

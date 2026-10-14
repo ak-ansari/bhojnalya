@@ -2,7 +2,9 @@
   "extends": "@bhojnalya/config/tsconfig/web.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist"
+    "noEmit": true,
+    "types": ["vite/client", "vite-plugin-pwa/client"],
+    "paths": { "@/*": ["./src/*"] }
   },
   "include": ["src"]
 }

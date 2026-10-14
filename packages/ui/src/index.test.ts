@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { workspace } from './index.js';
+import * as ui from './index.js';
 
-describe('@bhojnalya/ui scaffold', () => {
-  it('exports its workspace name', () => {
-    expect(workspace).toBe('@bhojnalya/ui');
+describe('@bhojnalya/ui', () => {
+  it('exports the shared primitives the three apps adopt', () => {
+    expect(Object.keys(ui).sort()).toEqual(
+      ['Banner', 'Button', 'buttonVariants', 'cn', 'formatINR'].sort(),
+    );
   });
 
   it('runs its tests in UTC whatever the machine timezone is', () => {

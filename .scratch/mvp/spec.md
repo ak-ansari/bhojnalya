@@ -40,3 +40,6 @@ the work.
 - 02: paise are digit strings on the wire (ADR 0018); tax rates are basis points (`taxRateBp`); JSON keys are camelCase (the skill's snake_case conflict is still open). [ticket](issues/02-contracts-core.md)
 - 05: `withTenant` + `app.enable_tenant_rls`; explicit per-table grants; pre-auth lookups via SECURITY DEFINER (ADR 0019). [ticket](issues/05-db-tenancy-identity-rls.md)
 - 03: `computeInvoice` takes contract-shaped lines (`taxRateBp`); discount comes off taxable value, service charge on what remains (ADR 0017). Property suite has a 60 s timeout because it flakes under load. [ticket](issues/03-billing-engine-totals.md)
+- 12: admin is Vite + React Router 7 + Tailwind v3 (to move to v4); keeps a local `formatINR` and session context. [ticket](issues/12-admin-shell.md)
+- 11: menu is Vite + React + wouter + Tailwind v4; 67 KB of the 120 KB budget is used, and TanStack Query + socket.io + zod will make it tight (ADR 0023). [ticket](issues/11-menu-shell.md)
+- 09: every domain table is outlet-scoped; snapshots have no FK to the menu; KOT numbers are per device per business date; aggregator store lookup happens before sign-in (ADR 0021); there are no DB format CHECKs on text columns yet. [ticket](issues/09-db-domain-tables.md)

@@ -1,5 +1,23 @@
 # Update Log
 
+## 2026-10-14 — the domain tables, and the guest menu and admin shells
+
+- **Creation**: `packages/db` migration `0002_domain_tables`: menu,
+  ordering, kitchen, billing, aggregator, sync and reporting tables, all
+  outlet-scoped under RLS. The financial tables, `sync_ops` and `kot_items`
+  are insert and read only for `app_user` (ticket 09). Cases `db 0007`–`0014`.
+  ADR 0021: an aggregator webhook can only learn which outlet its store
+  belongs to.
+- **Creation**: `apps/menu`: Vite + React guest menu shell on `/t/:qrToken`
+  with outlet branding, and a build that fails above 120,000 B of gzipped JS
+  (67,030 B today) (ticket 11). Cases `menu 0001`–`0005`. ADR 0023: full
+  React, with every script counted.
+- **Creation**: `apps/admin`: Vite + React owner and platform shell, a login
+  stub, the view-as banner and `formatINR` (ticket 12). Cases
+  `admin 0001`–`0004`.
+- **Not changed**: admin is on Tailwind v3 and menu on v4. They will be
+  aligned on v4 once ticket 10 fills in the shared preset.
+
 ## 2026-10-14 — contracts, invoice numbering, the tenancy schema, local Docker and CI
 
 - **Creation**: `packages/contracts`: money, UUIDv7 ids, the error envelope,

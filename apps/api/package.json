@@ -7,13 +7,39 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:int": "vitest run --config vitest.int.config.ts",
+    "start": "node dist/main.js",
+    "migrate": "node dist/migrate.js"
+  },
+  "dependencies": {
+    "@asteasolutions/zod-to-openapi": "9.1.0",
+    "@bhojnalya/contracts": "workspace:*",
+    "@bhojnalya/db": "workspace:*",
+    "@nestjs/common": "11.2.6",
+    "@nestjs/core": "11.2.6",
+    "@nestjs/platform-express": "11.2.6",
+    "drizzle-orm": "0.45.4",
+    "nestjs-pino": "5.3.1",
+    "pg": "8.23.1",
+    "pg-boss": "12.35.1",
+    "pino": "10.3.1",
+    "pino-http": "11.0.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "zod": "4.6.5"
   },
   "devDependencies": {
     "@bhojnalya/config": "workspace:*",
+    "@nestjs/testing": "11.2.6",
+    "@testcontainers/postgresql": "12.2.1",
+    "@types/express": "5.0.6",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.23.1",
+    "@types/supertest": "7.2.1",
     "eslint": "9.39.5",
+    "supertest": "7.3.0",
     "typescript": "5.9.3",
-    "vitest": "3.2.7",
-    "@types/node": "22.20.5"
+    "vitest": "3.2.7"
   }
 }

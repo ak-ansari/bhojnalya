@@ -10,3 +10,4 @@ export * from './billing.js';
 export * from './aggregators.js';
 export * from './sync.js';
 export * from './reporting.js';
+export * from './idempotency.js';

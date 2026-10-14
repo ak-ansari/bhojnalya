@@ -1,0 +1,14 @@
+# Build context is the repo root; only sources and manifests go in.
+**/node_modules
+**/dist
+**/.turbo
+**/coverage
+.git
+.claude
+.scratch
+design
+docs
+infra
+**/*.md
+**/.env
+**/.env.*

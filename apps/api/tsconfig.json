@@ -2,7 +2,10 @@
   "extends": "@bhojnalya/config/tsconfig/node.json",
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "dist"
+    "outDir": "dist",
+    // Nest's decorators. No emitDecoratorMetadata: every injection names its
+    // token with @Inject, so Vitest's esbuild and tsc build the same graph.
+    "experimentalDecorators": true
   },
   "include": ["src"]
 }

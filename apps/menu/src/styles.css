@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+@config '@bhojnalya/config/tailwind';
+
+/* Guest menu tokens, from design/ui-board QrMenu. Move to the shared preset once it carries tokens. */
+@theme {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --color-ink: #1b2230;
+  --color-muted: #5b6577;
+  --color-line: #eef0f4;
+  --color-chip-line: #e3e6eb;
+  --color-surface: #fafaf9;
+  --color-veg: #15803d;
+  --color-veg-line: #bbe5c8;
+  --color-veg-tint: #e8f7ee;
+  --color-veg-ink: #166534;
+  --color-egg: #ca8a04;
+  --color-egg-line: #a16207;
+  --color-non-veg: #7c2d12;
+}
+
+/* The outlet's colour arrives at runtime as --brand on the page root (TRD §10). */
+@theme inline {
+  --color-brand: var(--brand);
+}
+
+:root {
+  --brand: #6b3a1f;
+}
+
+@utility border-mark {
+  border-width: 1.5px;
+}
+
+@utility clip-triangle {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}

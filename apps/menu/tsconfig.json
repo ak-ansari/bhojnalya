@@ -1,8 +1,11 @@
 {
   "extends": "@bhojnalya/config/tsconfig/web.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist"
+    "noEmit": true,
+    "types": ["vite/client", "node"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "scripts"]
 }

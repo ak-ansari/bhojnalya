@@ -1,0 +1,8 @@
+{
+  "extends": "@bhojnalya/config/tsconfig/web.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["vite.config.ts", "vitest.config.ts", "scripts"]
+}

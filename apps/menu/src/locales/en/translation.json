@@ -1,0 +1,24 @@
+{
+  "menu": {
+    "header": {
+      "table": "You're at Table {{table}} · order here, pay at the counter"
+    },
+    "vegOnly": "Veg only",
+    "categories": "Menu categories",
+    "empty": "Nothing in this section is veg. Turn off Veg only to see everything.",
+    "diet": {
+      "veg": "Veg",
+      "egg": "Contains egg",
+      "non_veg": "Non-veg"
+    },
+    "item": {
+      "unavailable": "Unavailable",
+      "soldOut": "Sold out for now. Check back soon.",
+      "customisable": "customisable"
+    }
+  },
+  "notFound": {
+    "title": "This link isn't a table's menu",
+    "body": "Scan the QR code on your table again, or ask a member of staff."
+  }
+}

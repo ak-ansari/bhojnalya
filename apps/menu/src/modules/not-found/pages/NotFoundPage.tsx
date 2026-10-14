@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 export function NotFoundPage() {
   const { t } = useTranslation();
   return (
-    <main className="flex min-h-dvh flex-col justify-center gap-2 bg-surface px-6 font-sans text-ink">
+    <main className="flex min-h-dvh flex-col justify-center gap-2 bg-surface-sunken px-6 font-sans text-fg">
       <h1 className="text-lg font-bold">{t('notFound.title')}</h1>
-      <p className="text-sm text-muted">{t('notFound.body')}</p>
+      <p className="text-sm text-fg-muted">{t('notFound.body')}</p>
     </main>
   );
 }

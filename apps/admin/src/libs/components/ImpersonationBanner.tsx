@@ -24,7 +24,7 @@ export function ImpersonationBanner() {
   return (
     <div
       role="alert"
-      className="flex flex-wrap items-center gap-3 bg-red-700 px-6 py-3 text-sm text-white"
+      className="flex flex-wrap items-center gap-3 bg-danger px-6 py-3 text-sm text-white"
     >
       <strong>{t('common.impersonation.title')}</strong>
       <span className="flex-1">{t('common.impersonation.body')}</span>

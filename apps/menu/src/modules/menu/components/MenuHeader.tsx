@@ -22,14 +22,16 @@ export function MenuHeader({ menu, vegOnly, onToggleVeg }: MenuHeaderProps) {
         </div>
         <div className="flex-1">
           <h1 className="text-lg font-bold">{menu.outletName}</h1>
-          <p className="text-sm text-muted">{t('menu.header.table', { table: menu.tableLabel })}</p>
+          <p className="text-sm text-fg-muted">
+            {t('menu.header.table', { table: menu.tableLabel })}
+          </p>
         </div>
       </div>
       <button
         type="button"
         aria-pressed={vegOnly}
         onClick={onToggleVeg}
-        className={`inline-flex h-11 items-center gap-2 self-end rounded-full border border-veg-line px-3 text-xs font-bold text-veg-ink ${vegOnly ? 'bg-veg-tint' : 'bg-white'}`}
+        className={`inline-flex h-11 items-center gap-2 self-end rounded-full border border-veg-line px-3 text-xs font-bold text-veg-ink ${vegOnly ? 'bg-veg-tint' : 'bg-surface'}`}
       >
         <VegMark diet="veg" />
         {t('menu.vegOnly')}

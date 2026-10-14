@@ -22,7 +22,7 @@ describe('ImpersonationBanner', () => {
       expect(banner).toHaveTextContent(
         'Everything you do now is written to the audit log as you, on behalf of the owner.',
       );
-      expect(banner).toHaveClass('bg-red-700');
+      expect(banner).toHaveClass('bg-danger');
     },
   );
 

@@ -19,10 +19,10 @@ export function AppShell({
   items: NavItem[];
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-canvas text-fg">
       <ImpersonationBanner />
       <div className="flex flex-1 flex-col md:flex-row">
-        <aside className="bg-slate-800 p-4 text-slate-300 md:w-60">
+        <aside className="bg-ink p-4 text-ink-soft md:w-60">
           <p className="mb-4 px-3 text-base font-bold text-white">{brand}</p>
           <nav aria-label={navLabel} className="flex flex-row flex-wrap gap-1 md:flex-col">
             {items.map((item) => (
@@ -43,6 +43,6 @@ export function AppShell({
 function navLinkClass({ isActive }: { isActive: boolean }): string {
   const base = 'flex min-h-11 items-center rounded-lg px-3 text-sm font-semibold';
   return isActive
-    ? `${base} bg-orange-700 text-white`
-    : `${base} hover:bg-slate-700 hover:text-white`;
+    ? `${base} bg-saffron text-white`
+    : `${base} hover:bg-ink-raised hover:text-white`;
 }

@@ -21,7 +21,7 @@ export function VegMark({ diet }: { diet: Diet }) {
     <span
       role="img"
       aria-label={t(`menu.diet.${diet}`)}
-      className={`inline-flex size-3.5 flex-none items-center justify-center rounded-sm border-mark bg-white ${BOX[diet]}`}
+      className={`inline-flex size-3.5 flex-none items-center justify-center rounded-sm border-mark bg-surface ${BOX[diet]}`}
     >
       <i className={DOT[diet]} />
     </span>

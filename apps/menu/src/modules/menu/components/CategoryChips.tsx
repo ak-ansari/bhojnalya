@@ -22,7 +22,7 @@ export function CategoryChips({ categories, selectedId, onSelect }: CategoryChip
             onClick={() => {
               onSelect(category.id);
             }}
-            className={`h-11 flex-none rounded-full border px-4 text-sm font-semibold ${selected ? 'border-brand bg-brand text-white' : 'border-chip-line bg-white text-ink'}`}
+            className={`h-11 flex-none rounded-full border px-4 text-sm font-semibold ${selected ? 'border-brand bg-brand text-white' : 'border-line bg-surface text-fg'}`}
           >
             {category.name}
           </button>

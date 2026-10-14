@@ -26,9 +26,9 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
         id={id}
         aria-invalid={error ? true : undefined}
         aria-describedby={messageId}
-        className="min-h-11 rounded-lg border border-slate-300 px-3 aria-[invalid=true]:border-red-700"
+        className="min-h-11 rounded-lg border border-line-strong bg-surface px-3 aria-[invalid=true]:border-danger"
       />
-      <p id={messageId} className={`min-h-10 text-xs ${error ? 'text-red-700' : 'text-slate-500'}`}>
+      <p id={messageId} className={`min-h-10 text-xs ${error ? 'text-danger' : 'text-fg-muted'}`}>
         {error ?? hint}
       </p>
     </div>

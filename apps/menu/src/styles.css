@@ -1,14 +1,12 @@
 @import 'tailwindcss';
+/* The colour, type and radius tokens live once, in the shared preset. */
 @config '@bhojnalya/config/tailwind';
 
-/* Guest menu tokens, from design/ui-board QrMenu. Move to the shared preset once it carries tokens. */
+/* Guest-only tokens, from design/ui-board QrMenu. The guest menu loads no
+   webfont on 4G, so it swaps the preset's DM Sans for the system stack. */
 @theme {
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --color-ink: #1b2230;
-  --color-muted: #5b6577;
-  --color-line: #eef0f4;
-  --color-chip-line: #e3e6eb;
-  --color-surface: #fafaf9;
+  /* The veg / egg / non-veg marks: the preset has no diet colours yet. */
   --color-veg: #15803d;
   --color-veg-line: #bbe5c8;
   --color-veg-tint: #e8f7ee;

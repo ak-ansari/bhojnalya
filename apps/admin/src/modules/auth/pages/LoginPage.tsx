@@ -27,7 +27,7 @@ export function LoginPage() {
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center gap-4 p-6">
       <h1 className="text-2xl font-bold">{t('auth.login.title')}</h1>
-      <p className="text-slate-600">{t('auth.login.subtitle')}</p>
+      <p className="text-fg-body">{t('auth.login.subtitle')}</p>
       <form noValidate onSubmit={(event) => void onSubmit(event)} className="flex flex-col gap-2">
         <TextField
           label={t('auth.login.identifier')}
@@ -47,7 +47,7 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="min-h-11 rounded-lg bg-orange-700 px-4 font-semibold text-white disabled:opacity-60"
+          className="min-h-11 rounded-lg bg-saffron px-4 font-semibold text-white disabled:opacity-60"
         >
           {isSubmitting ? t('auth.login.submitting') : t('auth.login.submit')}
         </button>

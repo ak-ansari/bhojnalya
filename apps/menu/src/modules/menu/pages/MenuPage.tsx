@@ -20,9 +20,9 @@ export function MenuPage() {
   return (
     <div
       style={brandingStyle(menu.branding)}
-      className="flex min-h-dvh flex-col bg-surface font-sans text-ink tabular-nums"
+      className="flex min-h-dvh flex-col bg-surface-sunken font-sans text-fg tabular-nums"
     >
-      <header className="flex flex-col gap-3 border-b border-line bg-white px-4 pt-4 pb-3">
+      <header className="flex flex-col gap-3 border-b border-surface-muted bg-surface px-4 pt-4 pb-3">
         <MenuHeader
           menu={menu}
           vegOnly={vegOnly}
@@ -39,7 +39,7 @@ export function MenuPage() {
       <main className="flex-1 px-4 pt-2 pb-24">
         <h2 className="mt-2.5 mb-1 text-lg font-bold">{category?.name}</h2>
         {items.length === 0 ? (
-          <p className="py-6 text-sm text-muted">{t('menu.empty')}</p>
+          <p className="py-6 text-sm text-fg-muted">{t('menu.empty')}</p>
         ) : (
           <ul>
             {items.map((item) => (

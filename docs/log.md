@@ -15,8 +15,16 @@
 - **Creation**: `apps/admin`: Vite + React owner and platform shell, a login
   stub, the view-as banner and `formatINR` (ticket 12). Cases
   `admin 0001`–`0004`.
-- **Not changed**: admin is on Tailwind v3 and menu on v4. They will be
-  aligned on v4 once ticket 10 fills in the shared preset.
+- **Creation**: `apps/app`: Vite + React PWA shell for the POS and KDS,
+  with lazy `/pos` and `/kds` route trees behind a role guard, an offline
+  strip, and a staff socket that refetches on every connect (ticket 10).
+  Cases `app 0101`–`0103`. ADR 0022: a new version of the till takes over
+  only on its next launch.
+- **Creation**: `packages/ui`: `formatINR`, `cn`, `Button` and `Banner`.
+  Cases `ui 0101`–`0102`. The shared Tailwind preset now holds the
+  Foundations design tokens.
+- **Not changed**: admin is still on Tailwind v3, and menu's own `@theme`
+  clashes with the preset's tokens. Ticket 24 aligns both.
 
 ## 2026-10-14 — contracts, invoice numbering, the tenancy schema, local Docker and CI
 

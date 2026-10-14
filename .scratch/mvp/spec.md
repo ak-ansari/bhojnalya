@@ -23,7 +23,7 @@ the work.
 | 0 | 01 scaffold |
 | 1 | 02 contracts, 03 billing totals, 04 numbering, 05 db tenancy+RLS, 06 infra, 07 CI |
 | 2 | 08 api skeleton, 09 db domain tables, 10 app shell, 11 menu shell, 12 admin shell |
-| 3 | 13 auth+devices, 16 POS local store |
+| 3 | 13 auth+devices, 16 POS local store, 24 Tailwind alignment |
 | 4 | 14 platform admin, 15 menu API, 17 sync API |
 | 5 | 18 POS screens, 23 owner/admin screens |
 | 6 | 19 KOT+KDS, 22 reports |
@@ -43,3 +43,4 @@ the work.
 - 12: admin is Vite + React Router 7 + Tailwind v3 (to move to v4); keeps a local `formatINR` and session context. [ticket](issues/12-admin-shell.md)
 - 11: menu is Vite + React + wouter + Tailwind v4; 67 KB of the 120 KB budget is used, and TanStack Query + socket.io + zod will make it tight (ADR 0023). [ticket](issues/11-menu-shell.md)
 - 09: every domain table is outlet-scoped; snapshots have no FK to the menu; KOT numbers are per device per business date; aggregator store lookup happens before sign-in (ADR 0021); there are no DB format CHECKs on text columns yet. [ticket](issues/09-db-domain-tables.md)
+- 10: `apps/app` on Vite 7 + Tailwind v4 + React Router 7 + Zustand; tokens are in the shared preset; `packages/ui` has `formatINR`/`Button`/`Banner`; the SW only updates on next launch (ADR 0022); offline means `navigator.onLine` only. [ticket](issues/10-app-pwa-shell.md)

@@ -16,7 +16,9 @@
     "test:e2e": "turbo run test:e2e",
     "check": "turbo run build typecheck lint test",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:up": "docker compose -f infra/docker-compose.yml up -d --wait postgres",
+    "db:down": "docker compose -f infra/docker-compose.yml --profile \"*\" down"
   },
   "devDependencies": {
     "@bhojnalya/config": "workspace:*",

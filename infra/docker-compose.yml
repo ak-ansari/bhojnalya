@@ -1,0 +1,88 @@
+# Local development stack (TRD §15.1–15.2): postgres + caddy, with the api
+# behind the `api` profile until it has a real image (ticket 08).
+#
+#   pnpm db:up                                   # postgres only, waits for healthy
+#   docker compose -f infra/docker-compose.yml --profile api up -d
+#   pnpm db:down                                 # stop; add -v to wipe the volume
+#
+# Variables come from infra/.env (copy infra/.env.example). Compose reads it
+# automatically because it sits beside this file.
+
+name: bhojnalya
+
+services:
+  postgres:
+    image: postgres:16.10-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in infra/.env}
+      POSTGRES_DB: postgres
+      # Read by postgres/init/01-roles.sh on the first start of an empty volume.
+      DB_NAME: ${DB_NAME:-bhojnalya}
+      DB_OWNER_PASSWORD: ${DB_OWNER_PASSWORD:?set DB_OWNER_PASSWORD in infra/.env}
+      APP_USER_PASSWORD: ${APP_USER_PASSWORD:?set APP_USER_PASSWORD in infra/.env}
+      PLATFORM_ADMIN_PASSWORD: ${PLATFORM_ADMIN_PASSWORD:?set PLATFORM_ADMIN_PASSWORD in infra/.env}
+      TZ: UTC
+    # TRD §15.2 tuning for a 2 GB VPS; the API pool is 10 of these 50.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=512MB
+      - -c
+      - work_mem=8MB
+      - -c
+      - max_connections=50
+      - -c
+      - timezone=UTC
+    ports:
+      - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    shm_size: 256mb
+    healthcheck:
+      # Healthy only once the app database exists and app_user can log in,
+      # so `up --wait` returns after the init script has finished.
+      test:
+        - CMD-SHELL
+        - PGPASSWORD="$$APP_USER_PASSWORD" psql -h 127.0.0.1 -U app_user -d "$$DB_NAME" -tAc 'select 1'
+      interval: 2s
+      timeout: 3s
+      retries: 30
+      start_period: 10s
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    ports:
+      - '127.0.0.1:${CADDY_HTTP_PORT:-8080}:80'
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+  # Stub until ticket 08 ships apps/api's Dockerfile: answers 503 on :3000 so
+  # the Caddy routes can be exercised. Replace `image`/`command` with `build`.
+  api:
+    profiles: [api]
+    image: node:22.20.0-alpine
+    command:
+      - node
+      - -e
+      - "require('http').createServer((q,s)=>{s.writeHead(503,{'content-type':'application/json'});s.end(JSON.stringify({code:'NOT_BUILT',message:'api stub: see ticket 08',path:q.url}))}).listen(3000)"
+    environment:
+      NODE_ENV: development
+      TZ: UTC
+      PORT: 3000
+      DATABASE_URL: postgres://app_user:${APP_USER_PASSWORD}@postgres:5432/${DB_NAME:-bhojnalya}
+      MIGRATION_DATABASE_URL: postgres://bhojnalya_owner:${DB_OWNER_PASSWORD}@postgres:5432/${DB_NAME:-bhojnalya}
+      PLATFORM_ADMIN_DATABASE_URL: postgres://platform_admin:${PLATFORM_ADMIN_PASSWORD}@postgres:5432/${DB_NAME:-bhojnalya}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

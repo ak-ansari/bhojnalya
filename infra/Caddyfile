@@ -1,0 +1,20 @@
+# Local dev reverse proxy (TRD §15.2). Production adds the site address and
+# TLS; the routes stay the same. Frontends run on their own Vite dev servers.
+{
+	admin off
+	auto_https off
+}
+
+:80 {
+	encode zstd gzip
+
+	# REST under /api/v1 and the Socket.io transport (incl. websocket upgrade).
+	@api path /api /api/* /socket.io /socket.io/*
+	handle @api {
+		reverse_proxy api:3000
+	}
+
+	handle {
+		respond "bhojnalya: no route" 404
+	}
+}

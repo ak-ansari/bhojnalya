@@ -12,6 +12,11 @@
   `idempotency_keys` under RLS, and the `pgboss` schema.
 - **Change**: `infra/docker-compose.yml` runs a one-shot `migrate` service
   and the real `api`. Caddy now routes `/healthz`.
+- **Change**: `apps/admin` moves to Tailwind v4 on the shared preset and
+  uses token names. `apps/menu` drops the `@theme` colours the preset
+  already has, and keeps only brand, the system font and the diet marks
+  (ticket 24). Admin's colours move from slate to the design tokens on
+  purpose; menu looks the same.
 
 ## 2026-10-14 — the domain tables, and the guest menu and admin shells
 

@@ -1,5 +1,20 @@
 # Update Log
 
+## 2026-10-14 — the monorepo builds, typechecks, lints and tests
+
+- **Creation**: pnpm 10 + Turborepo 2 workspace (`pnpm-workspace.yaml`,
+  `turbo.json`, root `package.json`, `.nvmrc`). Node 22 is enforced with
+  `engineStrict`. `test:int`, `test:contract` and `test:e2e` are uncacheable.
+- **Creation**: `packages/config` — strict tsconfig bases (base, library,
+  node, web) with `noUncheckedIndexedAccess`, a type-aware ESLint 9 flat
+  config (`strictTypeChecked`), Prettier, a Vitest base that runs in UTC, and
+  a Tailwind preset stub.
+- **Creation**: the eight workspaces (`apps/{api,app,menu,admin}`,
+  `packages/{billing,contracts,db,ui}`) each get a `package.json`, tsconfig,
+  `src/index.ts` and one Vitest smoke test. No framework code.
+- **Change**: `CLAUDE.md` "Repository status" lists the real commands;
+  `.gitignore` covers dependencies, build output, caches and `.env`.
+
 ## 2026-10-14 — the five open stories are decided
 
 - **Creation**: `GLOSSARY.md` at the root: Order, KOT, KOT number, Missed

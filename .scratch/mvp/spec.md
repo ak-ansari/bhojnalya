@@ -32,3 +32,5 @@ the work.
 ## Decisions so far
 
 (Resolved tickets append a one-line gist + link here.)
+
+- 01: pnpm 10 + Turborepo 2 on Node 22; shared config in `packages/config`; library packages compile to `dist/` so tasks depend on `^build`. [ticket](issues/01-scaffold-monorepo.md)

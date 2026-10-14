@@ -1,0 +1,10 @@
+packages:
+  - apps/*
+  - packages/*
+
+# Refuse to install on anything but the Node version in engines (.nvmrc).
+engineStrict: true
+
+# pnpm 10 skips dependency install scripts unless they are listed here.
+onlyBuiltDependencies:
+  - esbuild

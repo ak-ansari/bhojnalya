@@ -1,0 +1,26 @@
+{
+  "name": "bhojnalya",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=22 <23"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:int": "turbo run test:int",
+    "test:contract": "turbo run test:contract",
+    "test:e2e": "turbo run test:e2e",
+    "check": "turbo run build typecheck lint test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@bhojnalya/config": "workspace:*",
+    "prettier": "3.9.10",
+    "turbo": "2.11.8"
+  }
+}

@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+dist/
+coverage/
+.turbo/
+design/
+docs/
+.scratch/
+.claude/
+*.md

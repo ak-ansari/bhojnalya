@@ -4,14 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository status
 
-This repo is **pre-code**: the workspaces are empty placeholders. The design is the source of truth:
+The monorepo is **scaffolded** (ticket 01): every workspace builds, typechecks, lints and runs one smoke test, but holds no product code yet. The design is the source of truth:
 
 - `docs/BHOJNALYA_PRD.md`: product requirements. Requirement IDs (M1, P4, G3, N2, ...) are cited throughout the TRD. (Its header still calls itself `omnidine_platform_prd_v2.md`.)
 - `docs/BHOJNALYA_TRD.md`: technical design for the Phase 1 MVP.
 
 "OmniDine OS" is a placeholder name; the repo is Bhojnalya. This is a multi-tenant restaurant OS for Indian cafés: POS + KDS + QR table ordering + Swiggy/Zomato through middleware (UrbanPiper).
 
-There are no build, lint or test commands yet. Once the monorepo is scaffolded (TRD §4.3), add the real commands here. Don't guess at them.
+### Commands
+
+Node 22 (`.nvmrc`; `engineStrict` refuses anything else) and pnpm 10, pinned through `packageManager` (`corepack enable` once). Run from the repo root:
+
+| Command | What |
+| --- | --- |
+| `pnpm install` | Install every workspace |
+| `pnpm turbo build typecheck lint test` (or `pnpm check`) | The full gate; must pass before a commit |
+| `pnpm build` / `pnpm typecheck` / `pnpm lint` / `pnpm test` | One Turborepo task across all workspaces |
+| `pnpm test:int` / `pnpm test:contract` / `pnpm test:e2e` | Uncacheable levels; no workspace defines them yet |
+| `pnpm format` / `pnpm format:check` | Prettier |
+| `pnpm turbo test --filter=@bhojnalya/billing` | One workspace (any task) |
+| `pnpm --filter @bhojnalya/billing exec vitest run src/index.test.ts` | One test file |
+
+Shared config lives in `packages/config` (tsconfig bases, ESLint flat config, Prettier, Vitest base that forces `TZ=UTC`, Tailwind preset stub). Each workspace's `tsconfig.json`, `eslint.config.js` and `vitest.config.ts` extend it. Library packages are compiled to `dist/` with `tsc`, so `typecheck`, `lint` and `test` depend on `^build`.
 
 ## Planned stack and layout (TRD §2, §4)
 

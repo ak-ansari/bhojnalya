@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Bhojnalya Node 22 service (apps/api)",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "sourceMap": true
+  }
+}

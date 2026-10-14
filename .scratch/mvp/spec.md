@@ -39,3 +39,4 @@ the work.
 - 04: invoice numbers are exactly 16 chars; FY and business date use a fixed IST offset (ADR 0016). [ticket](issues/04-billing-invoice-numbering.md)
 - 02: paise are digit strings on the wire (ADR 0018); tax rates are basis points (`taxRateBp`); JSON keys are camelCase (the skill's snake_case conflict is still open). [ticket](issues/02-contracts-core.md)
 - 05: `withTenant` + `app.enable_tenant_rls`; explicit per-table grants; pre-auth lookups via SECURITY DEFINER (ADR 0019). [ticket](issues/05-db-tenancy-identity-rls.md)
+- 03: `computeInvoice` takes contract-shaped lines (`taxRateBp`); discount comes off taxable value, service charge on what remains (ADR 0017). Property suite has a 60 s timeout because it flakes under load. [ticket](issues/03-billing-engine-totals.md)

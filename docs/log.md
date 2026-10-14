@@ -20,6 +20,12 @@
 - **Creation**: `.github/workflows/ci.yml`: format, lint, typecheck and test,
   then `test:int`, plus a non-blocking `pnpm audit`. Dependabot runs weekly
   (ticket 07).
+- **Creation**: `packages/billing`: `computeInvoice` computes line tax,
+  CGST/SGST, an order discount split by largest remainder, service charge
+  and round-off, plus Bill of Supply for composition and unregistered
+  outlets (ticket 03). Cases `billing 0001`–`0006`, nine golden files, the
+  contracts fixture among them. ADR 0017: a discount comes off the taxable
+  value, and service charge is charged on what remains.
 - **Change**: the test-case catalogue table lists `packages/contracts` and
   `packages/db`.
 

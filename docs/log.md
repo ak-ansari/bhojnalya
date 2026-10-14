@@ -1,5 +1,28 @@
 # Update Log
 
+## 2026-10-14 — contracts, invoice numbering, the tenancy schema, local Docker and CI
+
+- **Creation**: `packages/contracts`: money, UUIDv7 ids, the error envelope,
+  sync push/pull ops, socket events, shared enums and the sync-push fixture
+  (ticket 02). Cases `contracts 0001`–`0006`. ADR 0018: money crosses the
+  wire as a string of digits. Tax rates are basis points (`taxRateBp`).
+- **Creation**: `packages/billing/src/numbering`: invoice number format and
+  parse, the IST financial year, business date with the day-end cutoff, and
+  the clock guard (ticket 04). Cases `billing 0101`–`0104`. ADR 0016: Indian
+  time is a fixed offset, never the device's zone.
+- **Creation**: `packages/db`: tenancy and identity schema with RLS forced on
+  every tenant table, `withTenant`, and an isolation test that enumerates
+  tables (ticket 05). Cases `db 0001`–`0006`. ADR 0019: a caller with no
+  tenant can only learn which tenant holds its secret.
+- **Creation**: `infra/docker-compose.yml`: Postgres 16 (TRD §15.2 tuning)
+  with the `bhojnalya_owner`, `app_user` and `platform_admin` roles, Caddy
+  proxying `/api` and `/socket.io`, and `pnpm db:up` / `db:down` (ticket 06).
+- **Creation**: `.github/workflows/ci.yml`: format, lint, typecheck and test,
+  then `test:int`, plus a non-blocking `pnpm audit`. Dependabot runs weekly
+  (ticket 07).
+- **Change**: the test-case catalogue table lists `packages/contracts` and
+  `packages/db`.
+
 ## 2026-10-14 — the monorepo builds, typechecks, lints and tests
 
 - **Creation**: pnpm 10 + Turborepo 2 workspace (`pnpm-workspace.yaml`,

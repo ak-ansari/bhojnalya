@@ -10,6 +10,8 @@ its own catalogue beside its code:
 | :--- | :--- | :--- |
 | `docs/test-cases/` | cross-workspace contracts | `contract 0001` |
 | `packages/billing/docs/test-cases/` | the billing and GST engine | `billing 0001` |
+| `packages/contracts/docs/test-cases/` | the shared wire schemas | `contracts 0001` |
+| `packages/db/docs/test-cases/` | the schema, RLS and grants | `db 0001` |
 | `apps/api/docs/test-cases/` | the API, RLS, sync, jobs, webhooks | `api 0001` |
 | `apps/app/docs/test-cases/` | the POS and KDS | `app 0001` |
 | `apps/menu/docs/test-cases/` | the QR guest menu | `menu 0001` |

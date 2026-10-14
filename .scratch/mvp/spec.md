@@ -34,3 +34,8 @@ the work.
 (Resolved tickets append a one-line gist + link here.)
 
 - 01: pnpm 10 + Turborepo 2 on Node 22; shared config in `packages/config`; library packages compile to `dist/` so tasks depend on `^build`. [ticket](issues/01-scaffold-monorepo.md)
+- 07: GitHub Actions runs format, lint, typecheck and test, then `test:int`, and a non-blocking audit. [ticket](issues/07-ci-workflow.md)
+- 06: Compose with Postgres 16 and the roles `bhojnalya_owner` (migrations), `app_user` (API, no BYPASSRLS) and `platform_admin` (BYPASSRLS); tests reuse `infra/postgres/init/01-roles.sh`. [ticket](issues/06-infra-local-dev.md)
+- 04: invoice numbers are exactly 16 chars; FY and business date use a fixed IST offset (ADR 0016). [ticket](issues/04-billing-invoice-numbering.md)
+- 02: paise are digit strings on the wire (ADR 0018); tax rates are basis points (`taxRateBp`); JSON keys are camelCase (the skill's snake_case conflict is still open). [ticket](issues/02-contracts-core.md)
+- 05: `withTenant` + `app.enable_tenant_rls`; explicit per-table grants; pre-auth lookups via SECURITY DEFINER (ADR 0019). [ticket](issues/05-db-tenancy-identity-rls.md)

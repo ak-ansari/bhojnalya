@@ -20,7 +20,9 @@ Node 22 (`.nvmrc`; `engineStrict` refuses anything else) and pnpm 10, pinned thr
 | `pnpm install` | Install every workspace |
 | `pnpm turbo build typecheck lint test` (or `pnpm check`) | The full gate; must pass before a commit |
 | `pnpm build` / `pnpm typecheck` / `pnpm lint` / `pnpm test` | One Turborepo task across all workspaces |
-| `pnpm test:int` / `pnpm test:contract` / `pnpm test:e2e` | Uncacheable levels; no workspace defines them yet |
+| `pnpm test:int` | Integration tests on real Postgres via Testcontainers (Docker must be running); uncacheable |
+| `pnpm test:contract` / `pnpm test:e2e` | Uncacheable levels; no workspace defines them yet |
+| `pnpm db:up` / `pnpm db:down` | Local Postgres from `infra/docker-compose.yml` (copy `infra/.env.example` to `infra/.env` first) |
 | `pnpm format` / `pnpm format:check` | Prettier |
 | `pnpm turbo test --filter=@bhojnalya/billing` | One workspace (any task) |
 | `pnpm --filter @bhojnalya/billing exec vitest run src/index.test.ts` | One test file |

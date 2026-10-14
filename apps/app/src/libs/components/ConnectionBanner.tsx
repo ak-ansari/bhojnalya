@@ -8,9 +8,11 @@ import { useOnlineStatus } from '@/libs/connection/useOnlineStatus';
 
 export interface ConnectionBannerProps {
   role: DeviceRole;
+  /** Changes waiting to sync on this device; the strip says how many. */
+  waiting?: number;
 }
 
-export function ConnectionBanner({ role }: ConnectionBannerProps) {
+export function ConnectionBanner({ role, waiting = 0 }: ConnectionBannerProps) {
   const online = useOnlineStatus();
   const { t } = useTranslation();
   if (online) return null;
@@ -18,6 +20,7 @@ export function ConnectionBanner({ role }: ConnectionBannerProps) {
   return (
     <Banner tone="offline" title={t('common.offline.title')} icon={<WifiOffIcon />}>
       {t(`${role}.offline.body`)}
+      {waiting > 0 ? <> {t('pos.offline.waiting', { count: waiting })}</> : null}
     </Banner>
   );
 }

@@ -26,13 +26,56 @@
     "title": "Billing counter",
     "nav": {
       "label": "Billing counter sections",
-      "order": "Order"
+      "order": "Order",
+      "device": "Device"
     },
     "home": {
       "empty": "No open orders yet."
     },
     "offline": {
-      "body": "Keep billing as usual. Bills are saved on this tablet and sync on their own when the internet is back. QR and Swiggy/Zomato orders are paused."
+      "body": "Keep billing as usual. Bills are saved on this tablet and sync on their own when the internet is back. QR and Swiggy/Zomato orders are paused.",
+      "waiting_one": "{{count}} change is waiting to sync.",
+      "waiting_other": "{{count}} changes are waiting to sync."
+    },
+    "sync": {
+      "allSynced": "All synced",
+      "waiting_one": "{{count}} not synced",
+      "waiting_other": "{{count}} not synced",
+      "refused_one": "{{count}} refused",
+      "refused_other": "{{count}} refused"
+    },
+    "clock": {
+      "title": "This tablet's clock is behind its last bill.",
+      "body": "Billing is paused so no bill gets the wrong date. Set the correct date and time in the tablet's settings; billing starts again on its own."
+    },
+    "storage": {
+      "title": "Bills on this tablet are not protected yet.",
+      "install": "Add Bhojnalya to the Home Screen and open it from there, or Safari may delete bills that have not synced.",
+      "persist": "The browser may delete saved bills when the tablet runs low on space. Install the app so they are kept."
+    },
+    "device": {
+      "title": "This tablet",
+      "unsynced": {
+        "heading": "Changes not synced yet",
+        "none": "Everything on this tablet has synced.",
+        "count_one": "{{count}} change has not reached the server yet.",
+        "count_other": "{{count}} changes have not reached the server yet.",
+        "refused_one": "The server refused {{count}} of them; it stays on this tablet until you retry.",
+        "refused_other": "The server refused {{count}} of them; they stay on this tablet until you retry.",
+        "retry": "Retry refused changes",
+        "exportJson": "Export unsynced (JSON)",
+        "exportCsv": "Export unsynced (CSV)"
+      },
+      "reset": {
+        "heading": "Clear or reset",
+        "blocked_one": "Blocked: {{count}} change has not synced yet. Connect to the internet and wait for it to sync, or export it first.",
+        "blocked_other": "Blocked: {{count}} changes have not synced yet. Connect to the internet and wait for them to sync, or export them first.",
+        "clear": "Clear data on this tablet",
+        "clearHint": "Removes bills, orders and the invoice series from this tablet. It must be paired again before it can bill.",
+        "reset": "Reset this tablet",
+        "resetHint": "Clears the data and goes back to set-up.",
+        "cleared": "Data on this tablet was cleared."
+      }
     }
   },
   "kds": {

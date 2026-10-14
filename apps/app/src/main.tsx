@@ -10,6 +10,7 @@ import { appRoutes } from './app/routes';
 import './index.css';
 import { createQueryClient } from './libs/api/queryClient';
 import { createI18n } from './libs/i18n/i18n';
+import { PosDb } from './libs/local-db/db';
 import { connectStaffSocket } from './libs/socket/staffSocket';
 import { createDeviceStore } from './modules/device/store/deviceStore';
 
@@ -26,6 +27,7 @@ createRoot(rootElement).render(
       queryClient={createQueryClient()}
       i18n={createI18n()}
       deviceStore={createDeviceStore()}
+      localDb={new PosDb()}
       connectSocket={connectStaffSocket}
     >
       <RouterProvider router={router} />

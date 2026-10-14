@@ -1,6 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 
+import { POS_ROUTES } from '../constants/routes';
+
 /** The dark left rail of the POS: brand mark, then one link per section. */
 export function PosRail() {
   const { t } = useTranslation();
@@ -15,19 +17,24 @@ export function PosRail() {
       >
         B
       </span>
-      <NavLink
-        to="/pos"
-        end
-        className={({ isActive }) =>
-          `flex min-h-touch w-14 flex-col items-center justify-center rounded-control text-caption font-semibold ${
-            isActive
-              ? 'bg-saffron text-white'
-              : 'text-ink-soft hover:bg-ink-raised hover:text-white'
-          }`
-        }
-      >
-        {t('pos.nav.order')}
-      </NavLink>
+      <RailLink to={POS_ROUTES.HOME} label={t('pos.nav.order')} />
+      <RailLink to={POS_ROUTES.DEVICE} label={t('pos.nav.device')} />
     </nav>
+  );
+}
+
+function RailLink({ to, label }: { to: string; label: string }) {
+  return (
+    <NavLink
+      to={to}
+      end
+      className={({ isActive }) =>
+        `flex min-h-touch w-14 flex-col items-center justify-center rounded-control text-caption font-semibold ${
+          isActive ? 'bg-saffron text-white' : 'text-ink-soft hover:bg-ink-raised hover:text-white'
+        }`
+      }
+    >
+      {label}
+    </NavLink>
   );
 }

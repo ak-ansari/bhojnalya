@@ -9,6 +9,8 @@ import { createJSONStorage, persist } from 'zustand/middleware';
 export interface DeviceState {
   role: DeviceRole | null;
   register: (role: DeviceRole) => void;
+  /** Forgets the role; callers clear the local data first (safety rails). */
+  unregister: () => void;
 }
 
 export type DeviceStore = StoreApi<DeviceState>;
@@ -24,6 +26,9 @@ export function createDeviceStore(
         ...initial,
         register: (role) => {
           set({ role });
+        },
+        unregister: () => {
+          set({ role: null });
         },
       }),
       {

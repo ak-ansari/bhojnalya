@@ -78,7 +78,7 @@ kitchen display (clear site data first) and check the reconnecting copy.
 - `ConnectionBanner › shows on the first render of a device that starts offline` (component)
 - `ConnectionBanner › sits in the POS screen frame under the top bar` (component)
 - A real browser going offline and back (e2e): **GAP**, no Playwright suite yet.
-- The count of changes waiting to sync in the strip: **not built** (no outbox yet).
+- The count of changes waiting to sync in the strip: see [app 0205](./0205-a-till-with-unsynced-changes-cannot-be-cleared-and-always-says-how-many.md).
 
 Command: `pnpm --filter @bhojnalya/app test`
 

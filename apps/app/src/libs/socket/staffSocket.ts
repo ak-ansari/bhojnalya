@@ -4,6 +4,7 @@
 // while it was away are gone.
 import type { SocketEventListeners } from '@bhojnalya/contracts';
 import type { QueryClient } from '@tanstack/react-query';
+import { createContext, useContext } from 'react';
 import { io, type Socket } from 'socket.io-client';
 
 import { STAFF_SOCKET_NAMESPACE } from '@/libs/api/endpoints';
@@ -32,4 +33,11 @@ export function refetchOnReconnect(socket: ConnectEmitter, queryClient: QueryCli
 /** Opens the staff namespace on this page's origin. Device auth is added with device pairing. */
 export function connectStaffSocket(): StaffSocket {
   return io(STAFF_SOCKET_NAMESPACE, { transports: ['websocket'] });
+}
+
+/** The open staff socket, or `null` before it opens (and always in tests). */
+export const StaffSocketContext = createContext<StaffSocket | null>(null);
+
+export function useStaffSocket(): StaffSocket | null {
+  return useContext(StaffSocketContext);
 }

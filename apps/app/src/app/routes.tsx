@@ -28,6 +28,12 @@ export const appRoutes: RouteObject[] = [
               Component: (await import('@/modules/pos/pages/PosHomePage')).PosHomePage,
             }),
           },
+          {
+            path: 'device',
+            lazy: async () => ({
+              Component: (await import('@/modules/pos/pages/PosDevicePage')).PosDevicePage,
+            }),
+          },
         ],
       },
     ],

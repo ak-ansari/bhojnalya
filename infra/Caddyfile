@@ -8,8 +8,9 @@
 :80 {
 	encode zstd gzip
 
-	# REST under /api/v1 and the Socket.io transport (incl. websocket upgrade).
-	@api path /api /api/* /socket.io /socket.io/*
+	# REST under /api/v1, the Socket.io transport (incl. websocket upgrade),
+	# and the uptime check the API serves at the root (TRD §16).
+	@api path /api /api/* /socket.io /socket.io/* /healthz
 	handle @api {
 		reverse_proxy api:3000
 	}

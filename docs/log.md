@@ -1,5 +1,18 @@
 # Update Log
 
+## 2026-10-14 — the API runs
+
+- **Creation**: `apps/api`: NestJS 11 with Pino JSON logs, Zod validation
+  and OpenAPI, the error envelope, a tenant transaction per request as
+  `app_user`, idempotency keys (24 h), the suspended-outlet check, in-process
+  pg-boss and `/healthz` (ticket 08). Cases `api 0001`–`0008`. ADR 0020:
+  background jobs run as the application role but are installed by the
+  owner.
+- **Creation**: `packages/db` migration `0003_api_idempotency_jobs`:
+  `idempotency_keys` under RLS, and the `pgboss` schema.
+- **Change**: `infra/docker-compose.yml` runs a one-shot `migrate` service
+  and the real `api`. Caddy now routes `/healthz`.
+
 ## 2026-10-14 — the domain tables, and the guest menu and admin shells
 
 - **Creation**: `packages/db` migration `0002_domain_tables`: menu,

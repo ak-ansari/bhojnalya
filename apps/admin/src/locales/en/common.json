@@ -1,0 +1,14 @@
+{
+  "appName": "Bhojnalya",
+  "loading": "Loading…",
+  "notFound": {
+    "title": "Page not found",
+    "body": "There is nothing at this address.",
+    "home": "Go to the dashboard"
+  },
+  "impersonation": {
+    "title": "Viewing as the owner",
+    "body": "Everything you do now is written to the audit log as you, on behalf of the owner.",
+    "exit": "Exit view-as"
+  }
+}

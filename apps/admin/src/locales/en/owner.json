@@ -1,0 +1,21 @@
+{
+  "nav": {
+    "label": "Owner",
+    "dashboard": "Dashboard",
+    "menu": "Menu & stock",
+    "reports": "Reports"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "todaySales": "Today's sales",
+    "empty": "No sales yet today. Bills appear here as the counter syncs them."
+  },
+  "menu": {
+    "title": "Menu & stock",
+    "empty": "No menu items yet. Add a category, then the items in it."
+  },
+  "reports": {
+    "title": "Reports",
+    "empty": "No reports yet. Reports fill in once the outlet has billed its first sale."
+  }
+}

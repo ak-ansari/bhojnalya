@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "label": "Platform",
+    "brand": "Bhojnalya platform",
+    "outlets": "Outlets"
+  },
+  "outlets": {
+    "title": "Outlets",
+    "empty": "No outlets yet. Create a tenant and its first outlet to get started."
+  }
+}

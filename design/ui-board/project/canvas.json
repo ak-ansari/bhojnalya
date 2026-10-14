@@ -1,0 +1,39 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-14T09:00:00Z"},
+  "title": "Bhojnalya UI Board",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 1280, "h": 800, "title": "POS · Order screen", "is_interactive": true},
+    "Tables.dc.html": {"x": 1360, "y": 0, "w": 1280, "h": 800, "title": "POS · Tables", "is_interactive": true},
+    "Payment.dc.html": {"x": 2720, "y": 0, "w": 1280, "h": 800, "title": "POS · Bill & payment", "is_interactive": true},
+    "Incoming.dc.html": {"x": 4080, "y": 0, "w": 1280, "h": 800, "title": "POS · Incoming orders (QR, Swiggy, Zomato)", "is_interactive": true},
+    "Kds.dc.html": {"x": 0, "y": 1220, "w": 1280, "h": 800, "title": "KDS · Kitchen display", "is_interactive": true},
+    "Invoice.dc.html": {"x": 1360, "y": 1220, "w": 380, "h": 1000, "title": "Print · 80 mm tax invoice"},
+    "Device.dc.html": {"x": 1820, "y": 1220, "w": 1280, "h": 800, "title": "Device sign-in & register", "is_interactive": true},
+    "Foundations.dc.html": {"x": 3180, "y": 1220, "w": 1280, "h": 800, "title": "Foundations · colour, type, components"},
+    "QrMenu.dc.html": {"x": 0, "y": 2640, "w": 390, "h": 844, "title": "QR · Menu", "is_interactive": true},
+    "QrCart.dc.html": {"x": 470, "y": 2640, "w": 390, "h": 844, "title": "QR · Cart & place order", "is_interactive": true},
+    "QrStatus.dc.html": {"x": 940, "y": 2640, "w": 390, "h": 844, "title": "QR · Order status & running bill", "is_interactive": true},
+    "OwnerDashboard.dc.html": {"x": 0, "y": 3904, "w": 1440, "h": 1040, "title": "Owner · Dashboard", "expand": "fill", "is_interactive": true},
+    "OwnerMenu.dc.html": {"x": 1520, "y": 3904, "w": 1440, "h": 1040, "title": "Owner · Menu & stock", "expand": "fill", "is_interactive": true},
+    "OwnerReports.dc.html": {"x": 3040, "y": 3904, "w": 1440, "h": 1040, "title": "Owner · Reports", "expand": "fill", "is_interactive": true},
+    "AdminConsole.dc.html": {"x": 0, "y": 5364, "w": 1440, "h": 1000, "title": "Super admin · Platform console", "expand": "fill", "is_interactive": true}
+  },
+  "order": [
+    "Main.dc.html", "Tables.dc.html", "Payment.dc.html", "Incoming.dc.html",
+    "Kds.dc.html", "Invoice.dc.html", "Device.dc.html", "Foundations.dc.html",
+    "QrMenu.dc.html", "QrCart.dc.html", "QrStatus.dc.html",
+    "OwnerDashboard.dc.html", "OwnerMenu.dc.html", "OwnerReports.dc.html",
+    "AdminConsole.dc.html"
+  ],
+  "notes": {
+    "rowPos": {"x": 0, "y": -300, "text": "POS · counter tablet", "kind": "title1", "maxW": 5360},
+    "rowKitchen": {"x": 0, "y": 920, "text": "Kitchen, print & device setup", "kind": "title1", "maxW": 4460},
+    "rowQr": {"x": 0, "y": 2340, "text": "QR table ordering · guest phone", "kind": "title1", "maxW": 1330},
+    "rowOwner": {"x": 0, "y": 3604, "text": "Owner portal", "kind": "title1", "maxW": 4480},
+    "rowAdmin": {"x": 0, "y": 5064, "text": "Platform super admin", "kind": "title1", "maxW": 1440}
+  },
+  "designSystems": []
+}

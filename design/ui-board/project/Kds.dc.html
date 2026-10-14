@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kitchen display</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#FDBA74}a:hover{color:#FED7AA}
+.tab{height:40px;padding:0 16px;border-radius:10px;border:1px solid #2E3A50;background:transparent;font-weight:700;font-size:14px;color:#AEB6C6}
+.tab.on{background:#F4F5F7;border-color:#F4F5F7;color:#121826}
+.tk{display:flex;flex-direction:column;border-radius:14px;background:#1C2433;border:1px solid #2E3A50;overflow:hidden}
+.tk.done{opacity:.55}
+.hd{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;color:#fff}
+.hd.g{background:#15803D}.hd.a{background:#B45309}.hd.r{background:#B91C1C}.hd.n{background:#334155}
+.li{display:flex;gap:10px;width:100%;padding:8px 14px;border:0;background:transparent;text-align:left;color:#E7EAF0;font-size:16px;border-bottom:1px solid #263044}
+.li:hover{background:#232C3D}
+.li.x{color:#6B7486;text-decoration:line-through}
+.src{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.03em;background:rgba(255,255,255,.2);color:#fff}
+.act{height:52px;margin:12px 14px 14px;border-radius:12px;border:0;font-weight:700;font-size:16px}
+.act.start{background:#F4F5F7;color:#121826}
+.act.ready{background:#22C55E;color:#052E16}
+.act.served{background:#2E3A50;color:#E7EAF0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; display: flex; flex-direction: column; font-family: 'DM Sans', system-ui, sans-serif; color: #E7EAF0; background: #121826; overflow: hidden; font-variant-numeric: tabular-nums">
+  <header style="height: 68px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 20px; border-bottom: 1px solid #2E3A50">
+    <div style="width: 38px; height: 38px; border-radius: 10px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700">B</div>
+    <div style="display: flex; flex-direction: column; line-height: 1.2; margin-right: 12px">
+      <strong style="font-size: 17px">Kitchen</strong>
+      <span style="font-size: 12px; color: #AEB6C6">Brew &amp; Bun Café · KDS 1</span>
+    </div>
+    <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+      <button class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}} {{t.n}}</button>
+    </sc-for>
+    <div style="flex: 1"></div>
+    <button class="tab" onClick="{{flipSort}}">{{sortLabel}}</button>
+    <span style="display: flex; gap: 10px; font-size: 12px; color: #AEB6C6; align-items: center">
+      <span style="display: inline-flex; gap: 5px; align-items: center"><i style="width: 10px; height: 10px; border-radius: 3px; background: #15803D; display: inline-block"></i>&lt;10m</span>
+      <span style="display: inline-flex; gap: 5px; align-items: center"><i style="width: 10px; height: 10px; border-radius: 3px; background: #B45309; display: inline-block"></i>10–20m</span>
+      <span style="display: inline-flex; gap: 5px; align-items: center"><i style="width: 10px; height: 10px; border-radius: 3px; background: #B91C1C; display: inline-block"></i>&gt;20m</span>
+    </span>
+    <span style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 10px; border-radius: 16px; background: #0F2A1B; color: #86EFAC; font-size: 12px; font-weight: 700"><i style="width: 8px; height: 8px; border-radius: 50%; background: #22C55E; display: inline-block"></i>Live</span>
+    <a href="Main.dc.html" style="font-size: 13px; font-weight: 600">POS</a>
+  </header>
+  <div style="flex: 1; min-height: 0; padding: 16px 20px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-content: start; overflow-y: auto">
+    <sc-for list="{{tickets}}" as="t" hint-placeholder-count="8">
+      <article class="{{t.cls}}" aria-label="{{t.aria}}">
+        <div class="{{t.hdCls}}">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <strong style="font-size: 20px">{{t.where}}</strong>
+            <span style="font-size: 12px; opacity: .9">KOT {{t.kot}} · {{t.state}}</span>
+          </div>
+          <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+            <span class="src">{{t.src}}</span>
+            <strong style="font-family: 'JetBrains Mono', monospace; font-size: 18px">{{t.age}}</strong>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <sc-for list="{{t.items}}" as="i" hint-placeholder-count="3">
+            <button class="{{i.cls}}" onClick="{{i.toggle}}">
+              <strong style="min-width: 26px">{{i.q}}</strong>
+              <span style="display: flex; flex-direction: column"><span style="font-weight: 600">{{i.n}}</span><sc-if value="{{i.m}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #FDBA74">{{i.m}}</span></sc-if></span>
+            </button>
+          </sc-for>
+        </div>
+        <sc-if value="{{t.note}}" hint-placeholder-val="{{ false }}">
+          <div style="margin: 10px 14px 0; padding: 8px 10px; border-radius: 8px; background: #3B2A12; color: #FCD34D; font-size: 13px; font-weight: 600">{{t.note}}</div>
+        </sc-if>
+        <button class="{{t.actCls}}" onClick="{{t.advance}}">{{t.actLabel}}</button>
+      </article>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+var START = [
+  { id: 'k31', kot: 31, where: 'T6', src: 'POS', age: 1420, st: 'prep', note: '', items: [{ q: 2, n: 'Paneer Tikka', m: '' }, { q: 1, n: 'Penne Arrabbiata', m: 'Extra spicy' }] },
+  { id: 'k32', kot: 32, where: 'Swiggy #7781390', src: 'SWIGGY', age: 860, st: 'prep', note: 'Pack sauces separately', items: [{ q: 1, n: 'Penne Arrabbiata', m: '' }] },
+  { id: 'k33', kot: 33, where: 'T1', src: 'POS', age: 640, st: 'new', note: '', items: [{ q: 1, n: 'Chicken Club Sandwich', m: 'No mayo' }, { q: 1, n: 'Masala Fries', m: '' }] },
+  { id: 'k34', kot: 34, where: 'Token 18', src: 'TAKEAWAY', age: 410, st: 'new', note: '', items: [{ q: 2, n: 'Vada Pav', m: '' }, { q: 2, n: 'Masala Chai', m: 'Less sugar' }] },
+  { id: 'k35', kot: 35, where: 'T9', src: 'QR', age: 205, st: 'new', note: 'Guest has a nut allergy', items: [{ q: 3, n: 'Masala Chai', m: 'Less sugar' }, { q: 1, n: 'Walnut Brownie', m: 'Swap for Gulab Jamun?' }] },
+  { id: 'k36', kot: 36, where: 'Zomato #55102984', src: 'ZOMATO', age: 96, st: 'new', note: 'No onion in momos', items: [{ q: 2, n: 'Chicken Momos', m: '' }, { q: 1, n: 'Masala Fries', m: '' }, { q: 2, n: 'Fresh Lime Soda', m: 'Sweet' }] },
+  { id: 'k30', kot: 30, where: 'T3', src: 'POS', age: 1610, st: 'ready', note: '', items: [{ q: 2, n: 'Cappuccino', m: 'Large · Oat milk' }] },
+  { id: 'k37', kot: 37, where: 'T4', src: 'POS', age: 30, st: 'new', note: '', items: [{ q: 1, n: 'Cappuccino', m: 'Large · Oat milk' }] }
+];
+var NEXT = { new: 'prep', prep: 'ready', ready: 'served' };
+var LABEL = { new: 'New', prep: 'Preparing', ready: 'Ready' };
+var ACT = { new: ['act start', 'Start preparing'], prep: ['act ready', 'Mark ready'], ready: ['act served', 'Picked up · clear'] };
+function mmss(s) { return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+class Component extends DCLogic {
+  state = { tickets: START, tab: 'all', oldest: true, struck: {} };
+  componentDidMount() {
+    var self = this;
+    this.iv = setInterval(function () { self.setState({ tickets: self.state.tickets.map(function (t) { return t.st === 'ready' ? t : Object.assign({}, t, { age: t.age + 1 }); }) }); }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    var self = this, st = this.state;
+    var live = st.tickets.filter(function (t) { return t.st !== 'served'; });
+    var shown = live.filter(function (t) { return st.tab === 'all' || t.st === st.tab; })
+      .sort(function (a, b) { return st.oldest ? b.age - a.age : a.age - b.age; });
+    return {
+      tabs: [['all', 'All'], ['new', 'New'], ['prep', 'Preparing'], ['ready', 'Ready']].map(function (t) {
+        return { label: t[1], n: live.filter(function (x) { return t[0] === 'all' || x.st === t[0]; }).length, cls: st.tab === t[0] ? 'tab on' : 'tab', pick: function () { self.setState({ tab: t[0] }); } };
+      }),
+      sortLabel: st.oldest ? 'Oldest first' : 'Newest first',
+      flipSort: function () { self.setState({ oldest: !st.oldest }); },
+      tickets: shown.map(function (t) {
+        var m = t.age / 60;
+        var hd = t.st === 'ready' ? 'hd n' : m < 10 ? 'hd g' : m < 20 ? 'hd a' : 'hd r';
+        return {
+          where: t.where, kot: t.kot, src: t.src, state: LABEL[t.st], age: mmss(t.age), note: t.note,
+          cls: t.st === 'ready' ? 'tk done' : 'tk', hdCls: hd, aria: 'KOT ' + t.kot + ' for ' + t.where,
+          actCls: ACT[t.st][0], actLabel: ACT[t.st][1],
+          advance: function () { self.setState({ tickets: st.tickets.map(function (x) { return x.id === t.id ? Object.assign({}, x, { st: NEXT[x.st] }) : x; }) }); },
+          items: t.items.map(function (i, k) {
+            var key = t.id + ':' + k;
+            return { q: i.q + '×', n: i.n, m: i.m, cls: st.struck[key] ? 'li x' : 'li',
+              toggle: function () { var s = Object.assign({}, st.struck); s[key] = !s[key]; self.setState({ struck: s }); } };
+          })
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

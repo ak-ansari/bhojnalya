@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Owner reports</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.nav a{display:flex;align-items:center;gap:10px;height:42px;padding:0 12px;border-radius:10px;color:#C9D0DC;text-decoration:none;font-size:14px;font-weight:600}
+.nav a:hover{background:#2A3449;color:#fff}
+.nav a.on{background:#C2410C;color:#fff}
+.card{background:#fff;border:1px solid #E3E6EB;border-radius:16px;padding:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border-radius:11px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:14px;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.tab{height:44px;padding:0 4px;margin-right:18px;border:0;border-bottom:3px solid transparent;background:transparent;font-weight:700;font-size:14px;color:#5B6577}
+.tab.on{color:#1B2230;border-bottom-color:#C2410C}
+.tab b{display:inline-flex;min-width:20px;height:20px;padding:0 6px;border-radius:10px;background:#B91C1C;color:#fff;font-size:11px;align-items:center;justify-content:center;margin-left:4px}
+.kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #F1F2F4;font-size:14px}
+.kv span{color:#4A5568}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.04em;color:#5B6577;padding:10px 12px;background:#FAFBFC;border-bottom:1px solid #E3E6EB}
+td{padding:11px 12px;border-bottom:1px solid #F1F2F4}
+.num{text-align:right}
+.mono{font-family:'JetBrains Mono',monospace;font-size:13px}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F5F7; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; font-variant-numeric: tabular-nums">
+  <nav class="nav" aria-label="Owner portal" style="flex: 1 1 240px; max-width: 260px; min-width: 220px; background: #1E2638; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 18px">
+      <div style="width: 38px; height: 38px; border-radius: 10px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700">B</div>
+      <div style="line-height: 1.2"><strong style="color: #fff; font-size: 15px">Brew &amp; Bun Café</strong><div style="font-size: 12px; color: #9AA3B2">Koramangala</div></div>
+    </div>
+    <a href="OwnerDashboard.dc.html">Dashboard</a>
+    <a href="OwnerMenu.dc.html">Menu &amp; stock</a>
+    <a href="OwnerReports.dc.html" class="on">Reports</a>
+    <a href="Tables.dc.html">Tables &amp; QR codes</a>
+    <a href="Device.dc.html">Devices</a>
+    <a href="#">Outlet settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 14px">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+      <h1 style="margin: 0; font-size: 26px">Reports</h1>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <button class="btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>14 Oct 2026 · business day</button>
+        <button class="btn pri">Export to Excel</button>
+        <button class="btn">CSV</button>
+      </div>
+    </div>
+    <div role="tablist" style="display: flex; flex-wrap: wrap; border-bottom: 1px solid #E3E6EB">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+        <button role="tab" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}<sc-if value="{{t.badge}}" hint-placeholder-val="{{ false }}"><b>{{t.badge}}</b></sc-if></button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isZ}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px">
+        <section class="card">
+          <h2 style="margin: 0 0 6px; font-size: 16px">Day-end Z-report</h2>
+          <div class="kv"><span>Gross sales</span><strong>₹39,820.00</strong></div>
+          <div class="kv"><span>Discounts</span><strong style="color: #166534">−₹1,370.00</strong></div>
+          <div class="kv"><span>Net sales</span><strong>₹38,450.00</strong></div>
+          <div class="kv"><span>Service charge</span><strong>₹1,240.00</strong></div>
+          <div class="kv"><span>CGST</span><strong>₹1,023.45</strong></div>
+          <div class="kv"><span>SGST</span><strong>₹1,023.45</strong></div>
+          <div class="kv"><span>Round off</span><strong>−₹1.90</strong></div>
+          <div class="kv" style="border: 0; font-size: 17px"><strong>Total collected</strong><strong>₹41,735.00</strong></div>
+        </section>
+        <section class="card">
+          <h2 style="margin: 0 0 6px; font-size: 16px">Payments</h2>
+          <div class="kv"><span>Cash</span><strong>₹9,925.00</strong></div>
+          <div class="kv"><span>UPI</span><strong>₹21,340.00</strong></div>
+          <div class="kv"><span>Card</span><strong>₹4,120.00</strong></div>
+          <div class="kv"><span>Swiggy / Zomato (settled by aggregator)</span><strong>₹6,350.00</strong></div>
+          <h2 style="margin: 18px 0 6px; font-size: 16px">Voids &amp; cancellations</h2>
+          <div class="kv"><span>Items voided (4)</span><strong>₹1,060.00</strong></div>
+          <div class="kv"><span>Invoices cancelled (1) · BB01/2627/000131</span><strong>₹420.00</strong></div>
+          <div class="kv" style="border: 0"><span>Missed aggregator orders</span><strong>1</strong></div>
+        </section>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{isItems}}" hint-placeholder-val="{{ false }}">
+      <section class="card" style="padding: 0; overflow-x: auto">
+        <table>
+          <thead><tr><th>ITEM</th><th>CATEGORY</th><th class="num">QTY</th><th class="num">NET SALES</th><th class="num">SHARE</th></tr></thead>
+          <tbody>
+            <sc-for list="{{itemRows}}" as="r" hint-placeholder-count="6">
+              <tr><td style="font-weight: 600">{{r.n}}</td><td style="color: #5B6577">{{r.c}}</td><td class="num">{{r.q}}</td><td class="num">{{r.a}}</td><td class="num">{{r.s}}</td></tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isCh}}" hint-placeholder-val="{{ false }}">
+      <section class="card" style="padding: 0; overflow-x: auto">
+        <table>
+          <thead><tr><th>CHANNEL</th><th class="num">ORDERS</th><th class="num">NET SALES</th><th class="num">AVG ORDER</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight: 600">Dine-in</td><td class="num">58</td><td class="num">₹16,918</td><td class="num">₹292</td></tr>
+            <tr><td style="font-weight: 600">Takeaway</td><td class="num">27</td><td class="num">₹5,383</td><td class="num">₹199</td></tr>
+            <tr><td style="font-weight: 600">QR at table</td><td class="num">31</td><td class="num">₹6,921</td><td class="num">₹223</td></tr>
+            <tr><td style="font-weight: 600">Swiggy</td><td class="num">16</td><td class="num">₹5,768</td><td class="num">₹361</td></tr>
+            <tr><td style="font-weight: 600">Zomato</td><td class="num">10</td><td class="num">₹3,460</td><td class="num">₹346</td></tr>
+          </tbody>
+        </table>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isGst}}" hint-placeholder-val="{{ false }}">
+      <section class="card" style="padding: 0; overflow-x: auto">
+        <table>
+          <thead><tr><th>GST RATE</th><th>HSN / SAC</th><th class="num">TAXABLE VALUE</th><th class="num">CGST</th><th class="num">SGST</th><th class="num">TOTAL TAX</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight: 600">5% · restaurant service</td><td class="mono">996331</td><td class="num">₹39,210.00</td><td class="num">₹980.25</td><td class="num">₹980.25</td><td class="num">₹1,960.50</td></tr>
+            <tr><td style="font-weight: 600">18% · packaged goods</td><td class="mono">2201</td><td class="num">₹480.00</td><td class="num">₹43.20</td><td class="num">₹43.20</td><td class="num">₹86.40</td></tr>
+            <tr style="background: #FAFBFC"><td style="font-weight: 700">Total</td><td></td><td class="num" style="font-weight: 700">₹39,690.00</td><td class="num" style="font-weight: 700">₹1,023.45</td><td class="num" style="font-weight: 700">₹1,023.45</td><td class="num" style="font-weight: 700">₹2,046.90</td></tr>
+          </tbody>
+        </table>
+        <p style="margin: 0; padding: 12px 16px; font-size: 13px; color: #5B6577">Invoice series used today: BB01/2627/000098 – 000143 · BB02/2627/000012 – 000041. No gaps.</p>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+      <section class="card" style="padding: 0; overflow-x: auto">
+        <table>
+          <thead><tr><th>INVOICE</th><th>DEVICE</th><th class="num">BILLED</th><th class="num">SERVER TOTAL</th><th>WHY IT WAS FLAGGED</th><th></th></tr></thead>
+          <tbody>
+            <sc-for list="{{reviewRows}}" as="r" hint-placeholder-count="2">
+              <tr>
+                <td class="mono">{{r.inv}}</td><td>{{r.dev}}</td><td class="num">{{r.billed}}</td><td class="num">{{r.server}}</td>
+                <td style="color: #4A5568; max-width: 340px">{{r.why}}</td>
+                <td class="num"><button class="btn" onClick="{{r.ack}}">{{r.ackLabel}}</button></td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+        <p style="margin: 0; padding: 12px 16px; font-size: 13px; color: #5B6577">Flagged bills are kept exactly as the customer received them. Nothing is changed or deleted.</p>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  state = { tab: 'z', acked: {} };
+  renderVals() {
+    var self = this, st = this.state;
+    var reviews = [
+      { id: 'a', inv: 'BB02/2627/000017', dev: 'Counter 2 · offline', billed: '₹612.00', server: '₹614.00', why: 'Menu price for Cold Coffee changed while this tablet was offline. The bill used the older price.' },
+      { id: 'b', inv: 'BB02/2627/000023', dev: 'Counter 2 · offline', billed: '₹1,050.00', server: '₹1,051.00', why: 'Service charge was rounded on the tablet before tax. Totals differ by ₹1.' }
+    ];
+    var open = reviews.filter(function (r) { return !st.acked[r.id]; }).length;
+    return {
+      tabs: [['z', 'Z-report'], ['items', 'Items'], ['ch', 'Channels'], ['gst', 'GST'], ['review', 'Needs review']].map(function (t) {
+        return { label: t[1], badge: t[0] === 'review' && open ? open : 0, cls: st.tab === t[0] ? 'tab on' : 'tab', pick: function () { self.setState({ tab: t[0] }); } };
+      }),
+      isZ: st.tab === 'z', isItems: st.tab === 'items', isCh: st.tab === 'ch', isGst: st.tab === 'gst', isReview: st.tab === 'review',
+      itemRows: [
+        ['Cold Coffee', 'Cold beverages', 52, '₹7,800', '20%'], ['Masala Chai', 'Hot beverages', 186, '₹7,440', '19%'],
+        ['Cappuccino', 'Hot beverages', 41, '₹5,740', '15%'], ['Vada Pav', 'Snacks', 88, '₹4,400', '11%'],
+        ['Paneer Tikka', 'Snacks', 18, '₹3,960', '10%'], ['Walnut Brownie', 'Desserts', 21, '₹2,520', '7%']
+      ].map(function (r) { return { n: r[0], c: r[1], q: r[2], a: r[3], s: r[4] }; }),
+      reviewRows: reviews.map(function (r) {
+        var done = !!st.acked[r.id];
+        return Object.assign({}, r, { ackLabel: done ? 'Reviewed ✓' : 'Mark reviewed', ack: function () { var a = Object.assign({}, st.acked); a[r.id] = !done; self.setState({ acked: a }); } });
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

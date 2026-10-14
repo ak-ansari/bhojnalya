@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Platform console</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.card{background:#fff;border:1px solid #E3E6EB;border-radius:16px;padding:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 14px;border-radius:10px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:13px;color:#1B2230;white-space:nowrap}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.btn.danger{background:#B91C1C;border-color:#B91C1C;color:#fff}
+.plan{height:30px;padding:0 10px;border-radius:8px;border:0;font-size:12px;font-weight:700}
+.plan.trial{background:#EAF1FF;color:#1D4ED8}
+.plan.active{background:#E8F7EE;color:#166534}
+.plan.overdue{background:#FFF4DE;color:#92400E}
+.plan.suspended{background:#FEE2E2;color:#991B1B}
+.switch{width:42px;height:24px;border-radius:12px;border:0;background:#C3C9D3;position:relative;padding:0;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on{background:#15803D}
+.switch.on i{left:21px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:12px;letter-spacing:.04em;color:#5B6577;padding:10px 14px;background:#FAFBFC;border-bottom:1px solid #E3E6EB}
+td{padding:12px 14px;border-bottom:1px solid #F1F2F4;vertical-align:middle}
+.al{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #F1F2F4;font-size:14px}
+.al i{width:10px;height:10px;border-radius:3px;margin-top:5px;flex:none}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F4F5F7; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; font-variant-numeric: tabular-nums; display: flex; flex-direction: column">
+  <sc-if value="{{viewing}}" hint-placeholder-val="{{ false }}">
+    <div role="alert" style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; padding: 12px 28px; background: #B91C1C; color: #fff; font-size: 14px">
+      <strong>Viewing as {{viewing}}</strong>
+      <span style="flex: 1 1 300px">Everything you do now is written to the audit log as you, on behalf of the owner.</span>
+      <button class="btn" onClick="{{stopView}}" style="color: #991B1B">Exit view-as</button>
+    </div>
+  </sc-if>
+  <header style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 16px 28px; background: #1E2638; color: #fff">
+    <div style="width: 38px; height: 38px; border-radius: 10px; background: #C2410C; display: flex; align-items: center; justify-content: center; font-weight: 700">B</div>
+    <div style="line-height: 1.2"><strong style="font-size: 17px">Bhojnalya platform</strong><div style="font-size: 12px; color: #9AA3B2">Super admin · signed in with TOTP</div></div>
+    <div style="flex: 1"></div>
+    <nav aria-label="Platform" style="display: flex; gap: 4px; flex-wrap: wrap">
+      <a href="#" style="color: #fff; text-decoration: none; font-weight: 700; font-size: 14px; padding: 8px 12px; border-radius: 8px; background: #2A3449">Outlets</a>
+      <a href="#" style="color: #C9D0DC; text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 12px">Menu import</a>
+      <a href="#" style="color: #C9D0DC; text-decoration: none; font-weight: 600; font-size: 14px; padding: 8px 12px">Audit log</a>
+    </nav>
+  </header>
+
+  <main style="padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+      <div class="card"><div style="font-size: 13px; color: #5B6577; font-weight: 600">Active outlets</div><div style="font-size: 30px; font-weight: 700">{{activeCount}}</div><div style="font-size: 12px; color: #5B6577">of {{total}} · {{trialCount}} on trial</div></div>
+      <div class="card"><div style="font-size: 13px; color: #5B6577; font-weight: 600">Orders yesterday</div><div style="font-size: 30px; font-weight: 700">1,284</div><div style="font-size: 12px; color: #166534; font-weight: 700">+6% week on week</div></div>
+      <div class="card"><div style="font-size: 13px; color: #5B6577; font-weight: 600">MRR (entered by hand)</div><div style="font-size: 30px; font-weight: 700">{{mrr}}</div><div style="font-size: 12px; color: #5B6577">Paid outlets × ₹1,499 (placeholder, price TBD)</div></div>
+      <div class="card"><div style="font-size: 13px; color: #5B6577; font-weight: 600">Last backup</div><div style="font-size: 30px; font-weight: 700">03:00</div><div style="font-size: 12px; color: #166534; font-weight: 700">Restore tested Sunday</div></div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section class="card" style="flex: 999 1 640px; min-width: 0; padding: 0; overflow: hidden">
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; padding: 16px 18px">
+          <h2 style="margin: 0; font-size: 17px">Outlets</h2>
+          <button class="btn pri">+ New tenant &amp; outlet</button>
+        </div>
+        <div style="overflow-x: auto">
+          <table>
+            <thead><tr><th>OUTLET</th><th>PLAN · TAP TO CHANGE</th><th>SWIGGY / ZOMATO</th><th>DEVICES</th><th></th></tr></thead>
+            <tbody>
+              <sc-for list="{{outlets}}" as="o" hint-placeholder-count="5">
+                <tr>
+                  <td><strong>{{o.name}}</strong><div style="font-size: 12px; color: #5B6577">{{o.city}} · {{o.gst}}</div></td>
+                  <td><button class="{{o.planCls}}" onClick="{{o.cycle}}">{{o.plan}}</button></td>
+                  <td><button class="{{o.aggCls}}" onClick="{{o.toggleAgg}}" aria-label="{{o.aggAria}}"><i></i></button></td>
+                  <td style="color: #4A5568">{{o.devices}}</td>
+                  <td style="text-align: right"><button class="btn" onClick="{{o.view}}">View as owner</button></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card" style="flex: 1 1 300px; max-width: 420px">
+        <h2 style="margin: 0 0 4px; font-size: 17px">Needs attention</h2>
+        <div class="al"><i style="background: #B91C1C"></i><span><strong>Invoice gap</strong> · Chai Point Indiranagar<br><span style="color: #5B6577">CP01/2627/000212 missing between 211 and 213</span></span></div>
+        <div class="al"><i style="background: #B45309"></i><span><strong>Device unsynced 1 h 20 m</strong> · Brew &amp; Bun, Counter 2<br><span style="color: #5B6577">3 bills waiting · last seen 11:31 AM</span></span></div>
+        <div class="al"><i style="background: #B45309"></i><span><strong>Aggregator job failed</strong> · Kaapi Katte<br><span style="color: #5B6577">Stock update for “Filter Coffee” failed 5 times</span></span></div>
+        <div class="al" style="border: 0"><i style="background: #15803D"></i><span><strong>Backups</strong> · all good<br><span style="color: #5B6577">WAL archiving current · nightly base backup done</span></span></div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+var PLANS = ['trial', 'active', 'overdue', 'suspended'];
+var LABEL = { trial: 'Trial · 9 days left', active: 'Active', overdue: 'Overdue · 6 days', suspended: 'Suspended · read-only' };
+var START = [
+  { id: 1, name: 'Brew & Bun Café', city: 'Koramangala, Bengaluru', gst: 'Regular GST', plan: 'active', agg: true, devices: '2 POS · 1 KDS' },
+  { id: 2, name: 'Chai Point Indiranagar', city: 'Bengaluru', gst: 'Regular GST', plan: 'active', agg: true, devices: '1 POS · 1 KDS' },
+  { id: 3, name: 'Kaapi Katte', city: 'Jayanagar, Bengaluru', gst: 'Composition', plan: 'overdue', agg: true, devices: '1 POS' },
+  { id: 4, name: 'The Dosa Den', city: 'Pune', gst: 'Regular GST', plan: 'trial', agg: false, devices: '1 POS · 1 KDS' },
+  { id: 5, name: 'Momo Junction', city: 'Indore', gst: 'Unregistered', plan: 'suspended', agg: false, devices: '1 POS' }
+];
+class Component extends DCLogic {
+  state = { outlets: START, viewing: '' };
+  renderVals() {
+    var self = this, st = this.state;
+    function patch(id, p) { self.setState({ outlets: st.outlets.map(function (o) { return o.id === id ? Object.assign({}, o, p) : o; }) }); }
+    var paid = st.outlets.filter(function (o) { return o.plan === 'active' || o.plan === 'overdue'; }).length;
+    return {
+      viewing: st.viewing, stopView: function () { self.setState({ viewing: '' }); },
+      total: st.outlets.length,
+      activeCount: st.outlets.filter(function (o) { return o.plan !== 'suspended'; }).length,
+      trialCount: st.outlets.filter(function (o) { return o.plan === 'trial'; }).length,
+      mrr: '₹' + (paid * 1499).toLocaleString('en-IN'),
+      outlets: st.outlets.map(function (o) {
+        return {
+          name: o.name, city: o.city, gst: o.gst, devices: o.devices,
+          plan: LABEL[o.plan], planCls: 'plan ' + o.plan,
+          cycle: function () { patch(o.id, { plan: PLANS[(PLANS.indexOf(o.plan) + 1) % PLANS.length] }); },
+          aggCls: o.agg ? 'switch on' : 'switch', aggAria: 'Aggregator integration for ' + o.name,
+          toggleAgg: function () { patch(o.id, { agg: !o.agg }); },
+          view: function () { self.setState({ viewing: o.name }); }
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

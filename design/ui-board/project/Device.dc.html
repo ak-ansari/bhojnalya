@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Device sign-in</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.fld{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#3B4456}
+.fld input{height:48px;border:1px solid #D9DDE4;border-radius:12px;padding:0 14px;font-size:15px;font-weight:400;color:#1B2230;outline:0}
+.fld input:focus{border-color:#C2410C;box-shadow:0 0 0 3px #FFE1CF}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 18px;border-radius:12px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:16px;text-decoration:none;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.btn.pri:hover{background:#9A3412;color:#fff}
+.role{display:flex;flex-direction:column;gap:6px;padding:16px;border-radius:14px;border:1.5px solid #E3E6EB;background:#fff;text-align:left}
+.role.on{border-color:#C2410C;background:#FFF1E8}
+.role strong{font-size:16px}
+.role span{font-size:13px;color:#5B6577}
+.step{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#7D879A}
+.step i{width:28px;height:28px;border-radius:50%;border:1.5px solid #3B4760;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:13px}
+.step.on{color:#fff}
+.step.on i{background:#C2410C;border-color:#C2410C}
+.step.done{color:#AEB6C6}
+.step.done i{background:#2A3449;border-color:#2A3449;color:#86EFAC}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; display: flex; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; background: #F4F5F7">
+  <aside style="width: 460px; flex: none; background: #1E2638; color: #fff; padding: 48px 44px; display: flex; flex-direction: column; gap: 40px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 44px; height: 44px; border-radius: 12px; background: #C2410C; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 22px">B</div>
+      <strong style="font-size: 22px">Bhojnalya</strong>
+    </div>
+    <div>
+      <h1 style="margin: 0; font-size: 34px; line-height: 1.15">Set up this tablet once.</h1>
+      <p style="margin: 12px 0 0; font-size: 15px; line-height: 1.55; color: #C9D0DC">Sign in as the owner, pick what this screen is for, and it stays ready for your staff from then on. No daily logins.</p>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 18px">
+      <sc-for list="{{steps}}" as="s" hint-placeholder-count="3">
+        <div class="{{s.cls}}"><i>{{s.mark}}</i>{{s.label}}</div>
+      </sc-for>
+    </div>
+    <div style="margin-top: auto; font-size: 12px; color: #9AA3B2">Works on Windows, Android tablets and iPad, in Chrome, Edge or Safari.</div>
+  </aside>
+
+  <main style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px">
+    <div style="width: 520px; background: #fff; border-radius: 20px; border: 1px solid #E3E6EB; padding: 36px; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 10px 30px rgba(16,24,40,.06)">
+      <sc-if value="{{s1}}" hint-placeholder-val="{{ true }}">
+        <div>
+          <h2 style="margin: 0; font-size: 24px">Owner sign-in</h2>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #5B6577">Use the email or phone number you gave us at onboarding.</p>
+        </div>
+        <label class="fld">Email or phone<input value="owner@brewandbun.in" type="text"></label>
+        <label class="fld">Password<input value="password12" type="password"></label>
+        <div style="display: flex; justify-content: flex-end; font-size: 13px"><a href="#">Forgot password? We'll email a code</a></div>
+        <button class="btn pri" onClick="{{next}}">Sign in</button>
+      </sc-if>
+
+      <sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+        <div>
+          <h2 style="margin: 0; font-size: 24px">What is this screen for?</h2>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #5B6577">Brew &amp; Bun Café · Koramangala</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <button class="{{posCls}}" onClick="{{pickPos}}"><strong>Billing counter (POS)</strong><span>Orders, bills and payments. Works offline.</span></button>
+          <button class="{{kdsCls}}" onClick="{{pickKds}}"><strong>Kitchen display (KDS)</strong><span>Live KOTs for the kitchen. Needs internet.</span></button>
+        </div>
+        <label class="fld">Screen name<input value="{{deviceName}}" onInput="{{onName}}"></label>
+        <button class="btn pri" onClick="{{next}}">Register this tablet</button>
+        <button class="btn" onClick="{{back}}">Back</button>
+      </sc-if>
+
+      <sc-if value="{{s3}}" hint-placeholder-val="{{ false }}">
+        <div style="width: 60px; height: 60px; border-radius: 50%; background: #E8F7EE; display: flex; align-items: center; justify-content: center"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div>
+          <h2 style="margin: 0; font-size: 24px">{{deviceName}} is ready</h2>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #5B6577">This tablet stays signed in. You can revoke it any time from the owner portal.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr auto; row-gap: 10px; padding: 14px 16px; border-radius: 12px; background: #F6F7F9; font-size: 14px">
+          <span style="color: #5B6577">Role</span><strong>{{roleLabel}}</strong>
+          <span style="color: #5B6577">Device code</span><strong style="font-family: 'JetBrains Mono', monospace">02</strong>
+          <span style="color: #5B6577">First invoice number</span><strong style="font-family: 'JetBrains Mono', monospace">{{firstInv}}</strong>
+          <span style="color: #5B6577">Offline storage</span><strong style="color: #166534">Protected</strong>
+        </div>
+        <sc-if value="{{isPos}}" hint-placeholder-val="{{ true }}"><a class="btn pri" href="Main.dc.html">Start billing</a></sc-if>
+        <sc-if value="{{isKds}}" hint-placeholder-val="{{ false }}"><a class="btn pri" href="Kds.dc.html">Open kitchen display</a></sc-if>
+        <button class="btn" onClick="{{restart}}">Set up another screen</button>
+      </sc-if>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  state = { step: 1, role: 'pos', name: 'Counter 2' };
+  renderVals() {
+    var self = this, st = this.state;
+    var labels = ['Owner sign-in', 'Choose POS or kitchen', 'Ready to use'];
+    return {
+      steps: labels.map(function (l, i) {
+        var n = i + 1;
+        return { label: l, mark: n < st.step ? '✓' : String(n), cls: n === st.step ? 'step on' : n < st.step ? 'step done' : 'step' };
+      }),
+      s1: st.step === 1, s2: st.step === 2, s3: st.step === 3,
+      next: function () { self.setState({ step: Math.min(3, st.step + 1) }); },
+      back: function () { self.setState({ step: Math.max(1, st.step - 1) }); },
+      restart: function () { self.setState({ step: 2 }); },
+      posCls: st.role === 'pos' ? 'role on' : 'role', kdsCls: st.role === 'kds' ? 'role on' : 'role',
+      pickPos: function () { self.setState({ role: 'pos', name: 'Counter 2' }); },
+      pickKds: function () { self.setState({ role: 'kds', name: 'Kitchen screen 1' }); },
+      deviceName: st.name, onName: function (e) { self.setState({ name: e.target.value }); },
+      roleLabel: st.role === 'pos' ? 'Billing counter (POS)' : 'Kitchen display (KDS)',
+      isPos: st.role === 'pos', isKds: st.role === 'kds',
+      firstInv: st.role === 'pos' ? 'BB02/2627/000001' : 'Not used on KDS'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>80 mm tax invoice</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=DM+Sans:opsz,wght@9..40,500;9..40,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.r{display:flex;justify-content:space-between;gap:8px}
+.hr{border-top:1px dashed #1B2230;margin:8px 0}
+</style>
+</helmet>
+<div style="width: 380px; height: 1000px; background: #E9EBEF; padding: 24px 32px; font-family: 'DM Sans', system-ui, sans-serif">
+  <div style="font-size: 11px; font-weight: 700; color: #5B6577; letter-spacing: .06em; margin-bottom: 8px">80 MM ROLL · PRINT PREVIEW</div>
+  <div style="width: 302px; background: #fff; padding: 16px 14px 22px; font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.5; color: #111; box-shadow: 0 2px 10px rgba(16,24,40,.12)">
+    <div style="text-align: center">
+      <div style="font-size: 15px; font-weight: 700">BREW &amp; BUN CAFÉ</div>
+      <div>Brew and Bun Hospitality LLP</div>
+      <div>12, 5th Block, Koramangala</div>
+      <div>Bengaluru, Karnataka 560095</div>
+      <div>GSTIN: 29AAAAA0000A1Z5</div>
+      <div>FSSAI: 11224999000000</div>
+    </div>
+    <div class="hr"></div>
+    <div style="text-align: center; font-weight: 700; font-size: 13px">TAX INVOICE</div>
+    <div class="hr"></div>
+    <div class="r"><span>Inv No</span><span>BB01/2627/000143</span></div>
+    <div class="r"><span>Date</span><span>14-10-2026 12:58</span></div>
+    <div class="r"><span>Table</span><span>T4 · Dine-in</span></div>
+    <div class="r"><span>Order</span><span>A-0142</span></div>
+    <div class="hr"></div>
+    <div class="r" style="font-weight: 700"><span style="flex: 1">Item</span><span style="width: 30px; text-align: right">Qty</span><span style="width: 60px; text-align: right">Amt</span></div>
+    <div class="hr"></div>
+    <div class="r"><span style="flex: 1">Masala Chai</span><span style="width: 30px; text-align: right">2</span><span style="width: 60px; text-align: right">80.00</span></div>
+    <div style="color: #444">  HSN 996331 @5%</div>
+    <div class="r"><span style="flex: 1">Vada Pav</span><span style="width: 30px; text-align: right">2</span><span style="width: 60px; text-align: right">100.00</span></div>
+    <div style="color: #444">  HSN 996331 @5%</div>
+    <div class="r"><span style="flex: 1">Cappuccino</span><span style="width: 30px; text-align: right">1</span><span style="width: 60px; text-align: right">210.00</span></div>
+    <div style="color: #444">  Large, Oat milk · HSN 996331 @5%</div>
+    <div class="r"><span style="flex: 1">Masala Fries</span><span style="width: 30px; text-align: right">1</span><span style="width: 60px; text-align: right">110.00</span></div>
+    <div style="color: #444">  HSN 996331 @5%</div>
+    <div class="hr"></div>
+    <div class="r"><span>Subtotal</span><span>500.00</span></div>
+    <div class="r"><span>Service charge 5% (optional)</span><span>25.00</span></div>
+    <div class="r"><span>Taxable value</span><span>525.00</span></div>
+    <div class="r"><span>CGST @2.5%</span><span>13.13</span></div>
+    <div class="r"><span>SGST @2.5%</span><span>13.12</span></div>
+    <div class="r"><span>Round off</span><span>-0.25</span></div>
+    <div class="hr"></div>
+    <div class="r" style="font-size: 15px; font-weight: 700"><span>TOTAL</span><span>₹551.00</span></div>
+    <div class="hr"></div>
+    <div class="r"><span>Paid · Cash</span><span>600.00</span></div>
+    <div class="r"><span>Change</span><span>49.00</span></div>
+    <div class="hr"></div>
+    <div style="font-weight: 700">GST summary</div>
+    <div class="r"><span>Rate</span><span>Taxable</span><span>CGST</span><span>SGST</span></div>
+    <div class="r"><span>5%</span><span>525.00</span><span>13.13</span><span>13.12</span></div>
+    <div class="hr"></div>
+    <div style="text-align: center">Service charge is optional and</div>
+    <div style="text-align: center">can be removed on request.</div>
+    <div style="text-align: center; margin-top: 6px; font-weight: 700">Thank you · Visit again</div>
+    <div style="text-align: center; color: #555; margin-top: 4px">Counter 1 · Cashier device BB01</div>
+  </div>
+  <div style="margin-top: 16px; font-size: 12px; color: #4A5568; line-height: 1.5">
+    <strong style="color: #1B2230">Composition / unregistered outlets</strong> print “Bill of Supply” here, with no CGST/SGST lines and the composition declaration in the footer.
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":380,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

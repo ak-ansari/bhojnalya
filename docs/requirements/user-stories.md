@@ -31,8 +31,9 @@ one line at a time.
 Postgres), **U** unit. `Cov` is the test that holds the story. Nothing is built
 yet, so every `Cov` is `—`.
 
-There are **5 N** stories and **5 ?** stories out of **108**. Those 10 are the
-real agenda.
+There are **9 N** stories and **0 ?** stories out of **108**. The five open
+stories were decided on 2026-10-14 and are now N, except US-ACC-06, which
+follows the TRD and is now T.
 
 ---
 
@@ -85,7 +86,7 @@ real agenda.
 | US-KDS-04 | P | As **kitchen staff** I see each ticket's age colour-coded (green, amber, red) against thresholds the outlet sets (K4) | E | — |
 | US-KDS-05 | P | As **kitchen staff** who prefer paper I print a KOT through the browser print dialog (K5) | E | — |
 | US-KDS-06 | T | As **kitchen staff**, if the screen drops its connection and comes back, it shows every ticket that changed while it was away, without a manual refresh | S | — |
-| US-KDS-07 | ? | As a **café owner** I know whether the MVP prints KOTs automatically at launch or relies on the KDS alone (PRD §10 Q5, TRD §22 Q3) | — | — |
+| US-KDS-07 | N | As a **café owner** I choose per outlet whether KOTs go to the kitchen screen, the printer or both. With a printer, the print dialog opens by itself on "send to kitchen" (silent printing stays in Phase 2), and each till numbers its KOTs from 1 every business day, so two offline tills never clash (PRD §10 Q5, TRD §22 Q3) | E | — |
 
 ## US-QR: Guest ordering at the table
 
@@ -119,7 +120,7 @@ real agenda.
 | US-AGG-07 | T | As a **café owner** an aggregator order sent twice by the middleware appears once | I | — |
 | US-AGG-08 | T | As a **café owner** I see a banner when an accept, reject, Food Ready, stock or store update could not reach the aggregator after retries, so I can act on it by hand | S | — |
 | US-AGG-09 | P | As a **cashier** I'm told aggregator orders are paused while the POS is offline (A1 constraint, N2) | E | — |
-| US-AGG-10 | ? | As a **café owner** I know what happens when the accept deadline passes with no answer, and that depends on the middleware we choose (PRD §10 Q2, TRD §22 Q1) | — | — |
+| US-AGG-10 | N | As a **café owner** an aggregator order nobody accepted before the platform's deadline is kept as a missed order: no KOT, no invoice, and counted in my reports. Auto-accept is off unless I switch it on. The exact deadline comes from the middleware (PRD §10 Q2, TRD §22 Q1) | I | — |
 
 ## US-GST: Compliant invoices
 
@@ -136,7 +137,7 @@ real agenda.
 | US-GST-09 | T | As a **café owner** CGST and SGST always add up to the tax, line discounts add up to the order discount, and the bill reconciles to the paisa | U | — |
 | US-GST-10 | P | As a **café owner** round-off shows as its own line and is never more than 50 paise either way (P4) | U | — |
 | US-GST-11 | T | As a **café owner** a past bill stays exactly as issued even after I change an item's name, price, tax rate or HSN | I | — |
-| US-GST-12 | ? | As a **café owner** I know whether GST applies to the service charge at my outlet. The engine supports both ways, and a CA must confirm which (TRD §22 Q4) | — | — |
+| US-GST-12 | N | As a **café owner** when I switch service charge on, GST is charged on it at the same rate as the items unless I turn that off for my outlet. A CA confirms this for the pilot outlets (TRD §22 Q4) | U | — |
 
 ## US-MENU: Menu and stock
 
@@ -175,7 +176,7 @@ real agenda.
 | US-ACC-03 | P | As a **café owner** I log in once on a tablet and register it as this outlet's POS or KDS, and it stays signed in from then on (U2) | E | — |
 | US-ACC-04 | T | As a **café owner** I see my registered devices and revoke one, and a revoked device can't do anything after that | I | — |
 | US-ACC-05 | P | As a **café owner** my outlet's data is never visible to another café, whatever the request asks for (N4) | I | — |
-| US-ACC-06 | ? | As a **café owner** I can log in with an OTP instead of a password. The PRD offers OTP (U1), but the TRD defers SMS OTP because each message costs money | — | — |
+| US-ACC-06 | T | As a **café owner** I log in with my email or phone and a password, and reset it with a code sent by email. SMS OTP login waits for a later phase because each message costs money (U1) | E | — |
 
 ## US-ADM: Platform super admin
 
@@ -191,7 +192,7 @@ real agenda.
 | US-ADM-08 | P | As a **super admin** I view an outlet as its owner to support them. The screen shows a red banner, and everything I do is written to an audit log (S6) | S | — |
 | US-ADM-09 | T | As a **super admin** I'm alerted to invoice number gaps, devices with changes unsynced for over an hour, aggregator jobs that failed for good, and failed backups | I | — |
 | US-ADM-10 | N | As a **super admin** reading the audit log I can tell what the outlet's owner did from what I did while viewing as them | I | — |
-| US-ADM-11 | ? | As a **café owner** suspended while a POS was offline, I know what happens to the bills it made. Suspension refuses every change, but synced bills are never dropped (S3, N2) | — | — |
+| US-ADM-11 | N | As a **café owner** suspended while a POS was offline, every bill it made is accepted when it syncs, and I can still bill tables whose food already went to the kitchen, but I can't start a new order. Bills dated after the suspension are flagged for review (S3, N2, ADR 0015) | S | — |
 | US-ADM-12 | N | As a **super admin** I re-provision a café's device and see the last number its old device code synced before that code is retired | I | — |
 
 ---

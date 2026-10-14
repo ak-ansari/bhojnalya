@@ -92,6 +92,20 @@ Use these in `.claude/skills/` rather than working from memory:
 - `user-story`: add a story and write the cross-app story test
 - `adr`: write or supersede a decision
 
+## Agent skills
+
+### Issue tracker
+
+Issues and specs are local markdown files under `.scratch/<feature>/`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five default roles (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`), written as a `Status:` line. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: one root `GLOSSARY.md`; ADRs in `docs/decisions/`. See `docs/agents/domain.md`.
+
 ## Conventions
 
 - API: REST under `/api/v1`. Errors look like `{ code, message, details?, requestId }`. Lists use cursor pagination. Zod validates at every boundary, and OpenAPI is generated from Zod.

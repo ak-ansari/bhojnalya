@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>QR menu</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#6B3A1F}
+.chip{flex:none;height:36px;padding:0 14px;border-radius:18px;border:1px solid #E3E6EB;background:#fff;font-size:13px;font-weight:600;color:#3B4456}
+.chip.on{background:#6B3A1F;border-color:#6B3A1F;color:#fff}
+.vmark{width:14px;height:14px;border:1.5px solid #15803D;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex:none;background:#fff}
+.vmark i{width:6px;height:6px;border-radius:50%;background:#15803D}
+.vmark.nv{border-color:#7C2D12}
+.vmark.nv i{border-radius:0;width:8px;height:7px;background:#7C2D12;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.vmark.egg{border-color:#A16207}
+.vmark.egg i{background:#CA8A04}
+.add{height:36px;min-width:84px;border-radius:10px;border:1.5px solid #6B3A1F;background:#fff;color:#6B3A1F;font-weight:700;font-size:14px}
+.add:hover{background:#F8EFE9}
+.step{display:flex;align-items:center;height:36px;min-width:84px;border-radius:10px;background:#6B3A1F;color:#fff;overflow:hidden}
+.step button{width:30px;height:36px;border:0;background:transparent;color:#fff;font-size:18px;font-weight:700}
+.step span{flex:1;text-align:center;font-weight:700}
+.opt{display:flex;justify-content:space-between;align-items:center;min-height:48px;padding:0 14px;border:1.5px solid #E3E6EB;border-radius:12px;background:#fff;font-weight:600;font-size:15px}
+.opt.on{border-color:#6B3A1F;background:#F8EFE9}
+.toggle{display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 10px;border-radius:16px;border:1px solid #BBE5C8;background:#fff;font-size:12px;font-weight:700;color:#166534}
+.toggle.on{background:#E8F7EE}
+.cartbar{display:flex;align-items:center;justify-content:space-between;height:60px;padding:0 18px;border-radius:16px;background:#6B3A1F;color:#fff;text-decoration:none;font-weight:700;box-shadow:0 10px 24px rgba(107,58,31,.35)}
+.cartbar:hover{color:#fff;background:#5A2F18}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #FAFAF9; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; font-variant-numeric: tabular-nums; display: flex; flex-direction: column">
+  <header style="padding: 18px 18px 12px; background: #fff; border-bottom: 1px solid #EEF0F4; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; align-items: center; gap: 12px">
+      <div style="width: 46px; height: 46px; border-radius: 50%; background: #6B3A1F; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700">B&amp;B</div>
+      <div style="flex: 1">
+        <div style="font-size: 18px; font-weight: 700">Brew &amp; Bun Café</div>
+        <div style="font-size: 13px; color: #5B6577">You're at <strong style="color: #1B2230">Table T9</strong> · order here, pay at the counter</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center">
+      <label style="flex: 1; display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 12px; background: #F4F5F7; font-size: 14px; color: #5B6577"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search the menu</label>
+      <button class="{{vegCls}}" onClick="{{toggleVeg}}" aria-pressed="{{vegOnly}}"><span class="vmark"><i></i></span>Veg only</button>
+    </div>
+    <div style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -18px; padding: 0 18px">
+      <sc-for list="{{cats}}" as="c" hint-placeholder-count="5">
+        <button class="{{c.cls}}" onClick="{{c.pick}}">{{c.name}}</button>
+      </sc-for>
+    </div>
+  </header>
+
+  <main style="flex: 1; min-height: 0; overflow-y: auto; padding: 8px 18px 100px">
+    <h2 style="margin: 10px 0 4px; font-size: 18px">{{catName}}</h2>
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="5">
+      <div style="display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid #EEF0F4; opacity: {{it.opacity}}">
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+          <span class="{{it.vclass}}"><i></i></span>
+          <strong style="font-size: 16px">{{it.name}}</strong>
+          <span style="font-size: 15px; font-weight: 700">{{it.price}}</span>
+          <span style="font-size: 13px; color: #5B6577; line-height: 1.4">{{it.desc}}</span>
+        </div>
+        <div style="width: 104px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 0">
+          <div style="width: 104px; height: 88px; border-radius: 14px; background: {{it.tint}}; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6B5B4F">[photo]</div>
+          <div style="margin-top: -18px">
+            <sc-if value="{{it.oos}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; height: 36px; align-items: center; padding: 0 10px; border-radius: 10px; background: #EEF0F4; color: #5B6577; font-size: 12px; font-weight: 700">Unavailable</span></sc-if>
+            <sc-if value="{{it.showAdd}}" hint-placeholder-val="{{ true }}"><button class="add" onClick="{{it.add}}" aria-label="{{it.aria}}">ADD</button></sc-if>
+            <sc-if value="{{it.showStep}}" hint-placeholder-val="{{ false }}"><div class="step"><button onClick="{{it.dec}}" aria-label="Remove one">−</button><span>{{it.qty}}</span><button onClick="{{it.add}}" aria-label="Add one">+</button></div></sc-if>
+          </div>
+          <sc-if value="{{it.custom}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; color: #5B6577; margin-top: 4px">customisable</span></sc-if>
+        </div>
+      </div>
+    </sc-for>
+  </main>
+
+  <sc-if value="{{hasCart}}" hint-placeholder-val="{{ true }}">
+    <div style="position: absolute; left: 14px; right: 14px; bottom: 18px">
+      <a class="cartbar" href="QrCart.dc.html"><span style="display: flex; flex-direction: column; line-height: 1.2"><span style="font-size: 12px; font-weight: 500; opacity: .85">{{cartCount}} items</span><span style="font-size: 17px">{{cartTotal}}</span></span><span style="display: inline-flex; align-items: center; gap: 6px">View cart<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span></a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{sheet}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: rgba(16,24,40,.5); display: flex; align-items: flex-end">
+      <div role="dialog" aria-label="Customise" style="width: 100%; background: #fff; border-radius: 22px 22px 0 0; padding: 20px 18px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start">
+          <div><div style="font-size: 19px; font-weight: 700">{{sheetName}}</div><div style="font-size: 13px; color: #5B6577">Size · pick 1</div></div>
+          <button onClick="{{closeSheet}}" aria-label="Close" style="width: 36px; height: 36px; border-radius: 18px; border: 0; background: #F4F5F7; font-weight: 700">✕</button>
+        </div>
+        <sc-for list="{{sizes}}" as="s" hint-placeholder-count="2">
+          <button class="{{s.cls}}" onClick="{{s.pick}}">{{s.name}}<span style="font-weight: 500; color: #5B6577">{{s.delta}}</span></button>
+        </sc-for>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #3B4456">Note for the kitchen<input placeholder="e.g. less ice" style="height: 44px; border: 1px solid #D9DDE4; border-radius: 12px; padding: 0 12px; font: inherit; font-size: 15px; font-weight: 400"></label>
+        <button onClick="{{confirmSheet}}" style="height: 54px; border: 0; border-radius: 14px; background: #6B3A1F; color: #fff; font-size: 16px; font-weight: 700">Add item · {{sheetPrice}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+var CATS = [['cold', 'Cold coffee'], ['hot', 'Hot drinks'], ['snacks', 'Snacks'], ['sand', 'Sandwiches'], ['dessert', 'Desserts']];
+var MENU = [
+  { id: 'cc', cat: 'cold', name: 'Classic Cold Coffee', price: 15000, v: 'veg', desc: 'Our house blend, shaken with milk and ice.', mods: true, tint: '#E9DCCF' },
+  { id: 'hz', cat: 'cold', name: 'Hazelnut Frappé', price: 18000, v: 'veg', desc: 'Blended with hazelnut syrup and topped with cream.', mods: true, tint: '#E6D3C2' },
+  { id: 'ia', cat: 'cold', name: 'Iced Americano', price: 13000, v: 'veg', desc: 'Double shot over ice. No milk.', tint: '#DCCFC4' },
+  { id: 'vt', cat: 'cold', name: 'Vietnamese Iced Coffee', price: 17000, v: 'veg', desc: 'Strong drip with condensed milk.', oos: true, tint: '#E3D6CA' },
+  { id: 'ch', cat: 'hot', name: 'Masala Chai', price: 4000, v: 'veg', desc: 'Ginger, cardamom and a little clove.', tint: '#EADBC8' },
+  { id: 'cp', cat: 'hot', name: 'Cappuccino', price: 14000, v: 'veg', desc: 'Espresso with velvety foam.', mods: true, tint: '#E6D6C6' },
+  { id: 'vp', cat: 'snacks', name: 'Vada Pav', price: 5000, v: 'veg', desc: 'Mumbai style, with dry garlic chutney.', tint: '#F0DFC2' },
+  { id: 'mm', cat: 'snacks', name: 'Chicken Momos', price: 16000, v: 'nv', desc: 'Steamed, 6 pieces, with red chutney.', tint: '#EFE3D3' },
+  { id: 'em', cat: 'sand', name: 'Egg Mayo Sandwich', price: 13000, v: 'egg', desc: 'On toasted milk bread.', tint: '#F1E6CF' },
+  { id: 'bm', cat: 'sand', name: 'Bombay Masala Sandwich', price: 12000, v: 'veg', desc: 'Potato, chutney and veggies, grilled.', tint: '#EEE1C9' },
+  { id: 'br', cat: 'dessert', name: 'Walnut Brownie', price: 12000, v: 'egg', desc: 'Warm, fudgy, with a walnut crust.', tint: '#DDCBBE' }
+];
+function rupees0(p) { return '₹' + (p / 100).toLocaleString('en-IN'); }
+function vclass(v) { return v === 'nv' ? 'vmark nv' : v === 'egg' ? 'vmark egg' : 'vmark'; }
+class Component extends DCLogic {
+  state = { cat: 'cold', veg: false, cart: { cc: 1, ch: 2 }, sheet: null, size: 'reg' };
+  renderVals() {
+    var self = this, st = this.state;
+    function bump(id, by) { var c = Object.assign({}, st.cart); c[id] = Math.max(0, (c[id] || 0) + by); if (!c[id]) delete c[id]; self.setState({ cart: c }); }
+    var count = 0, total = 0;
+    Object.keys(st.cart).forEach(function (id) { var m = MENU.filter(function (x) { return x.id === id; })[0]; count += st.cart[id]; total += m.price * st.cart[id]; });
+    var sheetItem = st.sheet ? MENU.filter(function (x) { return x.id === st.sheet; })[0] : null;
+    return {
+      vegOnly: st.veg, vegCls: st.veg ? 'toggle on' : 'toggle', toggleVeg: function () { self.setState({ veg: !st.veg }); },
+      cats: CATS.map(function (c) { return { name: c[1], cls: st.cat === c[0] ? 'chip on' : 'chip', pick: function () { self.setState({ cat: c[0] }); } }; }),
+      catName: CATS.filter(function (c) { return c[0] === st.cat; })[0][1],
+      items: MENU.filter(function (m) { return m.cat === st.cat && (!st.veg || m.v === 'veg'); }).map(function (m) {
+        var q = st.cart[m.id] || 0;
+        return { name: m.name, price: rupees0(m.price), desc: m.oos ? 'Sold out for now. Check back soon.' : m.desc, vclass: vclass(m.v), tint: m.tint,
+          oos: !!m.oos, showAdd: !m.oos && q === 0, showStep: !m.oos && q > 0, qty: q, custom: !!m.mods && !m.oos,
+          opacity: m.oos ? '0.55' : '1', aria: 'Add ' + m.name,
+          add: function () { if (m.mods && q === 0) self.setState({ sheet: m.id, size: 'reg' }); else bump(m.id, 1); },
+          dec: function () { bump(m.id, -1); } };
+      }),
+      hasCart: count > 0, cartCount: count, cartTotal: rupees0(total) + ' + taxes',
+      sheet: !!sheetItem, sheetName: sheetItem ? sheetItem.name : '',
+      sizes: [['reg', 'Regular', 0], ['lg', 'Large', 3000]].map(function (s) {
+        return { name: s[1], delta: s[2] ? '+' + rupees0(s[2]) : 'Included', cls: st.size === s[0] ? 'opt on' : 'opt', pick: function () { self.setState({ size: s[0] }); } };
+      }),
+      sheetPrice: sheetItem ? rupees0(sheetItem.price + (st.size === 'lg' ? 3000 : 0)) : '',
+      closeSheet: function () { self.setState({ sheet: null }); },
+      confirmSheet: function () { var id = st.sheet; var c = Object.assign({}, st.cart); c[id] = (c[id] || 0) + 1; self.setState({ cart: c, sheet: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

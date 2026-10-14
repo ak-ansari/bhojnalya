@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foundations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit}
+.h{margin:0 0 12px;font-size:12px;font-weight:700;letter-spacing:.08em;color:#5B6577}
+.sw{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#3B4456}
+.sw i{display:block;height:64px;border-radius:12px;border:1px solid rgba(0,0,0,.06)}
+.sw b{font-size:13px;color:#1B2230}
+.mono{font-family:'JetBrains Mono',monospace;font-size:11px;color:#5B6577}
+.btn{display:inline-flex;align-items:center;justify-content:center;height:48px;padding:0 18px;border-radius:12px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:15px;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.btn.dark{background:#1E2638;border-color:#1E2638;color:#fff}
+.btn.ok{background:#15803D;border-color:#15803D;color:#fff}
+.btn.ghost{color:#B91C1C;border-color:#F3C4C4}
+.tag{display:inline-flex;align-items:center;height:26px;padding:0 10px;border-radius:7px;font-size:12px;font-weight:700}
+.vmark{width:16px;height:16px;border:1.5px solid #15803D;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;background:#fff}
+.vmark i{width:7px;height:7px;border-radius:50%;background:#15803D}
+.vmark.nv{border-color:#7C2D12}
+.vmark.nv i{border-radius:0;width:9px;height:8px;background:#7C2D12;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.vmark.egg{border-color:#A16207}
+.vmark.egg i{background:#CA8A04}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; padding: 40px 48px; background: #fff; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px">
+  <div style="display: flex; flex-direction: column; gap: 30px">
+    <div>
+      <div style="font-size: 13px; font-weight: 700; color: #C2410C; letter-spacing: .08em">BHOJNALYA · FOUNDATIONS</div>
+      <h1 style="margin: 6px 0 0; font-size: 36px">Warm, fast, readable at the counter.</h1>
+    </div>
+    <div>
+      <p class="h">CORE COLOUR</p>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+        <div class="sw"><i style="background: #C2410C"></i><b>Saffron</b><span class="mono">#C2410C</span></div>
+        <div class="sw"><i style="background: #FFF1E8"></i><b>Saffron tint</b><span class="mono">#FFF1E8</span></div>
+        <div class="sw"><i style="background: #1E2638"></i><b>Ink</b><span class="mono">#1E2638</span></div>
+        <div class="sw"><i style="background: #F4F5F7"></i><b>Canvas</b><span class="mono">#F4F5F7</span></div>
+        <div class="sw"><i style="background: #5B6577"></i><b>Muted text</b><span class="mono">#5B6577</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="h">STATUS COLOUR · ALSO DIFFER IN LIGHTNESS</p>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+        <div class="sw"><i style="background: #15803D"></i><b>Success · Fresh</b><span class="mono">#15803D</span></div>
+        <div class="sw"><i style="background: #B45309"></i><b>Warning · Ageing</b><span class="mono">#B45309</span></div>
+        <div class="sw"><i style="background: #B91C1C"></i><b>Danger · Late</b><span class="mono">#B91C1C</span></div>
+        <div class="sw"><i style="background: #2563EB"></i><b>Info · Running</b><span class="mono">#2563EB</span></div>
+        <div class="sw"><i style="background: #6D28D9"></i><b>QR channel</b><span class="mono">#6D28D9</span></div>
+      </div>
+    </div>
+    <div>
+      <p class="h">TYPE · DM SANS + JETBRAINS MONO, TABULAR FIGURES</p>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="mono" style="width: 70px">36 / 700</span><span style="font-size: 36px; font-weight: 700">₹1,26,450.00</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="mono" style="width: 70px">22 / 700</span><span style="font-size: 22px; font-weight: 700">Bill · Table T4</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="mono" style="width: 70px">15 / 600</span><span style="font-size: 15px; font-weight: 600">Cappuccino · Large, Oat milk</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="mono" style="width: 70px">13 / 400</span><span style="font-size: 13px; color: #5B6577">Bills are saved on this tablet and sync on their own.</span></div>
+        <div style="display: flex; align-items: baseline; gap: 16px"><span class="mono" style="width: 70px">Mono</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 14px">BB01/2627/000143</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 28px">
+    <div>
+      <p class="h">BUTTONS · 48 PX MIN TOUCH HEIGHT</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button class="btn pri">Bill ₹551.00</button>
+        <button class="btn dark">Send KOT</button>
+        <button class="btn ok">Accept</button>
+        <button class="btn">Discount</button>
+        <button class="btn ghost">Reject</button>
+      </div>
+    </div>
+    <div>
+      <p class="h">TABLE STATUS</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span class="tag" style="background: #fff; border: 1.5px solid #9AA3B2; color: #3B4456">Vacant</span>
+        <span class="tag" style="background: #EAF1FF; border: 1.5px solid #2563EB; color: #1D4ED8">Running</span>
+        <span class="tag" style="background: #FFF4DE; border: 1.5px solid #B45309; color: #92400E">Bill printed</span>
+        <span class="tag" style="background: #E8F7EE; border: 1.5px solid #15803D; color: #166534">Settled</span>
+      </div>
+    </div>
+    <div>
+      <p class="h">CHANNELS</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span class="tag" style="background: #EEF0F4; color: #3B4456">DINE-IN</span>
+        <span class="tag" style="background: #EEF0F4; color: #3B4456">TAKEAWAY</span>
+        <span class="tag" style="background: #EFE7FF; color: #5B21B6">QR · TABLE</span>
+        <span class="tag" style="background: #FFEDD5; color: #9A3412">SWIGGY</span>
+        <span class="tag" style="background: #FFE4E6; color: #9F1239">ZOMATO</span>
+      </div>
+    </div>
+    <div>
+      <p class="h">FOOD MARKERS (FSSAI)</p>
+      <div style="display: flex; gap: 22px; font-size: 14px; font-weight: 600">
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span class="vmark"><i></i></span>Veg</span>
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span class="vmark nv"><i></i></span>Non-veg</span>
+        <span style="display: inline-flex; gap: 8px; align-items: center"><span class="vmark egg"><i></i></span>Contains egg</span>
+      </div>
+    </div>
+    <div>
+      <p class="h">CONNECTION</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <span style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #BBE5C8; background: #EDF9F0; font-size: 13px; font-weight: 600; color: #166534"><i style="width: 8px; height: 8px; border-radius: 50%; background: #16A34A; display: inline-block"></i>Online · all synced</span>
+        <span style="display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid #F5D08A; background: #FFF7E6; font-size: 13px; font-weight: 600; color: #92400E"><i style="width: 8px; height: 8px; border-radius: 50%; background: #D97706; display: inline-block"></i>Offline · 3 bills to sync</span>
+      </div>
+    </div>
+    <div>
+      <p class="h">SHAPE</p>
+      <div style="display: flex; gap: 12px; align-items: flex-end; font-size: 12px; color: #5B6577">
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><i style="width: 56px; height: 40px; border: 1.5px solid #C3C9D3; border-radius: 8px; display: block"></i>8 chips</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><i style="width: 56px; height: 40px; border: 1.5px solid #C3C9D3; border-radius: 12px; display: block"></i>12 controls</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><i style="width: 56px; height: 40px; border: 1.5px solid #C3C9D3; border-radius: 14px; display: block"></i>14 cards</div>
+        <div style="display: flex; flex-direction: column; gap: 6px; align-items: center"><i style="width: 56px; height: 40px; border: 1.5px solid #C3C9D3; border-radius: 20px; display: block"></i>20 dialogs</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

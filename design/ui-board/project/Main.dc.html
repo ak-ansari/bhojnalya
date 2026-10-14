@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>POS order screen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:4px;width:60px;padding:10px 0;border-radius:12px;color:#AEB6C6;text-decoration:none;font-size:11px;font-weight:600;position:relative}
+.rail a:hover{background:#2A3449;color:#fff}
+.rail a.on{background:#C2410C;color:#fff}
+.rail .badge{position:absolute;top:4px;right:8px;min-width:18px;height:18px;border-radius:9px;background:#FBBF24;color:#1E2638;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.seg{display:flex;background:#EEF0F4;border-radius:10px;padding:3px}
+.seg button{border:0;background:transparent;height:36px;padding:0 16px;border-radius:8px;font-weight:600;font-size:14px;color:#4A5568}
+.seg button.on{background:#fff;color:#1B2230;box-shadow:0 1px 2px rgba(16,24,40,.12)}
+.cat{display:flex;justify-content:space-between;align-items:center;width:100%;min-height:48px;padding:0 14px;border:0;border-radius:10px;background:transparent;text-align:left;font-weight:600;font-size:14px;color:#3B4456}
+.cat:hover{background:#EEF0F4}
+.cat.on{background:#FFF1E8;color:#9A3412}
+.cat small{font-weight:500;color:#6B7486;font-size:12px}
+.cat.on small{color:#C2410C}
+.item{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:8px;height:108px;padding:12px;border:1px solid #E3E6EB;border-radius:12px;background:#fff;text-align:left;transition:transform .08s, box-shadow .12s, border-color .12s}
+.item:hover{border-color:#F0A47A;box-shadow:0 4px 12px rgba(194,65,12,.10)}
+.item:active{transform:scale(.97)}
+.item.oos{background:#F6F7F9;cursor:not-allowed;color:#8A93A3}
+.item.oos:hover{border-color:#E3E6EB;box-shadow:none}
+.vmark{width:14px;height:14px;border:1.5px solid #15803D;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex:none;background:#fff}
+.vmark i{width:6px;height:6px;border-radius:50%;background:#15803D}
+.vmark.nv{border-color:#7C2D12}
+.vmark.nv i{border-radius:0;width:8px;height:7px;background:#7C2D12;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.vmark.egg{border-color:#A16207}
+.vmark.egg i{background:#CA8A04}
+.qty{display:flex;align-items:center;border:1px solid #D9DDE4;border-radius:10px;overflow:hidden}
+.qty button{width:34px;height:34px;border:0;background:#fff;font-size:18px;font-weight:600;color:#C2410C}
+.qty button:hover{background:#FFF1E8}
+.qty span{min-width:28px;text-align:center;font-weight:700;font-size:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 16px;border-radius:12px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:15px;text-decoration:none;color:#1B2230}
+.btn:hover{background:#F6F7F9;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.btn.pri:hover{background:#9A3412;color:#fff}
+.btn.dark{background:#1E2638;border-color:#1E2638;color:#fff}
+.btn.dark:hover{background:#2A3449}
+.chip{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:8px;border:1px solid #E3E6EB;background:#fff;font-size:13px;font-weight:600;color:#3B4456}
+.mini{height:36px;padding:0 12px;border-radius:9px;border:1px solid #E3E6EB;background:#fff;font-size:13px;font-weight:600;color:#3B4456}
+.mini:hover{background:#F6F7F9}
+.opt{display:flex;justify-content:space-between;align-items:center;min-height:48px;padding:0 14px;border:1.5px solid #E3E6EB;border-radius:10px;background:#fff;font-weight:600;font-size:14px;text-align:left}
+.opt.on{border-color:#C2410C;background:#FFF1E8;color:#9A3412}
+.opt small{font-weight:500;color:#6B7486}
+.net{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border-radius:18px;border:1px solid #BBE5C8;background:#EDF9F0;font-size:13px;font-weight:600;color:#166534}
+.net.off{border-color:#F5D08A;background:#FFF7E6;color:#92400E}
+.net i{width:8px;height:8px;border-radius:50%;background:#16A34A}
+.net.off i{background:#D97706}
+.scroll::-webkit-scrollbar{width:6px}.scroll::-webkit-scrollbar-thumb{background:#D9DDE4;border-radius:3px}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; display: flex; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; background: #F4F5F7; overflow: hidden; position: relative; font-variant-numeric: tabular-nums">
+
+  <nav class="rail" aria-label="POS" style="width: 76px; flex: none; background: #1E2638; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 0">
+    <div style="width: 40px; height: 40px; border-radius: 12px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; margin-bottom: 14px">B</div>
+    <a href="Main.dc.html" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l-1 18H7L6 3z"/><path d="M9 8h6M9 12h6"/></svg>Order</a>
+    <a href="Tables.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Tables</a>
+    <a href="Incoming.dc.html"><span class="badge">3</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>Online</a>
+    <a href="Kds.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9V20h12v-6.1"/><path d="M6 14a4 4 0 01-.9-7.9 5 5 0 019.8-1A4 4 0 1118 14H6z"/></svg>Kitchen</a>
+    <a href="Payment.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2-3-2z"/><path d="M8 9h8M8 13h5"/></svg>Bills</a>
+    <div style="flex: 1"></div>
+    <a href="Device.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Device</a>
+  </nav>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; flex: none; display: flex; align-items: center; gap: 16px; padding: 0 20px; background: #fff; border-bottom: 1px solid #E3E6EB">
+      <div style="display: flex; flex-direction: column; line-height: 1.2">
+        <strong style="font-size: 16px">Brew &amp; Bun Café</strong>
+        <span style="font-size: 12px; color: #5B6577">Koramangala · Counter 1 · BB01</span>
+      </div>
+      <div class="seg" role="group" aria-label="Order type">
+        <button class="{{dineCls}}" onClick="{{setDine}}">Dine-in</button>
+        <button class="{{takeCls}}" onClick="{{setTake}}">Takeaway</button>
+      </div>
+      <sc-if value="{{isDine}}" hint-placeholder-val="{{ true }}">
+        <a href="Tables.dc.html" class="chip" style="text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>Table T4 · 4 seats<span style="color: #C2410C">Change</span></a>
+      </sc-if>
+      <sc-if value="{{isTake}}" hint-placeholder-val="{{ false }}">
+        <span class="chip">Token #18</span>
+      </sc-if>
+      <div style="flex: 1"></div>
+      <button class="{{netCls}}" onClick="{{toggleNet}}" aria-label="Network status, tap to simulate"><i></i>{{netLabel}}</button>
+      <span style="font-size: 14px; font-weight: 600; color: #3B4456">12:42 PM</span>
+    </header>
+
+    <sc-if value="{{offline}}" hint-placeholder-val="{{ false }}">
+      <div role="status" style="flex: none; display: flex; align-items: center; gap: 10px; padding: 9px 20px; background: #FFF7E6; border-bottom: 1px solid #F5D08A; font-size: 13px; color: #78350F">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 1l22 22M16.7 11.1A11 11 0 0119 12.6M5 12.6a11 11 0 015.2-2.5M10.7 5A16 16 0 0122.6 9M1.4 9a16 16 0 014.3-2.7M8.5 16.1a5 5 0 017 0M12 20h.01"/></svg>
+        <span><strong>You're offline.</strong> Keep billing as usual. Bills are saved on this tablet and sync on their own when the internet is back. QR and Swiggy/Zomato orders are paused.</span>
+      </div>
+    </sc-if>
+
+    <div style="flex: 1; min-height: 0; display: flex">
+      <aside class="scroll" aria-label="Categories" style="width: 196px; flex: none; padding: 14px 10px; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; background: #FAFBFC; border-right: 1px solid #E3E6EB">
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+          <button class="{{c.cls}}" onClick="{{c.pick}}">{{c.name}}<small>{{c.count}}</small></button>
+        </sc-for>
+      </aside>
+
+      <section style="flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 14px 16px; gap: 12px">
+        <label style="display: flex; align-items: center; gap: 10px; height: 46px; padding: 0 14px; border: 1px solid #D9DDE4; border-radius: 12px; background: #fff">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B7486" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <span style="position: absolute; left: -9999px">Search items</span>
+          <input value="{{q}}" onInput="{{onSearch}}" placeholder="Search items or type a short code… (e.g. chai)" style="flex: 1; border: 0; outline: 0; font-size: 15px; background: transparent">
+          <kbd style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #6B7486; border: 1px solid #E3E6EB; border-radius: 6px; padding: 2px 6px">F2</kbd>
+        </label>
+        <div style="display: flex; align-items: baseline; justify-content: space-between">
+          <h2 style="margin: 0; font-size: 18px">{{heading}}</h2>
+          <span style="font-size: 12px; color: #5B6577">Tap to add · long-press to mark out of stock</span>
+        </div>
+        <div class="scroll" style="flex: 1; min-height: 0; overflow-y: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; align-content: start; padding-bottom: 8px">
+          <sc-for list="{{items}}" as="it" hint-placeholder-count="9">
+            <button class="{{it.cls}}" onClick="{{it.tap}}" aria-label="{{it.aria}}">
+              <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+                <span class="{{it.vclass}}"><i></i></span>
+                <sc-if value="{{it.mods}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 600; color: #9A3412; background: #FFF1E8; padding: 2px 6px; border-radius: 5px">Customise</span></sc-if>
+                <sc-if value="{{it.oos}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 700; color: #fff; background: #6B7486; padding: 2px 6px; border-radius: 5px">Out of stock</span></sc-if>
+              </span>
+              <span style="font-weight: 600; font-size: 15px; line-height: 1.25">{{it.name}}</span>
+              <span style="font-weight: 700; font-size: 15px">{{it.price}}</span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <aside aria-label="Current order" style="width: 372px; flex: none; display: flex; flex-direction: column; background: #fff; border-left: 1px solid #E3E6EB">
+        <div style="padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #EEF0F4">
+          <div>
+            <div style="font-weight: 700; font-size: 16px">{{orderTitle}}</div>
+            <div style="font-size: 12px; color: #5B6577">Order A-0142 · {{itemCount}} items · KOT {{kotNo}} sent</div>
+          </div>
+          <button class="mini" onClick="{{clear}}">Clear</button>
+        </div>
+        <div class="scroll" style="flex: 1; min-height: 0; overflow-y: auto; padding: 6px 16px">
+          <sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+            <div style="height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #6B7486; text-align: center; padding: 40px 20px">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C3C9D3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l-1 18H7L6 3z"/><path d="M9 8h6M9 12h6"/></svg>
+              <strong style="color: #3B4456">No items yet</strong>
+              <span style="font-size: 13px">Tap an item on the left to start this order.</span>
+            </div>
+          </sc-if>
+          <sc-for list="{{lines}}" as="l" hint-placeholder-count="3">
+            <div style="display: flex; gap: 10px; align-items: flex-start; padding: 12px 0; border-bottom: 1px dashed #E3E6EB">
+              <span class="{{l.vclass}}" style="margin-top: 3px"><i></i></span>
+              <div style="flex: 1; min-width: 0">
+                <div style="display: flex; gap: 6px; align-items: center">
+                  <span style="font-weight: 600; font-size: 14px">{{l.name}}</span>
+                  <sc-if value="{{l.isNew}}" hint-placeholder-val="{{ false }}"><span style="font-size: 10px; font-weight: 700; color: #1D4ED8; background: #EAF1FF; padding: 1px 5px; border-radius: 4px">NEW</span></sc-if>
+                </div>
+                <sc-if value="{{l.mods}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12px; color: #5B6577">{{l.mods}}</div></sc-if>
+                <sc-if value="{{l.note}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12px; color: #9A3412">Note: {{l.note}}</div></sc-if>
+                <div style="font-size: 12px; color: #6B7486; margin-top: 2px">{{l.unit}} each</div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+                <div class="qty"><button onClick="{{l.dec}}" aria-label="Decrease">−</button><span>{{l.qty}}</span><button onClick="{{l.inc}}" aria-label="Increase">+</button></div>
+                <span style="font-weight: 700; font-size: 14px">{{l.total}}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="border-top: 1px solid #E3E6EB; padding: 12px 16px 14px; display: flex; flex-direction: column; gap: 10px; background: #FCFCFD">
+          <div style="display: flex; gap: 8px">
+            <button class="mini" style="flex: 1">Discount</button>
+            <button class="mini" style="flex: 1">Note</button>
+            <button class="mini" style="flex: 1">Void</button>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr auto; row-gap: 4px; font-size: 13px; color: #4A5568">
+            <span>Subtotal</span><span>{{t.sub}}</span>
+            <span>CGST 2.5%</span><span>{{t.cgst}}</span>
+            <span>SGST 2.5%</span><span>{{t.sgst}}</span>
+            <span>Round off</span><span>{{t.round}}</span>
+            <strong style="font-size: 18px; color: #1B2230; margin-top: 4px">Total</strong><strong style="font-size: 18px; color: #1B2230; margin-top: 4px">{{t.grand}}</strong>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 8px">
+            <button class="btn dark" onClick="{{sendKot}}">{{kotLabel}}</button>
+            <a class="btn pri" href="Payment.dc.html">Bill {{t.grand}}</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-radius: 12px; background: #1E2638; color: #fff; font-size: 14px; font-weight: 600; box-shadow: 0 10px 30px rgba(16,24,40,.25)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>{{toast}}
+    </div>
+  </sc-if>
+
+  <sc-if value="{{modOpen}}" hint-placeholder-val="{{ false }}">
+    <div style="position: absolute; inset: 0; background: rgba(16,24,40,.45); display: flex; align-items: center; justify-content: center">
+      <div role="dialog" aria-label="Customise item" style="width: 520px; max-height: 720px; display: flex; flex-direction: column; background: #fff; border-radius: 18px; box-shadow: 0 24px 60px rgba(16,24,40,.3); overflow: hidden">
+        <div style="padding: 18px 20px; display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid #EEF0F4">
+          <div>
+            <div style="font-size: 19px; font-weight: 700">{{mod.name}}</div>
+            <div style="font-size: 13px; color: #5B6577">Base price {{mod.base}}</div>
+          </div>
+          <button class="mini" onClick="{{closeMod}}" aria-label="Close">Close</button>
+        </div>
+        <div class="scroll" style="padding: 8px 20px 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px">
+          <sc-for list="{{mod.groups}}" as="g" hint-placeholder-count="3">
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 8px">
+                <strong style="font-size: 15px">{{g.name}}</strong>
+                <span style="font-size: 12px; color: #5B6577">{{g.rule}}</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+                <sc-for list="{{g.opts}}" as="o" hint-placeholder-count="2">
+                  <button class="{{o.cls}}" onClick="{{o.pick}}">{{o.name}}<small>{{o.delta}}</small></button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 15px; font-weight: 700">Kitchen note
+            <input value="{{mod.note}}" onInput="{{onNote}}" placeholder="e.g. less sugar, no ice" style="height: 44px; border: 1px solid #D9DDE4; border-radius: 10px; padding: 0 12px; font-size: 14px; font-weight: 400">
+          </label>
+        </div>
+        <div style="padding: 14px 20px; border-top: 1px solid #EEF0F4; display: flex; gap: 10px">
+          <button class="btn" style="flex: 1" onClick="{{closeMod}}">Cancel</button>
+          <button class="btn pri" style="flex: 2" onClick="{{confirmMod}}">Add to order · {{mod.total}}</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+var CATS = [
+  { id: 'hot', name: 'Hot beverages' },
+  { id: 'cold', name: 'Cold beverages' },
+  { id: 'snacks', name: 'Snacks' },
+  { id: 'sand', name: 'Sandwiches' },
+  { id: 'pasta', name: 'Pasta' },
+  { id: 'dessert', name: 'Desserts' }
+];
+var MENU = [
+  { id: 'chai', cat: 'hot', name: 'Masala Chai', price: 4000, v: 'veg' },
+  { id: 'ginger', cat: 'hot', name: 'Ginger Lemon Tea', price: 5000, v: 'veg' },
+  { id: 'filter', cat: 'hot', name: 'Filter Coffee', price: 6000, v: 'veg' },
+  { id: 'capp', cat: 'hot', name: 'Cappuccino', price: 14000, v: 'veg', mods: true },
+  { id: 'latte', cat: 'hot', name: 'Café Latte', price: 15000, v: 'veg', mods: true },
+  { id: 'hotchoc', cat: 'hot', name: 'Hot Chocolate', price: 16000, v: 'veg', oos: true },
+  { id: 'coldcoffee', cat: 'cold', name: 'Cold Coffee', price: 15000, v: 'veg', mods: true },
+  { id: 'iced', cat: 'cold', name: 'Iced Americano', price: 13000, v: 'veg', mods: true },
+  { id: 'mango', cat: 'cold', name: 'Mango Shake', price: 14000, v: 'veg' },
+  { id: 'lime', cat: 'cold', name: 'Fresh Lime Soda', price: 8000, v: 'veg' },
+  { id: 'vada', cat: 'snacks', name: 'Vada Pav', price: 5000, v: 'veg' },
+  { id: 'fries', cat: 'snacks', name: 'Masala Fries', price: 11000, v: 'veg' },
+  { id: 'momos', cat: 'snacks', name: 'Chicken Momos', price: 16000, v: 'nv' },
+  { id: 'paneer', cat: 'snacks', name: 'Paneer Tikka', price: 22000, v: 'veg' },
+  { id: 'bombay', cat: 'sand', name: 'Bombay Masala Sandwich', price: 12000, v: 'veg' },
+  { id: 'eggmayo', cat: 'sand', name: 'Egg Mayo Sandwich', price: 13000, v: 'egg' },
+  { id: 'club', cat: 'sand', name: 'Chicken Club Sandwich', price: 19000, v: 'nv' },
+  { id: 'arrab', cat: 'pasta', name: 'Penne Arrabbiata', price: 23000, v: 'veg' },
+  { id: 'alfredo', cat: 'pasta', name: 'Chicken Alfredo', price: 27000, v: 'nv' },
+  { id: 'brownie', cat: 'dessert', name: 'Walnut Brownie', price: 12000, v: 'egg' },
+  { id: 'jamun', cat: 'dessert', name: 'Gulab Jamun (2 pc)', price: 8000, v: 'veg' }
+];
+var GROUPS = [
+  { id: 'size', name: 'Size', rule: 'Pick 1 · required', many: false, opts: [{ id: 'reg', name: 'Regular', d: 0 }, { id: 'lg', name: 'Large', d: 3000 }] },
+  { id: 'milk', name: 'Milk', rule: 'Pick 1', many: false, opts: [{ id: 'dairy', name: 'Dairy', d: 0 }, { id: 'oat', name: 'Oat milk', d: 4000 }, { id: 'almond', name: 'Almond milk', d: 4500 }] },
+  { id: 'add', name: 'Add-ons', rule: 'Up to 2', many: true, max: 2, opts: [{ id: 'shot', name: 'Extra shot', d: 3000 }, { id: 'hazel', name: 'Hazelnut syrup', d: 2500 }, { id: 'cream', name: 'Whipped cream', d: 2000 }] }
+];
+function find(id) { for (var i = 0; i < MENU.length; i++) if (MENU[i].id === id) return MENU[i]; return null; }
+function rupees(p) { var s = (Math.abs(p) / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); return (p < 0 ? '−₹' : '₹') + s; }
+function rupees0(p) { return '₹' + (p / 100).toLocaleString('en-IN'); }
+function vclass(v) { return v === 'nv' ? 'vmark nv' : v === 'egg' ? 'vmark egg' : 'vmark'; }
+function totals(sub) {
+  var tax = Math.floor((sub * 5 + 50) / 100);
+  var cgst = Math.floor((tax + 1) / 2);
+  var sgst = tax - cgst;
+  var gross = sub + tax;
+  var rounded = Math.floor((gross + 50) / 100) * 100;
+  return { sub: sub, cgst: cgst, sgst: sgst, round: rounded - gross, grand: rounded };
+}
+class Component extends DCLogic {
+  state = {
+    cat: 'hot', q: '', type: 'dine', offline: false, toast: '', kot: 23, modFor: null, sel: null, note: '',
+    lines: [
+      { key: 'chai||Less sugar', id: 'chai', mods: '', note: 'Less sugar', unit: 4000, qty: 2, sent: 2 },
+      { key: 'vada||', id: 'vada', mods: '', note: '', unit: 5000, qty: 2, sent: 2 },
+      { key: 'capp|Large · Oat milk|', id: 'capp', mods: 'Large · Oat milk', note: '', unit: 21000, qty: 1, sent: 0 }
+    ]
+  };
+  componentWillUnmount() { clearTimeout(this.t); }
+  flash(msg) { var self = this; clearTimeout(this.t); this.setState({ toast: msg }); this.t = setTimeout(function () { self.setState({ toast: '' }); }, 2400); }
+  addLine(id, mods, unit, note) {
+    var key = id + '|' + mods + '|' + note;
+    var lines = this.state.lines.slice(); var hit = false;
+    for (var i = 0; i < lines.length; i++) if (lines[i].key === key) { lines[i] = Object.assign({}, lines[i], { qty: lines[i].qty + 1 }); hit = true; }
+    if (!hit) lines.push({ key: key, id: id, mods: mods, note: note, unit: unit, qty: 1, sent: 0 });
+    this.setState({ lines: lines });
+  }
+  bump(key, by) {
+    var lines = [];
+    this.state.lines.forEach(function (l) { if (l.key !== key) { lines.push(l); return; } var q = l.qty + by; if (q > 0) lines.push(Object.assign({}, l, { qty: q, sent: Math.min(l.sent, q) })); });
+    this.setState({ lines: lines });
+  }
+  pickOpt(g, o) {
+    var sel = Object.assign({}, this.state.sel);
+    if (!g.many) sel[g.id] = o.id;
+    else {
+      var cur = (sel[g.id] || []).slice(); var at = cur.indexOf(o.id);
+      if (at >= 0) cur.splice(at, 1); else if (cur.length < g.max) cur.push(o.id);
+      sel[g.id] = cur;
+    }
+    this.setState({ sel: sel });
+  }
+  modPrice(item, sel) {
+    var p = item.price, names = [];
+    GROUPS.forEach(function (g) {
+      g.opts.forEach(function (o) {
+        var on = g.many ? (sel[g.id] || []).indexOf(o.id) >= 0 : sel[g.id] === o.id;
+        if (on) { p += o.d; if (o.d > 0 || (g.id === 'size' && o.id !== 'reg')) names.push(o.name); }
+      });
+    });
+    return { price: p, text: names.join(' · ') };
+  }
+  renderVals() {
+    var self = this, st = this.state;
+    var q = st.q.trim().toLowerCase();
+    var list = MENU.filter(function (m) { return q ? m.name.toLowerCase().indexOf(q) >= 0 : m.cat === st.cat; });
+    var catName = CATS.filter(function (c) { return c.id === st.cat; })[0].name;
+    var sub = 0, count = 0, fresh = 0;
+    var lines = st.lines.map(function (l) {
+      var m = find(l.id); sub += l.unit * l.qty; count += l.qty; fresh += l.qty - l.sent;
+      return { name: m.name, vclass: vclass(m.v), mods: l.mods, note: l.note, qty: l.qty, unit: rupees(l.unit), total: rupees(l.unit * l.qty), isNew: l.qty > l.sent,
+        inc: function () { self.bump(l.key, 1); }, dec: function () { self.bump(l.key, -1); } };
+    });
+    var t = totals(sub);
+    var modItem = st.modFor ? find(st.modFor) : null;
+    var mod = null;
+    if (modItem) {
+      var mp = this.modPrice(modItem, st.sel);
+      mod = {
+        name: modItem.name, base: rupees0(modItem.price), total: rupees(mp.price), note: st.note,
+        groups: GROUPS.map(function (g) {
+          return { name: g.name, rule: g.rule, opts: g.opts.map(function (o) {
+            var on = g.many ? (st.sel[g.id] || []).indexOf(o.id) >= 0 : st.sel[g.id] === o.id;
+            return { name: o.name, delta: o.d ? '+' + rupees0(o.d) : 'Included', cls: on ? 'opt on' : 'opt', pick: function () { self.pickOpt(g, o); } };
+          }) };
+        })
+      };
+    }
+    return {
+      dineCls: st.type === 'dine' ? 'on' : '', takeCls: st.type === 'take' ? 'on' : '',
+      isDine: st.type === 'dine', isTake: st.type === 'take',
+      setDine: function () { self.setState({ type: 'dine' }); }, setTake: function () { self.setState({ type: 'take' }); },
+      offline: st.offline, netCls: st.offline ? 'net off' : 'net', netLabel: st.offline ? 'Offline · 3 bills to sync' : 'Online · all synced',
+      toggleNet: function () { self.setState({ offline: !st.offline }); },
+      q: st.q, onSearch: function (e) { self.setState({ q: e.target.value }); },
+      heading: q ? 'Results for “' + st.q + '”' : catName,
+      cats: CATS.map(function (c) {
+        return { name: c.name, count: MENU.filter(function (m) { return m.cat === c.id; }).length, cls: c.id === st.cat && !q ? 'cat on' : 'cat',
+          pick: function () { self.setState({ cat: c.id, q: '' }); } };
+      }),
+      items: list.map(function (m) {
+        return { name: m.name, price: rupees0(m.price), vclass: vclass(m.v), mods: !!m.mods && !m.oos, oos: !!m.oos, cls: m.oos ? 'item oos' : 'item',
+          aria: m.oos ? m.name + ', out of stock' : 'Add ' + m.name,
+          tap: function () {
+            if (m.oos) return;
+            if (m.mods) self.setState({ modFor: m.id, sel: { size: 'reg', milk: 'dairy', add: [] }, note: '' });
+            else self.addLine(m.id, '', m.price, '');
+          } };
+      }),
+      lines: lines, empty: lines.length === 0, itemCount: count, kotNo: st.kot,
+      orderTitle: st.type === 'dine' ? 'Dine-in · Table T4' : 'Takeaway · Token #18',
+      kotLabel: fresh > 0 ? 'Send KOT (' + fresh + ' new)' : 'KOT sent',
+      t: { sub: rupees(t.sub), cgst: rupees(t.cgst), sgst: rupees(t.sgst), round: rupees(t.round), grand: rupees(t.grand) },
+      clear: function () { self.setState({ lines: [] }); },
+      sendKot: function () {
+        if (fresh === 0) return;
+        var k = st.kot + 1;
+        self.setState({ kot: k, lines: st.lines.map(function (l) { return Object.assign({}, l, { sent: l.qty }); }) });
+        self.flash('KOT ' + k + ' sent to kitchen · ' + fresh + (fresh === 1 ? ' item' : ' items'));
+      },
+      toast: st.toast,
+      modOpen: !!mod, mod: mod || { groups: [] },
+      closeMod: function () { self.setState({ modFor: null }); },
+      onNote: function (e) { self.setState({ note: e.target.value }); },
+      confirmMod: function () {
+        var mp = self.modPrice(modItem, st.sel);
+        self.addLine(modItem.id, mp.text, mp.price, st.note.trim());
+        self.setState({ modFor: null });
+      }
+    };
+  }
+}
+</script>
+</body>
+</html>

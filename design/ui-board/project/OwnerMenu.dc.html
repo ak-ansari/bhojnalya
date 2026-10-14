@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Menu and stock</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.nav a{display:flex;align-items:center;gap:10px;height:42px;padding:0 12px;border-radius:10px;color:#C9D0DC;text-decoration:none;font-size:14px;font-weight:600}
+.nav a:hover{background:#2A3449;color:#fff}
+.nav a.on{background:#C2410C;color:#fff}
+.card{background:#fff;border:1px solid #E3E6EB;border-radius:16px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border-radius:11px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:14px;text-decoration:none;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.cat{display:flex;justify-content:space-between;width:100%;height:40px;align-items:center;padding:0 12px;border:0;border-radius:9px;background:transparent;font-weight:600;font-size:14px;color:#3B4456;text-align:left}
+.cat.on{background:#FFF1E8;color:#9A3412}
+.cat small{color:#6B7486;font-weight:500}
+.row{display:grid;grid-template-columns:minmax(180px,2fr) 90px 70px 90px 120px;gap:12px;align-items:center;width:100%;padding:12px 16px;border:0;border-bottom:1px solid #F1F2F4;background:#fff;text-align:left;font-size:14px}
+.row:hover{background:#FAFBFC}
+.row.on{background:#FFF8F3}
+.vmark{width:14px;height:14px;border:1.5px solid #15803D;border-radius:3px;display:inline-flex;align-items:center;justify-content:center;flex:none;background:#fff}
+.vmark i{width:6px;height:6px;border-radius:50%;background:#15803D}
+.vmark.nv{border-color:#7C2D12}
+.vmark.nv i{border-radius:0;width:8px;height:7px;background:#7C2D12;clip-path:polygon(50% 0,100% 100%,0 100%)}
+.vmark.egg{border-color:#A16207}
+.vmark.egg i{background:#CA8A04}
+.switch{width:42px;height:24px;border-radius:12px;border:0;background:#C3C9D3;position:relative;padding:0;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on{background:#15803D}
+.switch.on i{left:21px}
+.fld{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:#3B4456}
+.fld input,.fld select{height:42px;border:1px solid #D9DDE4;border-radius:10px;padding:0 12px;font-size:14px;font-weight:400;color:#1B2230;background:#fff}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;height:38px;border-radius:9px;border:1.5px solid #E3E6EB;background:#fff;font-size:13px;font-weight:700;color:#3B4456;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.seg button.on{border-color:#C2410C;background:#FFF1E8;color:#9A3412}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F5F7; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; font-variant-numeric: tabular-nums">
+  <nav class="nav" aria-label="Owner portal" style="flex: 1 1 240px; max-width: 260px; min-width: 220px; background: #1E2638; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 18px">
+      <div style="width: 38px; height: 38px; border-radius: 10px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700">B</div>
+      <div style="line-height: 1.2"><strong style="color: #fff; font-size: 15px">Brew &amp; Bun Café</strong><div style="font-size: 12px; color: #9AA3B2">Koramangala</div></div>
+    </div>
+    <a href="OwnerDashboard.dc.html">Dashboard</a>
+    <a href="OwnerMenu.dc.html" class="on">Menu &amp; stock</a>
+    <a href="OwnerReports.dc.html">Reports</a>
+    <a href="Tables.dc.html">Tables &amp; QR codes</a>
+    <a href="Device.dc.html">Devices</a>
+    <a href="#">Outlet settings</a>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 26px">Menu &amp; stock</h1>
+        <div style="font-size: 14px; color: #5B6577">Changes reach the POS, QR menu, Swiggy and Zomato within a minute. Prices exclude GST.</div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <button class="btn">Import CSV / Excel</button>
+        <button class="btn pri">+ New item</button>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section class="card" style="flex: 1 1 200px; max-width: 230px; padding: 10px; display: flex; flex-direction: column; gap: 2px">
+        <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+          <button class="{{c.cls}}" onClick="{{c.pick}}">{{c.name}}<small>{{c.n}}</small></button>
+        </sc-for>
+        <button class="cat" style="color: #C2410C">+ Add category</button>
+      </section>
+
+      <section class="card" style="flex: 999 1 520px; min-width: 0; overflow: hidden">
+        <div style="overflow-x: auto">
+          <div style="min-width: 560px">
+            <div class="row" style="background: #FAFBFC; font-size: 12px; font-weight: 700; color: #5B6577; letter-spacing: .04em; cursor: default">
+              <span>ITEM</span><span>PRICE</span><span>GST</span><span>HSN</span><span>IN STOCK</span>
+            </div>
+            <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+              <div class="{{it.cls}}">
+                <button onClick="{{it.pick}}" style="display: flex; align-items: center; gap: 10px; border: 0; background: transparent; padding: 0; text-align: left">
+                  <span class="{{it.vclass}}"><i></i></span>
+                  <span style="display: flex; flex-direction: column"><strong style="font-weight: 600">{{it.name}}</strong><span style="font-size: 12px; color: #5B6577">{{it.extra}}</span></span>
+                </button>
+                <span style="font-weight: 600">{{it.price}}</span>
+                <span>{{it.gst}}</span>
+                <span style="font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #4A5568">{{it.hsn}}</span>
+                <span style="display: flex; align-items: center; gap: 8px"><button class="{{it.swCls}}" onClick="{{it.toggle}}" aria-label="{{it.aria}}"><i></i></button><span style="font-size: 12px; font-weight: 700; color: {{it.stockColor}}">{{it.stock}}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Edit item" style="flex: 1 1 300px; max-width: 360px; padding: 18px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 17px">Edit item</h2><span style="font-size: 12px; color: #5B6577">Saved bills keep old prices</span></div>
+        <label class="fld">Name<input value="{{sel.name}}"></label>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+          <label class="fld">Price (₹)<input value="{{sel.rawPrice}}"></label>
+          <label class="fld">GST rate<select><option>5% · restaurant</option><option>12%</option><option>18%</option><option>0%</option></select></label>
+        </div>
+        <label class="fld">HSN / SAC<input value="{{sel.hsn}}"></label>
+        <div class="fld">Food type
+          <div class="seg">
+            <sc-for list="{{types}}" as="t" hint-placeholder-count="3">
+              <button class="{{t.cls}}" onClick="{{t.pick}}"><span class="{{t.vclass}}"><i></i></span>{{t.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div class="fld">Modifier groups
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: #F6F7F9; font-size: 13px; font-weight: 500"><span><strong>Size</strong> · pick exactly 1</span><span style="color: #5B6577">2 options</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 12px; border-radius: 10px; background: #F6F7F9; font-size: 13px; font-weight: 500"><span><strong>Add-ons</strong> · up to 2</span><span style="color: #5B6577">3 options</span></div>
+            <button style="height: 38px; border: 1.5px dashed #D9DDE4; border-radius: 10px; background: #fff; font-size: 13px; font-weight: 700; color: #C2410C">+ Attach a group</button>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; margin-top: 4px">
+          <button class="btn" style="flex: 1">Deactivate</button>
+          <button class="btn pri" style="flex: 1.4">Save changes</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+var CATS = [['hot', 'Hot beverages'], ['cold', 'Cold beverages'], ['snacks', 'Snacks'], ['sand', 'Sandwiches'], ['pasta', 'Pasta'], ['dessert', 'Desserts']];
+var START = [
+  { id: 'chai', cat: 'hot', name: 'Masala Chai', price: 4000, v: 'veg', extra: 'No modifiers', stock: true },
+  { id: 'ginger', cat: 'hot', name: 'Ginger Lemon Tea', price: 5000, v: 'veg', extra: 'No modifiers', stock: true },
+  { id: 'filter', cat: 'hot', name: 'Filter Coffee', price: 6000, v: 'veg', extra: 'No modifiers', stock: true },
+  { id: 'capp', cat: 'hot', name: 'Cappuccino', price: 14000, v: 'veg', extra: 'Size · Milk · Add-ons', stock: true },
+  { id: 'latte', cat: 'hot', name: 'Café Latte', price: 15000, v: 'veg', extra: 'Size · Milk · Add-ons', stock: true },
+  { id: 'hotchoc', cat: 'hot', name: 'Hot Chocolate', price: 16000, v: 'veg', extra: 'Size', stock: false },
+  { id: 'cc', cat: 'cold', name: 'Cold Coffee', price: 15000, v: 'veg', extra: 'Size · Add-ons', stock: true },
+  { id: 'mango', cat: 'cold', name: 'Mango Shake', price: 14000, v: 'veg', extra: 'Seasonal', stock: true },
+  { id: 'vada', cat: 'snacks', name: 'Vada Pav', price: 5000, v: 'veg', extra: 'No modifiers', stock: true },
+  { id: 'momos', cat: 'snacks', name: 'Chicken Momos', price: 16000, v: 'nv', extra: 'Steamed / Fried', stock: true },
+  { id: 'eggmayo', cat: 'sand', name: 'Egg Mayo Sandwich', price: 13000, v: 'egg', extra: 'Bread choice', stock: true },
+  { id: 'brownie', cat: 'dessert', name: 'Walnut Brownie', price: 12000, v: 'egg', extra: 'Add ice cream', stock: true }
+];
+function vclass(v) { return v === 'nv' ? 'vmark nv' : v === 'egg' ? 'vmark egg' : 'vmark'; }
+class Component extends DCLogic {
+  state = { cat: 'hot', items: START, sel: 'capp' };
+  renderVals() {
+    var self = this, st = this.state;
+    var cur = st.items.filter(function (i) { return i.id === st.sel; })[0];
+    function patch(id, p) { self.setState({ items: st.items.map(function (i) { return i.id === id ? Object.assign({}, i, p) : i; }) }); }
+    return {
+      cats: CATS.map(function (c) {
+        var n = st.items.filter(function (i) { return i.cat === c[0]; }).length;
+        return { name: c[1], n: n, cls: st.cat === c[0] ? 'cat on' : 'cat', pick: function () {
+          var first = st.items.filter(function (i) { return i.cat === c[0]; })[0];
+          self.setState({ cat: c[0], sel: first ? first.id : st.sel });
+        } };
+      }),
+      items: st.items.filter(function (i) { return i.cat === st.cat; }).map(function (i) {
+        return {
+          name: i.name, extra: i.extra, vclass: vclass(i.v), price: '₹' + (i.price / 100).toLocaleString('en-IN'), gst: '5%', hsn: '996331',
+          cls: i.id === st.sel ? 'row on' : 'row', pick: function () { self.setState({ sel: i.id }); },
+          swCls: i.stock ? 'switch on' : 'switch', stock: i.stock ? 'Available' : 'Out of stock', stockColor: i.stock ? '#166534' : '#B91C1C',
+          aria: (i.stock ? 'Mark out of stock: ' : 'Mark available: ') + i.name,
+          toggle: function () { patch(i.id, { stock: !i.stock }); }
+        };
+      }),
+      sel: { name: cur.name, rawPrice: String(cur.price / 100), hsn: '996331' },
+      types: [['veg', 'Veg'], ['nv', 'Non-veg'], ['egg', 'Egg']].map(function (t) {
+        return { label: t[1], vclass: vclass(t[0]), cls: cur.v === t[0] ? 'on' : '', pick: function () { patch(cur.id, { v: t[0] }); } };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Owner dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.nav a{display:flex;align-items:center;gap:10px;height:42px;padding:0 12px;border-radius:10px;color:#C9D0DC;text-decoration:none;font-size:14px;font-weight:600}
+.nav a:hover{background:#2A3449;color:#fff}
+.nav a.on{background:#C2410C;color:#fff}
+.card{background:#fff;border:1px solid #E3E6EB;border-radius:16px;padding:18px}
+.rng{height:36px;padding:0 14px;border-radius:9px;border:0;background:transparent;font-weight:700;font-size:13px;color:#4A5568}
+.rng.on{background:#fff;color:#1B2230;box-shadow:0 1px 2px rgba(16,24,40,.12)}
+.kpi{display:flex;flex-direction:column;gap:6px}
+.kpi span{font-size:13px;color:#5B6577;font-weight:600}
+.kpi strong{font-size:28px}
+.kpi em{font-style:normal;font-size:12px;font-weight:700}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;height:100%}
+.bar i{display:block;width:70%;max-width:28px;border-radius:6px 6px 2px 2px;background:#E8A27F}
+.bar i.pk{background:#C2410C}
+.bar span{font-size:11px;color:#5B6577}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F4F5F7; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; font-variant-numeric: tabular-nums">
+  <nav class="nav" aria-label="Owner portal" style="flex: 1 1 240px; max-width: 260px; min-width: 220px; background: #1E2638; padding: 20px 14px; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 18px">
+      <div style="width: 38px; height: 38px; border-radius: 10px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700">B</div>
+      <div style="line-height: 1.2"><strong style="color: #fff; font-size: 15px">Brew &amp; Bun Café</strong><div style="font-size: 12px; color: #9AA3B2">Koramangala</div></div>
+    </div>
+    <a href="OwnerDashboard.dc.html" class="on">Dashboard</a>
+    <a href="OwnerMenu.dc.html">Menu &amp; stock</a>
+    <a href="OwnerReports.dc.html">Reports</a>
+    <a href="Tables.dc.html">Tables &amp; QR codes</a>
+    <a href="Device.dc.html">Devices</a>
+    <a href="#">Outlet settings</a>
+    <div style="flex: 1"></div>
+    <div style="margin-top: 20px; padding: 12px; border-radius: 12px; background: #2A3449; font-size: 12px; color: #C9D0DC; line-height: 1.5"><strong style="color: #fff">Plan: Active</strong><br>Renews 1 Nov 2026 · Billing via UPI</div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 24px 28px 40px; display: flex; flex-direction: column; gap: 18px">
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 26px">Good afternoon, Aarav</h1>
+        <div style="font-size: 14px; color: #5B6577">Business day {{dayLabel}} · day ends at 4:00 AM</div>
+      </div>
+      <div style="display: flex; background: #E9EBEF; border-radius: 11px; padding: 3px">
+        <sc-for list="{{ranges}}" as="r" hint-placeholder-count="3">
+          <button class="{{r.cls}}" onClick="{{r.pick}}">{{r.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 16px; border-radius: 14px; background: #FFF7E6; border: 1px solid #F5D08A; font-size: 14px; color: #78350F">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+      <span style="flex: 1 1 300px"><strong>2 bills need review.</strong> The server's total differed from the tablet's after an offline sync. Customers were billed correctly; check them before filing GST.</span>
+      <a href="OwnerReports.dc.html" style="font-weight: 700">Review bills</a>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px">
+      <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+        <div class="card kpi"><span>{{k.label}}</span><strong>{{k.value}}</strong><em style="color: {{k.deltaColor}}">{{k.delta}}</em></div>
+      </sc-for>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px">
+      <section class="card" style="display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 16px">Sales by hour</h2><span style="font-size: 12px; color: #5B6577">Peak {{peak}}</span></div>
+        <div role="img" aria-label="Sales by hour bar chart" style="height: 200px; display: flex; gap: 6px; align-items: flex-end">
+          <sc-for list="{{hours}}" as="h" hint-placeholder-count="12">
+            <div class="bar"><i class="{{h.cls}}" style="height: {{h.h}}"></i><span>{{h.label}}</span></div>
+          </sc-for>
+        </div>
+      </section>
+      <section class="card" style="display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 16px">Sales by channel</h2>
+        <sc-for list="{{channels}}" as="c" hint-placeholder-count="5">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="display: flex; justify-content: space-between; font-size: 14px"><span style="font-weight: 600">{{c.name}}</span><span><strong>{{c.amt}}</strong> <span style="color: #5B6577">· {{c.pct}}</span></span></div>
+            <div style="height: 10px; border-radius: 5px; background: #EEF0F4; overflow: hidden"><i style="display: block; height: 100%; width: {{c.pct}}; background: {{c.color}}; border-radius: 5px"></i></div>
+          </div>
+        </sc-for>
+      </section>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 14px">
+      <section class="card">
+        <h2 style="margin: 0 0 10px; font-size: 16px">Top 5 items</h2>
+        <sc-for list="{{top}}" as="t" hint-placeholder-count="5">
+          <div style="display: grid; grid-template-columns: 28px 1fr auto auto; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F2F4; font-size: 14px">
+            <span style="width: 24px; height: 24px; border-radius: 7px; background: #FFF1E8; color: #9A3412; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center">{{t.rank}}</span>
+            <span style="font-weight: 600">{{t.name}}</span><span style="color: #5B6577">{{t.qty}} sold</span><strong>{{t.amt}}</strong>
+          </div>
+        </sc-for>
+      </section>
+      <section class="card" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px">Devices</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 12px; background: #F6F7F9; font-size: 14px"><span><strong>Counter 1</strong> · POS · BB01</span><span style="color: #166534; font-weight: 700">Synced</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 12px; background: #FFF7E6; font-size: 14px"><span><strong>Counter 2</strong> · POS · BB02</span><span style="color: #92400E; font-weight: 700">3 bills waiting · 14 min</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; border-radius: 12px; background: #F6F7F9; font-size: 14px"><span><strong>Kitchen screen 1</strong> · KDS</span><span style="color: #166534; font-weight: 700">Live</span></div>
+        <a href="Device.dc.html" style="font-size: 14px; font-weight: 700; margin-top: 4px">Add or revoke a device</a>
+      </section>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+var DATA = {
+  today: { day: 'Wed 14 Oct', sales: 3845000, orders: 142, delta: ['+12% vs last Wed', '+9 vs last Wed', '+3%', '₹2,140 gross'],
+    hours: [2, 5, 9, 6, 8, 14, 11, 7, 6, 10, 13, 8], ch: [44, 14, 18, 15, 9] },
+  yday: { day: 'Tue 13 Oct', sales: 3212000, orders: 128, delta: ['−4% vs last Tue', '−6 vs last Tue', '+2%', '₹980 gross'],
+    hours: [3, 4, 7, 6, 7, 11, 12, 6, 5, 8, 10, 7], ch: [46, 12, 16, 16, 10] },
+  week: { day: '8–14 Oct', sales: 23490000, orders: 912, delta: ['+8% vs previous week', '+61 vs previous week', '+1%', '₹9,320 gross'],
+    hours: [16, 30, 55, 41, 50, 92, 84, 44, 40, 64, 81, 52], ch: [42, 15, 19, 15, 9] }
+};
+var HOURS = ['9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p'];
+var CH = [['Dine-in', '#C2410C'], ['Takeaway', '#E8A27F'], ['QR at table', '#6D28D9'], ['Swiggy', '#B45309'], ['Zomato', '#9F1239']];
+function inr(p) { return '₹' + Math.round(p / 100).toLocaleString('en-IN'); }
+class Component extends DCLogic {
+  state = { range: 'today' };
+  renderVals() {
+    var self = this, d = DATA[this.state.range];
+    var max = Math.max.apply(null, d.hours), peakAt = d.hours.indexOf(max);
+    return {
+      dayLabel: d.day,
+      ranges: [['today', 'Today'], ['yday', 'Yesterday'], ['week', 'Last 7 days']].map(function (r) {
+        return { label: r[1], cls: self.state.range === r[0] ? 'rng on' : 'rng', pick: function () { self.setState({ range: r[0] }); } };
+      }),
+      kpis: [
+        { label: 'Net sales', value: inr(d.sales), delta: d.delta[0] },
+        { label: 'Orders', value: String(d.orders), delta: d.delta[1] },
+        { label: 'Average order value', value: inr(d.sales / d.orders), delta: d.delta[2] },
+        { label: 'Discounts given', value: d.delta[3].split(' ')[0], delta: 'Across all channels' }
+      ].map(function (k) { k.deltaColor = k.delta.charAt(0) === '−' ? '#B91C1C' : k.delta.charAt(0) === '+' ? '#166534' : '#5B6577'; return k; }),
+      peak: HOURS[peakAt],
+      hours: d.hours.map(function (v, i) { return { label: HOURS[i], h: Math.round(v / max * 170) + 'px', cls: i === peakAt ? 'pk' : '' }; }),
+      channels: CH.map(function (c, i) { return { name: c[0], color: c[1], pct: d.ch[i] + '%', amt: inr(d.sales * d.ch[i] / 100) }; }),
+      top: [['Cold Coffee', 52, 780000], ['Masala Chai', 186, 744000], ['Cappuccino', 41, 574000], ['Vada Pav', 88, 440000], ['Paneer Tikka', 18, 396000]].map(function (t, i) {
+        var f = self.state.range === 'week' ? 6.1 : self.state.range === 'yday' ? 0.85 : 1;
+        return { rank: i + 1, name: t[0], qty: Math.round(t[1] * f), amt: inr(t[2] * f) };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

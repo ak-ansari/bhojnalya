@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>POS tables</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:4px;width:60px;padding:10px 0;border-radius:12px;color:#AEB6C6;text-decoration:none;font-size:11px;font-weight:600;position:relative}
+.rail a:hover{background:#2A3449;color:#fff}
+.rail a.on{background:#C2410C;color:#fff}
+.rail .badge{position:absolute;top:4px;right:8px;min-width:18px;height:18px;border-radius:9px;background:#FBBF24;color:#1E2638;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.pill{height:38px;padding:0 14px;border-radius:19px;border:1px solid #D9DDE4;background:#fff;font-weight:600;font-size:13px;color:#3B4456;display:inline-flex;align-items:center;gap:8px}
+.pill.on{background:#1E2638;border-color:#1E2638;color:#fff}
+.pill b{font-weight:700;opacity:.7}
+.tb{position:relative;display:flex;flex-direction:column;justify-content:space-between;height:132px;padding:14px;border-radius:14px;border:1.5px solid #D9DDE4;background:#fff;text-align:left;transition:transform .08s, box-shadow .12s}
+.tb:hover{box-shadow:0 6px 16px rgba(16,24,40,.10)}
+.tb:active{transform:scale(.98)}
+.tb.occ{background:#EAF1FF;border-color:#2563EB}
+.tb.bill{background:#FFF4DE;border-color:#B45309}
+.tb.set{background:#E8F7EE;border-color:#15803D}
+.tb.sel{outline:3px solid #C2410C;outline-offset:2px}
+.tb.target{border-style:dashed;border-color:#C2410C}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 16px;border-radius:12px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:15px;text-decoration:none;color:#1B2230}
+.btn:hover{background:#F6F7F9;color:#1B2230}
+.btn.pri{background:#C2410C;border-color:#C2410C;color:#fff}
+.btn.pri:hover{background:#9A3412;color:#fff}
+.btn.dark{background:#1E2638;border-color:#1E2638;color:#fff}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; display: flex; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; background: #F4F5F7; overflow: hidden; position: relative; font-variant-numeric: tabular-nums">
+  <nav class="rail" aria-label="POS" style="width: 76px; flex: none; background: #1E2638; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 0">
+    <div style="width: 40px; height: 40px; border-radius: 12px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; margin-bottom: 14px">B</div>
+    <a href="Main.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l-1 18H7L6 3z"/><path d="M9 8h6M9 12h6"/></svg>Order</a>
+    <a href="Tables.dc.html" class="on"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Tables</a>
+    <a href="Incoming.dc.html"><span class="badge">3</span><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>Online</a>
+    <a href="Kds.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9V20h12v-6.1"/><path d="M6 14a4 4 0 01-.9-7.9 5 5 0 019.8-1A4 4 0 1118 14H6z"/></svg>Kitchen</a>
+    <a href="Payment.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2-3-2z"/><path d="M8 9h8M8 13h5"/></svg>Bills</a>
+  </nav>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; flex: none; display: flex; align-items: center; gap: 12px; padding: 0 20px; background: #fff; border-bottom: 1px solid #E3E6EB">
+      <h1 style="margin: 0; font-size: 20px">Tables</h1>
+      <span style="font-size: 13px; color: #5B6577">Ground floor · 12 tables</span>
+      <div style="flex: 1"></div>
+      <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+        <button class="{{f.cls}}" onClick="{{f.pick}}">{{f.label}} <b>{{f.n}}</b></button>
+      </sc-for>
+    </header>
+
+    <div style="flex: 1; min-height: 0; display: flex">
+      <section style="flex: 1; min-width: 0; padding: 18px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; gap: 18px; font-size: 12px; color: #4A5568; align-items: center">
+          <span style="display: inline-flex; gap: 6px; align-items: center"><i class="dot" style="background: #fff; border: 1.5px solid #9AA3B2"></i>Vacant</span>
+          <span style="display: inline-flex; gap: 6px; align-items: center"><i class="dot" style="background: #2563EB"></i>Running</span>
+          <span style="display: inline-flex; gap: 6px; align-items: center"><i class="dot" style="background: #B45309"></i>Bill printed</span>
+          <span style="display: inline-flex; gap: 6px; align-items: center"><i class="dot" style="background: #15803D"></i>Settled</span>
+          <div style="flex: 1"></div>
+          <sc-if value="{{moving}}" hint-placeholder-val="{{ false }}">
+            <span role="status" style="padding: 6px 12px; border-radius: 8px; background: #FFF1E8; color: #9A3412; font-weight: 600">{{moveHint}}</span>
+          </sc-if>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; align-content: start">
+          <sc-for list="{{tables}}" as="t" hint-placeholder-count="12">
+            <button class="{{t.cls}}" onClick="{{t.pick}}" aria-label="{{t.aria}}">
+              <span style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%">
+                <span style="font-size: 22px; font-weight: 700">{{t.name}}</span>
+                <span style="font-size: 12px; color: #4A5568; display: inline-flex; align-items: center; gap: 4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg>{{t.seats}}</span>
+              </span>
+              <sc-if value="{{t.qr}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; top: -8px; left: 12px; font-size: 10px; font-weight: 700; color: #fff; background: #7C3AED; padding: 2px 7px; border-radius: 6px">QR ORDER</span></sc-if>
+              <span style="display: flex; justify-content: space-between; align-items: flex-end; width: 100%">
+                <span style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 12px; font-weight: 600; color: {{t.statusColor}}">{{t.status}}</span>
+                  <span style="font-size: 13px; color: #3B4456">{{t.time}}</span>
+                </span>
+                <span style="font-size: 16px; font-weight: 700">{{t.amount}}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <aside aria-label="Table details" style="width: 340px; flex: none; background: #fff; border-left: 1px solid #E3E6EB; display: flex; flex-direction: column">
+        <div style="padding: 18px 20px; border-bottom: 1px solid #EEF0F4">
+          <div style="font-size: 13px; color: #5B6577">Selected</div>
+          <div style="display: flex; align-items: baseline; justify-content: space-between">
+            <div style="font-size: 26px; font-weight: 700">Table {{sel.name}}</div>
+            <span style="font-size: 13px; font-weight: 700; color: {{sel.statusColor}}">{{sel.status}}</span>
+          </div>
+          <div style="font-size: 13px; color: #5B6577">{{sel.seats}} seats · {{sel.time}}</div>
+        </div>
+        <sc-if value="{{sel.busy}}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 14px 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; min-height: 0">
+            <div style="font-size: 12px; font-weight: 700; color: #5B6577; letter-spacing: .04em">ORDER A-0142 · 2 KOTS</div>
+            <sc-for list="{{sel.lines}}" as="l" hint-placeholder-count="3">
+              <div style="display: flex; justify-content: space-between; font-size: 14px"><span>{{l.q}} × {{l.n}}</span><strong>{{l.p}}</strong></div>
+            </sc-for>
+            <div style="border-top: 1px dashed #D9DDE4; padding-top: 10px; display: flex; justify-content: space-between; font-size: 16px"><strong>Running total</strong><strong>{{sel.amount}}</strong></div>
+          </div>
+          <div style="padding: 16px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-top: 1px solid #EEF0F4">
+            <button class="btn" onClick="{{startMove}}">Move</button>
+            <button class="btn" onClick="{{startMerge}}">Merge</button>
+            <a class="btn dark" href="Main.dc.html">Add items</a>
+            <a class="btn pri" href="Payment.dc.html">Bill &amp; settle</a>
+          </div>
+        </sc-if>
+        <sc-if value="{{sel.free}}" hint-placeholder-val="{{ false }}">
+          <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 24px; text-align: center; color: #5B6577">
+            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C3C9D3" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><rect x="3" y="7" width="18" height="4" rx="1"/><path d="M6 11v8M18 11v8"/></svg>
+            <strong style="color: #1B2230">Table is free</strong>
+            <span style="font-size: 13px">Start an order to seat guests here.</span>
+          </div>
+          <div style="padding: 16px 20px; border-top: 1px solid #EEF0F4">
+            <a class="btn pri" href="Main.dc.html" style="width: 100%">New order on {{sel.name}}</a>
+          </div>
+        </sc-if>
+      </aside>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+var STATUS = {
+  free: { label: 'Vacant', cls: 'tb', color: '#5B6577' },
+  occ: { label: 'Running', cls: 'tb occ', color: '#1D4ED8' },
+  bill: { label: 'Bill printed', cls: 'tb bill', color: '#92400E' },
+  set: { label: 'Settled', cls: 'tb set', color: '#166534' }
+};
+var START = [
+  { name: 'T1', seats: 2, s: 'occ', min: 34, amt: 48300 },
+  { name: 'T2', seats: 2, s: 'free' },
+  { name: 'T3', seats: 4, s: 'bill', min: 62, amt: 126000 },
+  { name: 'T4', seats: 4, s: 'occ', min: 18, amt: 52500, qr: true },
+  { name: 'T5', seats: 4, s: 'free' },
+  { name: 'T6', seats: 6, s: 'occ', min: 9, amt: 89000 },
+  { name: 'T7', seats: 2, s: 'set', min: 0, amt: 0 },
+  { name: 'T8', seats: 4, s: 'free' },
+  { name: 'T9', seats: 8, s: 'occ', min: 47, amt: 214500, qr: true },
+  { name: 'T10', seats: 2, s: 'free' },
+  { name: 'T11', seats: 4, s: 'bill', min: 71, amt: 98700 },
+  { name: 'T12', seats: 4, s: 'free' }
+];
+function rupees(p) { return '₹' + (p / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+class Component extends DCLogic {
+  state = { tables: START, filter: 'all', sel: 'T4', mode: null };
+  renderVals() {
+    var self = this, st = this.state;
+    var count = function (s) { return st.tables.filter(function (t) { return s === 'all' || t.s === s; }).length; };
+    var cur = st.tables.filter(function (t) { return t.name === st.sel; })[0];
+    var busy = cur.s === 'occ' || cur.s === 'bill';
+    function act(t) {
+      if (!st.mode) { self.setState({ sel: t.name }); return; }
+      if (t.name === st.sel) { self.setState({ mode: null }); return; }
+      if (st.mode === 'move' && t.s !== 'free') return;
+      if (st.mode === 'merge' && t.s === 'free') return;
+      var src = cur;
+      var next = st.tables.map(function (x) {
+        if (x.name === src.name) return { name: x.name, seats: x.seats, s: 'free' };
+        if (x.name === t.name) return st.mode === 'move'
+          ? Object.assign({}, src, { name: x.name, seats: x.seats })
+          : Object.assign({}, x, { amt: x.amt + src.amt, min: Math.max(x.min, src.min), qr: x.qr || src.qr });
+        return x;
+      });
+      self.setState({ tables: next, sel: t.name, mode: null });
+    }
+    var filters = [['all', 'All'], ['free', 'Vacant'], ['occ', 'Running'], ['bill', 'Bill printed']].map(function (f) {
+      return { label: f[1], n: count(f[0]), cls: st.filter === f[0] ? 'pill on' : 'pill', pick: function () { self.setState({ filter: f[0] }); } };
+    });
+    return {
+      filters: filters,
+      moving: !!st.mode,
+      moveHint: st.mode === 'move' ? 'Tap a vacant table to move ' + st.sel + ' there · tap ' + st.sel + ' to cancel' : 'Tap a running table to merge ' + st.sel + ' into it · tap ' + st.sel + ' to cancel',
+      tables: st.tables.filter(function (t) { return st.filter === 'all' || t.s === st.filter; }).map(function (t) {
+        var S = STATUS[t.s];
+        var target = st.mode === 'move' ? t.s === 'free' : st.mode === 'merge' ? (t.s !== 'free' && t.name !== st.sel) : false;
+        return {
+          name: t.name, seats: t.seats, qr: !!t.qr, status: S.label, statusColor: S.color,
+          cls: S.cls + (t.name === st.sel ? ' sel' : '') + (target ? ' target' : ''),
+          time: t.s === 'free' ? 'Ready' : t.s === 'set' ? 'Clearing' : t.min + ' min',
+          amount: t.amt ? rupees(t.amt) : '',
+          aria: 'Table ' + t.name + ', ' + S.label,
+          pick: function () { act(t); }
+        };
+      }),
+      sel: {
+        name: cur.name, seats: cur.seats, status: STATUS[cur.s].label, statusColor: STATUS[cur.s].color,
+        time: busy ? 'seated ' + cur.min + ' min ago' : 'free', busy: busy, free: !busy,
+        amount: busy ? rupees(cur.amt) : '',
+        lines: [{ q: 2, n: 'Masala Chai', p: '₹80.00' }, { q: 2, n: 'Vada Pav', p: '₹100.00' }, { q: 1, n: 'Cappuccino · Large, Oat', p: '₹210.00' }]
+      },
+      startMove: function () { self.setState({ mode: 'move', filter: 'all' }); },
+      startMerge: function () { self.setState({ mode: 'merge', filter: 'all' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

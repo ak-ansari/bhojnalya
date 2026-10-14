@@ -1,5 +1,26 @@
 # Update Log
 
+## 2026-10-14 — the five open stories are decided
+
+- **Creation**: `GLOSSARY.md` at the root: Order, KOT, KOT number, Missed
+  order, Invoice (Tax Invoice or Bill of Supply), Service charge, Suspension.
+  "Bill" is UI copy only.
+- **Creation**: ADR 0015, suspension stops new sales but never record-keeping.
+  It settles the clash between S3's read-only rule and N2.
+- **Change**: US-KDS-07, US-AGG-10, US-GST-12 and US-ADM-11 are decided and
+  marked N. US-ACC-06 follows the TRD (password, plus an email code to
+  reset) and is marked T. No `?` stories remain.
+- **Not changed**: the PRD and TRD. TRD §22 Q3 and Q4 are answered in the
+  stories, and Q1 (the middleware vendor) is still open.
+
+## 2026-10-14 — agent skills know where issues, labels and decisions live
+
+- **Creation**: `docs/agents/issue-tracker.md` (issues are local markdown
+  under `.scratch/<feature>/`), `docs/agents/triage-labels.md` (the five
+  default roles, recorded as a `Status:` line) and `docs/agents/domain.md`
+  (single-context; ADRs are read from `docs/decisions/`, not `docs/adr/`).
+- **Change**: `CLAUDE.md` gains an `## Agent skills` section pointing at them.
+
 ## 2026-10-14 — the record, the test levels and the house rules are set up
 
 - **Creation**: the knowledge bundle (`docs/index.md`), modelled on ghatnaghar's

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>POS incoming orders</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:#C2410C}a:hover{color:#9A3412}
+.rail a{display:flex;flex-direction:column;align-items:center;gap:4px;width:60px;padding:10px 0;border-radius:12px;color:#AEB6C6;text-decoration:none;font-size:11px;font-weight:600;position:relative}
+.rail a:hover{background:#2A3449;color:#fff}
+.rail a.on{background:#C2410C;color:#fff}
+.rail .badge{position:absolute;top:4px;right:8px;min-width:18px;height:18px;border-radius:9px;background:#FBBF24;color:#1E2638;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 18px;border-radius:12px;border:1px solid #D9DDE4;background:#fff;font-weight:700;font-size:16px;text-decoration:none;color:#1B2230}
+.btn:hover{background:#F6F7F9}
+.btn.pri{background:#15803D;border-color:#15803D;color:#fff}
+.btn.pri:hover{background:#166534}
+.btn.ghost{color:#B91C1C;border-color:#F3C4C4}
+.btn.ghost:hover{background:#FEF2F2}
+.tab{height:40px;padding:0 14px;border:0;border-bottom:3px solid transparent;background:transparent;font-weight:700;font-size:14px;color:#5B6577}
+.tab.on{color:#1B2230;border-bottom-color:#C2410C}
+.card{display:flex;flex-direction:column;gap:6px;width:100%;padding:14px;border-radius:14px;border:1.5px solid #E3E6EB;background:#fff;text-align:left}
+.card:hover{border-color:#C3C9D3}
+.card.on{border-color:#C2410C;box-shadow:0 4px 14px rgba(194,65,12,.12)}
+.src{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.03em}
+.src.qr{background:#EFE7FF;color:#5B21B6}
+.src.sw{background:#FFEDD5;color:#9A3412}
+.src.zo{background:#FFE4E6;color:#9F1239}
+.switch{width:46px;height:28px;border-radius:14px;border:0;background:#C3C9D3;position:relative;padding:0;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .15s}
+.switch.on{background:#15803D}
+.switch.on i{left:21px}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(12deg)}60%{transform:rotate(-8deg)}80%{transform:rotate(5deg)}}
+.ring{animation:ring 1.2s ease-in-out infinite;transform-origin:50% 0}
+</style>
+</helmet>
+<div style="width: 1280px; height: 800px; display: flex; font-family: 'DM Sans', system-ui, sans-serif; color: #1B2230; background: #F4F5F7; overflow: hidden; position: relative; font-variant-numeric: tabular-nums">
+  <nav class="rail" aria-label="POS" style="width: 76px; flex: none; background: #1E2638; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 0">
+    <div style="width: 40px; height: 40px; border-radius: 12px; background: #C2410C; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; margin-bottom: 14px">B</div>
+    <a href="Main.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l-1 18H7L6 3z"/><path d="M9 8h6M9 12h6"/></svg>Order</a>
+    <a href="Tables.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Tables</a>
+    <a href="Incoming.dc.html" class="on"><sc-if value="{{pendingCount}}" hint-placeholder-val="{{ 3 }}"><span class="badge">{{pendingCount}}</span></sc-if><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg>Online</a>
+    <a href="Kds.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 13.9V20h12v-6.1"/><path d="M6 14a4 4 0 01-.9-7.9 5 5 0 019.8-1A4 4 0 1118 14H6z"/></svg>Kitchen</a>
+    <a href="Payment.dc.html"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 2v20l3-2 3 2 2-2 2 2 3-2 3 2V2l-3 2-3-2-2 2-2-2-3 2-3-2z"/><path d="M8 9h8M8 13h5"/></svg>Bills</a>
+  </nav>
+
+  <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+    <header style="height: 64px; flex: none; display: flex; align-items: center; gap: 16px; padding: 0 20px; background: #fff; border-bottom: 1px solid #E3E6EB">
+      <h1 style="margin: 0; font-size: 20px">Online orders</h1>
+      <div role="tablist" style="display: flex; gap: 4px; align-self: flex-end">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="3">
+          <button role="tab" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}} · {{t.n}}</button>
+        </sc-for>
+      </div>
+      <div style="flex: 1"></div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 6px 12px; border-radius: 12px; border: 1px solid #E3E6EB">
+        <span style="display: flex; flex-direction: column; line-height: 1.15"><strong style="font-size: 13px">Swiggy &amp; Zomato store</strong><span style="font-size: 12px; color: {{storeColor}}">{{storeLabel}}</span></span>
+        <button class="{{storeCls}}" onClick="{{toggleStore}}" aria-label="Accept aggregator orders"><i></i></button>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; padding: 6px 12px; border-radius: 12px; border: 1px solid #E3E6EB">
+        <span style="display: flex; flex-direction: column; line-height: 1.15"><strong style="font-size: 13px">Auto-accept QR</strong><span style="font-size: 12px; color: #5B6577">{{autoLabel}}</span></span>
+        <button class="{{autoCls}}" onClick="{{toggleAuto}}" aria-label="Auto-accept QR orders"><i></i></button>
+      </div>
+    </header>
+
+    <div style="flex: 1; min-height: 0; display: flex">
+      <section aria-label="Order list" style="width: 380px; flex: none; padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; border-right: 1px solid #E3E6EB">
+        <sc-for list="{{list}}" as="o" hint-placeholder-count="3">
+          <button class="{{o.cls}}" onClick="{{o.pick}}">
+            <span style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <span class="{{o.srcCls}}">{{o.src}}</span>
+              <span style="font-size: 13px; font-weight: 700; color: {{o.timerColor}}">{{o.timer}}</span>
+            </span>
+            <span style="display: flex; justify-content: space-between; width: 100%"><strong style="font-size: 16px">{{o.title}}</strong><strong style="font-size: 16px">{{o.total}}</strong></span>
+            <span style="font-size: 13px; color: #5B6577">{{o.summary}}</span>
+          </button>
+        </sc-for>
+        <sc-if value="{{listEmpty}}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 40px 16px; text-align: center; color: #5B6577; font-size: 14px">Nothing here right now. New orders ring and appear at the top.</div>
+        </sc-if>
+      </section>
+
+      <section aria-label="Order details" style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+        <sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 20px 24px; display: flex; align-items: flex-start; gap: 14px; background: #fff; border-bottom: 1px solid #E3E6EB">
+            <sc-if value="{{d.pending}}" hint-placeholder-val="{{ true }}">
+              <div class="ring" style="width: 48px; height: 48px; border-radius: 14px; background: #FFF4DE; display: flex; align-items: center; justify-content: center; flex: none"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#B45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></div>
+            </sc-if>
+            <div style="flex: 1">
+              <div style="display: flex; gap: 8px; align-items: center"><span class="{{d.srcCls}}">{{d.src}}</span><span style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #5B6577">{{d.ref}}</span></div>
+              <div style="font-size: 24px; font-weight: 700; margin-top: 4px">{{d.title}}</div>
+              <div style="font-size: 13px; color: #5B6577">{{d.meta}}</div>
+            </div>
+            <sc-if value="{{d.hasDeadline}}" hint-placeholder-val="{{ true }}">
+              <div style="text-align: right">
+                <div style="font-size: 12px; color: #5B6577">Accept within</div>
+                <div style="font-size: 34px; font-weight: 700; color: {{d.timerColor}}">{{d.timer}}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{d.statusText}}" hint-placeholder-val="{{ false }}">
+              <span style="padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 14px; background: {{d.statusBg}}; color: {{d.statusColor}}">{{d.statusText}}</span>
+            </sc-if>
+          </div>
+          <div style="flex: 1; min-height: 0; overflow-y: auto; padding: 18px 24px; display: flex; flex-direction: column; gap: 14px">
+            <sc-if value="{{d.instructions}}" hint-placeholder-val="{{ true }}">
+              <div style="padding: 12px 14px; border-radius: 12px; background: #FFF7E6; border: 1px solid #F5D08A; font-size: 14px; color: #78350F"><strong>Customer note:</strong> {{d.instructions}}</div>
+            </sc-if>
+            <div style="background: #fff; border: 1px solid #E3E6EB; border-radius: 14px; padding: 4px 18px">
+              <sc-for list="{{d.items}}" as="i" hint-placeholder-count="3">
+                <div style="display: grid; grid-template-columns: 40px 1fr auto; padding: 12px 0; border-bottom: 1px dashed #E3E6EB; font-size: 15px">
+                  <strong>{{i.q}}×</strong>
+                  <span><strong style="font-weight: 600">{{i.n}}</strong><span style="display: block; font-size: 12px; color: #5B6577">{{i.m}}</span></span>
+                  <strong>{{i.p}}</strong>
+                </div>
+              </sc-for>
+              <div style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 17px"><strong>Order total</strong><strong>{{d.total}}</strong></div>
+            </div>
+            <sc-if value="{{d.rider}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: #fff; border: 1px solid #E3E6EB; font-size: 14px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6h2l3 8M5.5 17.5L9 9h6l-3 8.5"/></svg>
+                <span><strong>Rider:</strong> {{d.rider}}</span>
+              </div>
+            </sc-if>
+          </div>
+          <sc-if value="{{d.pending}}" hint-placeholder-val="{{ true }}">
+            <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #E3E6EB; display: grid; grid-template-columns: 1fr 2fr; gap: 12px">
+              <button class="btn ghost" onClick="{{reject}}">Reject</button>
+              <button class="btn pri" onClick="{{accept}}">Accept &amp; send KOT</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{d.canReady}}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 16px 24px; background: #fff; border-top: 1px solid #E3E6EB; display: grid; grid-template-columns: 1fr 2fr; gap: 12px">
+              <a class="btn" href="Kds.dc.html">Open kitchen view</a>
+              <button class="btn pri" onClick="{{markReady}}">Mark food ready</button>
+            </div>
+          </sc-if>
+        </sc-if>
+        <sc-if value="{{noSel}}" hint-placeholder-val="{{ false }}">
+          <div style="flex: 1; display: flex; align-items: center; justify-content: center; color: #5B6577">Select an order to see its details.</div>
+        </sc-if>
+      </section>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":800}}'>
+var SRC = { qr: { label: 'QR · TABLE', cls: 'src qr' }, sw: { label: 'SWIGGY', cls: 'src sw' }, zo: { label: 'ZOMATO', cls: 'src zo' } };
+var START = [
+  { id: 1, src: 'sw', ref: '#SW-7781402', title: 'Delivery · Ananya', meta: 'Placed 12:41 PM · Paid online · 2.4 km', secs: 168, status: 'pending', instructions: 'Please pack the chutney separately. Ring the bell twice.',
+    items: [{ q: 2, n: 'Bombay Masala Sandwich', m: 'Extra cheese', p: 26000 }, { q: 1, n: 'Cold Coffee', m: 'Large', p: 18000 }], rider: 'Assigned · Ravi K. · arrives in 12 min' },
+  { id: 2, src: 'qr', ref: 'QR-T9-03', title: 'Table T9 · 3rd order', meta: 'Placed 12:43 PM · Rahul · 98xxxxxx21', status: 'pending', instructions: '',
+    items: [{ q: 3, n: 'Masala Chai', m: 'Less sugar', p: 12000 }, { q: 1, n: 'Walnut Brownie', m: '', p: 12000 }] },
+  { id: 3, src: 'zo', ref: '#ZO-55102984', title: 'Delivery · Imran', meta: 'Placed 12:43 PM · Paid online · 4.1 km', secs: 241, status: 'pending', instructions: 'No onion in momos.',
+    items: [{ q: 2, n: 'Chicken Momos', m: '', p: 32000 }, { q: 1, n: 'Masala Fries', m: '', p: 11000 }, { q: 2, n: 'Fresh Lime Soda', m: 'Sweet', p: 16000 }], rider: 'Waiting for a rider' },
+  { id: 4, src: 'sw', ref: '#SW-7781390', title: 'Delivery · Priya', meta: 'Accepted 12:31 PM · Paid online', status: 'accepted', instructions: '',
+    items: [{ q: 1, n: 'Penne Arrabbiata', m: '', p: 23000 }], rider: 'At the café · Suresh M.' },
+  { id: 5, src: 'qr', ref: 'QR-T4-01', title: 'Table T4 · 1st order', meta: 'Rejected 12:20 PM · duplicate order', status: 'rejected', instructions: '',
+    items: [{ q: 6, n: 'Cappuccino', m: '', p: 84000 }] }
+];
+function rupees(p) { return '₹' + (p / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function mmss(s) { s = Math.max(0, s); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+class Component extends DCLogic {
+  state = { orders: START, tab: 'pending', sel: 1, store: true, auto: false };
+  componentDidMount() {
+    var self = this;
+    this.iv = setInterval(function () {
+      self.setState({ orders: self.state.orders.map(function (o) {
+        if (o.status !== 'pending' || o.secs == null) return o;
+        if (o.secs <= 1) return Object.assign({}, o, { secs: 0, status: 'missed', meta: 'Missed · not accepted before the deadline' });
+        return Object.assign({}, o, { secs: o.secs - 1 });
+      }) });
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  setStatus(id, status, extra) {
+    var tab = this.state.tab;
+    this.setState({ orders: this.state.orders.map(function (o) { return o.id === id ? Object.assign({}, o, { status: status }, extra || {}) : o; }) });
+  }
+  renderVals() {
+    var self = this, st = this.state;
+    var inTab = function (o, t) { return t === 'pending' ? o.status === 'pending' : t === 'active' ? (o.status === 'accepted' || o.status === 'ready') : (o.status === 'rejected' || o.status === 'missed'); };
+    var list = st.orders.filter(function (o) { return inTab(o, st.tab); });
+    var cur = st.orders.filter(function (o) { return o.id === st.sel && inTab(o, st.tab); })[0] || list[0];
+    function view(o) {
+      var total = o.items.reduce(function (a, i) { return a + i.p; }, 0);
+      var urgent = o.secs != null && o.secs < 60;
+      var stText = { accepted: 'In kitchen', ready: 'Food ready', rejected: 'Rejected', missed: 'Missed' }[o.status] || '';
+      return {
+        src: SRC[o.src].label, srcCls: SRC[o.src].cls, ref: o.ref, title: o.title, meta: o.meta, total: rupees(total),
+        summary: o.items.map(function (i) { return i.q + '× ' + i.n; }).join(', '),
+        pending: o.status === 'pending', hasDeadline: o.status === 'pending' && o.secs != null,
+        timer: o.status === 'pending' ? (o.secs != null ? mmss(o.secs) : 'Waiting') : stText,
+        timerColor: o.status !== 'pending' ? '#5B6577' : urgent ? '#B91C1C' : o.secs != null ? '#B45309' : '#5B21B6',
+        instructions: o.instructions, rider: o.src !== 'qr' && o.status !== 'rejected' ? o.rider : '',
+        canReady: o.status === 'accepted' && o.src !== 'qr',
+        statusText: stText,
+        statusBg: o.status === 'ready' || o.status === 'accepted' ? '#E8F7EE' : '#FEF2F2',
+        statusColor: o.status === 'ready' || o.status === 'accepted' ? '#166534' : '#B91C1C',
+        items: o.items.map(function (i) { return { q: i.q, n: i.n, m: i.m, p: rupees(i.p) }; })
+      };
+    }
+    var pendingCount = st.orders.filter(function (o) { return o.status === 'pending'; }).length;
+    return {
+      pendingCount: pendingCount,
+      tabs: [['pending', 'New'], ['active', 'Accepted'], ['closed', 'Rejected / missed']].map(function (t) {
+        return { label: t[1], n: st.orders.filter(function (o) { return inTab(o, t[0]); }).length, cls: st.tab === t[0] ? 'tab on' : 'tab', pick: function () { self.setState({ tab: t[0] }); } };
+      }),
+      storeCls: st.store ? 'switch on' : 'switch', storeLabel: st.store ? 'Taking orders' : 'Paused · store shows closed', storeColor: st.store ? '#166534' : '#B91C1C',
+      toggleStore: function () { self.setState({ store: !st.store }); },
+      autoCls: st.auto ? 'switch on' : 'switch', autoLabel: st.auto ? 'On · KOT goes straight out' : 'Off · cashier reviews',
+      toggleAuto: function () { self.setState({ auto: !st.auto }); },
+      list: list.map(function (o) { var v = view(o); v.cls = cur && o.id === cur.id ? 'card on' : 'card'; v.pick = function () { self.setState({ sel: o.id }); }; return v; }),
+      listEmpty: list.length === 0,
+      hasSel: !!cur, noSel: !cur,
+      d: cur ? view(cur) : { items: [] },
+      accept: function () { self.setStatus(cur.id, 'accepted', { meta: 'Accepted just now · KOT sent to kitchen', secs: null }); },
+      reject: function () { self.setStatus(cur.id, 'rejected', { meta: 'Rejected just now', secs: null }); },
+      markReady: function () { self.setStatus(cur.id, 'ready', { meta: 'Food ready sent to ' + (cur.src === 'sw' ? 'Swiggy' : 'Zomato') }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

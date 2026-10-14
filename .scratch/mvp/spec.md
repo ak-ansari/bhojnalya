@@ -28,6 +28,7 @@ the work.
 | 5 | 18 POS screens, 23 owner/admin screens |
 | 6 | 19 KOT+KDS, 22 reports |
 | 7 | 20 QR ordering, 21 aggregators |
+| QA 1 | 27 billing (now), 25 db + 26 api + 29 admin (after 13), 28 POS shell (after 16) |
 
 ## Decisions so far
 

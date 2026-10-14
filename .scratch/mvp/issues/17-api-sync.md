@@ -18,4 +18,5 @@ Invariants 2, 6, 7 on the server (TRD §8.3, §7). Load `api-code` and `billing-
 - `GET /api/v1/sync/pull?cursor=`: menu/table/order/stock changes since an opaque cursor.
 - Integration tests: same batch 3× → each invoice exactly once; out-of-order deviceSeq applied in order; mismatch stored + flagged; gap detected.
 - Contract test: the fixture from ticket 02 parsed by the server.
-- From ticket 03: `invoice.create` needs a snapshot of the service-charge GST rate (`serviceCharge.taxRateBp` or `outletTaxRateBp`), so re-validation doesn't depend on the outlet's current rate. Add it to `packages/contracts` and the fixture.
+- From ticket 03: re-validate with the payload's `outletTaxRateBp` snapshot (added in ticket 27), never the outlet's current rate.
+- Re-run the engine on lines in a deterministic order anyway (ORDER BY line position), though ticket 27 makes totals order-independent.

@@ -1,0 +1,127 @@
+{
+  "deviceId": "01a1391a-7e40-7069-a49b-8d79e28ef2ab",
+  "ops": [
+    {
+      "opId": "01a1391f-1220-7545-ad73-6bae011ded99",
+      "type": "order.upsert",
+      "entityId": "01a1391a-8228-7c42-911d-a096b40a1630",
+      "createdAt": "2026-10-14T06:30:05.000Z",
+      "deviceSeq": 41,
+      "payload": {
+        "channel": "pos",
+        "type": "dine_in",
+        "tableId": "01a1391a-a168-71ce-9b2d-8b7803afffc1",
+        "items": [
+          {
+            "id": "01a1391a-8610-77ee-88e4-42f1ccc63bb8",
+            "menuItemId": "01a1391a-9998-7ea1-8400-e68458919817",
+            "name": "Masala Chai",
+            "hsn": "996331",
+            "unitPrice": "4000",
+            "quantity": 2,
+            "taxRateBp": 500,
+            "modifiers": []
+          },
+          {
+            "id": "01a1391a-89f8-7362-84a3-0c741bbc199b",
+            "menuItemId": "01a1391a-9d80-7924-8be3-9341a2323697",
+            "name": "Veg Sandwich",
+            "hsn": "996331",
+            "unitPrice": "12000",
+            "quantity": 1,
+            "taxRateBp": 500,
+            "modifiers": [],
+            "note": "no onion"
+          }
+        ],
+        "updatedAt": "2026-10-14T06:30:05.000Z"
+      }
+    },
+    {
+      "opId": "01a1391f-1608-7cc5-88df-e7c3f283fc03",
+      "type": "kot.create",
+      "entityId": "01a1391a-8de0-7a95-a947-ef739148015d",
+      "createdAt": "2026-10-14T06:30:06.000Z",
+      "deviceSeq": 42,
+      "payload": {
+        "orderId": "01a1391a-8228-7c42-911d-a096b40a1630",
+        "kotNo": 7,
+        "businessDate": "2026-10-14",
+        "items": [
+          {
+            "orderItemId": "01a1391a-8610-77ee-88e4-42f1ccc63bb8",
+            "name": "Masala Chai",
+            "quantity": 2
+          },
+          {
+            "orderItemId": "01a1391a-89f8-7362-84a3-0c741bbc199b",
+            "name": "Veg Sandwich",
+            "quantity": 1,
+            "note": "no onion"
+          }
+        ]
+      }
+    },
+    {
+      "opId": "01a1391f-19f0-7be1-a050-0710081baf17",
+      "type": "invoice.create",
+      "entityId": "01a1391a-91c8-7417-9371-0b43c1f1167b",
+      "createdAt": "2026-10-14T06:31:00.000Z",
+      "deviceSeq": 43,
+      "payload": {
+        "orderId": "01a1391a-8228-7c42-911d-a096b40a1630",
+        "invoiceNo": "BL0A/2627/000042",
+        "issuedAt": "2026-10-14T06:31:00.000Z",
+        "taxMode": "regular",
+        "priceMode": "inclusive",
+        "placeOfSupply": "08",
+        "lines": [
+          {
+            "orderItemId": "01a1391a-8610-77ee-88e4-42f1ccc63bb8",
+            "menuItemId": "01a1391a-9998-7ea1-8400-e68458919817",
+            "name": "Masala Chai",
+            "hsn": "996331",
+            "unitPrice": "4000",
+            "quantity": 2,
+            "taxRateBp": 500,
+            "modifiers": []
+          },
+          {
+            "orderItemId": "01a1391a-89f8-7362-84a3-0c741bbc199b",
+            "menuItemId": "01a1391a-9d80-7924-8be3-9341a2323697",
+            "name": "Veg Sandwich",
+            "hsn": "996331",
+            "unitPrice": "12000",
+            "quantity": 1,
+            "taxRateBp": 500,
+            "modifiers": []
+          }
+        ],
+        "discount": null,
+        "serviceCharge": null,
+        "totals": {
+          "taxableValue": "19048",
+          "cgst": "477",
+          "sgst": "475",
+          "discount": "0",
+          "serviceCharge": "0",
+          "roundOff": "0",
+          "grandTotal": "20000"
+        }
+      }
+    },
+    {
+      "opId": "01a1391f-1dd8-780f-8290-306ab0d8c167",
+      "type": "payment.create",
+      "entityId": "01a1391a-95b0-7fdb-8be8-36e6569ccd9a",
+      "createdAt": "2026-10-14T06:31:30.000Z",
+      "deviceSeq": 44,
+      "payload": {
+        "invoiceId": "01a1391a-91c8-7417-9371-0b43c1f1167b",
+        "method": "cash",
+        "amount": "20000",
+        "receivedAt": "2026-10-14T06:31:30.000Z"
+      }
+    }
+  ]
+}

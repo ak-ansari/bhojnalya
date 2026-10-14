@@ -271,6 +271,9 @@ importers:
       '@bhojnalya/config':
         specifier: workspace:*
         version: link:../config
+      '@bhojnalya/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       '@testcontainers/postgresql':
         specifier: 12.2.1
         version: 12.2.1

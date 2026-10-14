@@ -127,6 +127,7 @@ export const tables = pgTable(
   },
   (t) => [
     unique('tables_outlet_id_label_key').on(t.outletId, t.label),
+    unique('tables_tenant_id_outlet_id_id_key').on(t.tenantId, t.outletId, t.id),
     foreignKey({
       name: 'tables_floor_fk',
       columns: [t.tenantId, t.outletId, t.floorId],

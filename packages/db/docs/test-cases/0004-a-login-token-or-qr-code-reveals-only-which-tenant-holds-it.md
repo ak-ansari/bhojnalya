@@ -19,13 +19,15 @@ Proposed
 ## Given
 
 - Two tenants. The second has an owner with an email and a phone, a
-  registered till with a token, a refresh token and a table with a QR code.
+  registered till with a token, a refresh token, a table with a QR code, and
+  in its second outlet a link to an aggregator's store.
 - No tenant context is set.
 
 ## When
 
 1. The owner's email (in any case) or phone is looked up.
-2. The till's token, the refresh token or the table's QR code is looked up.
+2. The till's token, the refresh token, the table's QR code or the
+   aggregator's provider and store id is looked up.
 3. The application switches the lookup behaviour on for itself and reads the
    same tables directly.
 
@@ -47,6 +49,8 @@ Proposed
 | device token | tenant, outlet, device |
 | refresh token | tenant, user, token |
 | table QR code | tenant, outlet, table |
+| aggregator provider and store id | tenant, outlet, link |
+| a known store id under another provider | nothing |
 | anything unknown | nothing |
 
 ## Procedure
@@ -71,10 +75,11 @@ The `pre-auth resolvers` suite passes.
 - `pre-auth resolvers › finds the tenant and outlet of a device token hash` (integration)
 - `pre-auth resolvers › finds the tenant and user of a refresh token hash` (integration)
 - `pre-auth resolvers › finds the tenant, outlet and table of a QR token` (integration)
+- `pre-auth resolvers › finds the tenant, outlet and link of an aggregator's store id` (integration)
 - `pre-auth resolvers › leaves app_user unable to read across tenants by switching the lookup setting on itself` (integration)
 - `pre-auth resolvers › leaves no lookup switched on after a resolver returns` (integration)
 - `pre-auth resolvers › denies app_user the helpers that create or loosen policies` (integration)
-- Sign-in, device authentication, refresh and QR scan using these lookups: **not built**.
+- Sign-in, device authentication, refresh, QR scan and aggregator webhooks using these lookups: **not built**.
 
 Command: `pnpm --filter @bhojnalya/db test:int`
 
@@ -82,4 +87,5 @@ Command: `pnpm --filter @bhojnalya/db test:int`
 
 - [db 0001](./0001-a-request-made-for-one-tenant-sees-and-changes-none-of-another-tenants-rows.md)
 - [ADR 0019](../../../../docs/decisions/0019-a-caller-without-a-tenant-may-learn-only-which-tenant-holds-its-secret.md)
+- [ADR 0021](../../../../docs/decisions/0021-an-aggregator-webhook-may-learn-only-which-outlet-its-store-belongs-to.md)
 - [ADR 0005](../../../../docs/decisions/0005-tenant-isolation-is-enforced-by-the-database.md)

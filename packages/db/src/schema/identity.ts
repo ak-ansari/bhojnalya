@@ -102,6 +102,7 @@ export const devices = pgTable(
   },
   (t) => [
     unique('devices_outlet_id_device_code_key').on(t.outletId, t.deviceCode),
+    unique('devices_tenant_id_outlet_id_id_key').on(t.tenantId, t.outletId, t.id),
     unique('devices_token_hash_key').on(t.tokenHash),
     check('devices_device_code_check', sql`${t.deviceCode} ~ '^[0-9A-Z]{2}$'`),
     foreignKey({

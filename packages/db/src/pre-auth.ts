@@ -71,3 +71,22 @@ export async function resolveQrToken(db: Db | Tx, qrToken: string): Promise<Reso
   const row = rows[0];
   return row ? { tenantId: row.tenant_id, outletId: row.outlet_id, tableId: row.table_id } : null;
 }
+
+export interface ResolvedAggregatorStore {
+  tenantId: string;
+  outletId: string;
+  linkId: string;
+}
+
+// An aggregator webhook names only the provider and its store (ADR 0021).
+export async function resolveAggregatorStore(
+  db: Db | Tx,
+  provider: string,
+  extStoreId: string,
+): Promise<ResolvedAggregatorStore | null> {
+  const { rows } = await db.execute<{ tenant_id: string; outlet_id: string; link_id: string }>(
+    sql`SELECT tenant_id, outlet_id, link_id FROM app.resolve_aggregator_store(${provider}, ${extStoreId})`,
+  );
+  const row = rows[0];
+  return row ? { tenantId: row.tenant_id, outletId: row.outlet_id, linkId: row.link_id } : null;
+}

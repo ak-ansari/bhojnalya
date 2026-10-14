@@ -15,6 +15,13 @@
       "when": 1791952470544,
       "tag": "0001_tenancy_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791957800417,
+      "tag": "0002_domain_tables",
+      "breakpoints": true
     }
   ]
 }

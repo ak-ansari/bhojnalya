@@ -6,6 +6,7 @@ import { afterAll, beforeAll, describe, expect, inject, it } from 'vitest';
 import { createDb } from './client.js';
 import type { Db } from './client.js';
 import {
+  resolveAggregatorStore,
   resolveDeviceToken,
   resolveLogin,
   resolveQrToken,
@@ -18,11 +19,17 @@ let superuser: pg.Client;
 let pool: pg.Pool;
 let db: Db;
 let tenant: TenantFixture;
-const ids = { device: randomUUID(), refresh: randomUUID(), table: randomUUID() };
+const ids = {
+  device: randomUUID(),
+  refresh: randomUUID(),
+  table: randomUUID(),
+  link: randomUUID(),
+};
 const secrets = {
   deviceHash: `device-hash-${randomUUID()}`,
   refreshHash: `refresh-hash-${randomUUID()}`,
   qrToken: `qr-${randomUUID()}`,
+  storeId: `store-${randomUUID()}`,
   phone: `+9198${String(Date.now()).slice(-8)}`,
 };
 
@@ -52,6 +59,11 @@ beforeAll(async () => {
   await superuser.query(
     "INSERT INTO tables (id, tenant_id, outlet_id, floor_id, label, qr_token) VALUES ($1, $2, $3, $4, 'T1', $5)",
     [ids.table, tenant.tenantId, outletId, tenant.floorId, secrets.qrToken],
+  );
+  // In the second outlet, so a resolver that returned the wrong outlet would be caught.
+  await superuser.query(
+    "INSERT INTO aggregator_links (id, tenant_id, outlet_id, provider, ext_store_id) VALUES ($1, $2, $3, 'urbanpiper', $4)",
+    [ids.link, tenant.tenantId, tenant.outletIds[1], secrets.storeId],
   );
 });
 
@@ -95,12 +107,22 @@ describe('pre-auth resolvers', () => {
     expect(await resolveQrToken(db, 'unknown')).toBeNull();
   });
 
+  it("finds the tenant, outlet and link of an aggregator's store id", async () => {
+    expect(await resolveAggregatorStore(db, 'urbanpiper', secrets.storeId)).toEqual({
+      tenantId: tenant.tenantId,
+      outletId: tenant.outletIds[1],
+      linkId: ids.link,
+    });
+    expect(await resolveAggregatorStore(db, 'urbanpiper', 'unknown')).toBeNull();
+    expect(await resolveAggregatorStore(db, 'other', secrets.storeId)).toBeNull();
+  });
+
   it('leaves app_user unable to read across tenants by switching the lookup setting on itself', async () => {
     const c = await pool.connect();
     try {
       await c.query('BEGIN');
       await c.query("SELECT set_config('app.pre_auth_lookup', 'on', true)");
-      for (const table of ['users', 'devices', 'refresh_tokens', 'tables']) {
+      for (const table of ['users', 'devices', 'refresh_tokens', 'tables', 'aggregator_links']) {
         const { rows } = await c.query<{ count: string }>(`SELECT count(*) FROM ${table}`);
         expect({ table, count: rows[0]?.count }).toEqual({ table, count: '0' });
       }

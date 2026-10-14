@@ -1,5 +1,20 @@
 # Update Log
 
+## 2026-10-14 — the till bills offline and syncs
+
+- **Creation**: `apps/app` local store (Dexie): outbox, per-year invoice
+  counters, orders, invoices, payments and the menu snapshot.
+  `issueInvoice` checks the clock, runs the engine, takes the next number,
+  writes the invoice and appends the op in one transaction. The sync runner
+  pushes in batches of up to 200 on `online`, on socket connect and every
+  15 s. There is an unsynced badge, a storage-persistence warning, and a
+  device screen with export and a reset that is blocked while anything is
+  unsynced (ticket 16). Cases `app 0201`–`0206`. ADR 0025: the till stores
+  what it will send, and a refused change waits for a person.
+- **Change**: CI runs `test:contract`. The till's push body is asserted
+  equal to the contracts fixture.
+- **Creation**: tickets 25–29 for the 15 bugs from QA round 1.
+
 ## 2026-10-14 — the API runs
 
 - **Creation**: `apps/api`: NestJS 11 with Pino JSON logs, Zod validation

@@ -20,3 +20,9 @@ Invariants 2, 6, 7 on the server (TRD §8.3, §7). Load `api-code` and `billing-
 - Contract test: the fixture from ticket 02 parsed by the server.
 - From ticket 03: re-validate with the payload's `outletTaxRateBp` snapshot (added in ticket 27), never the outlet's current rate.
 - Re-run the engine on lines in a deterministic order anyway (ORDER BY line position), though ticket 27 makes totals order-independent.
+
+## Notes from ticket 16
+
+- The device stores and pushes ops in wire form (ADR 0025). The pushed body for the fixture flow equals `packages/contracts/fixtures/sync-push.json` exactly; make the server's contract test parse that same file.
+- A refused op is held on the device until staff retry, so the server **will see holes in a device's `deviceSeq`**. Apply in order without requiring contiguity, and answer **every** op in a batch (acked or rejected).
+- Scope the idempotent skip on `sync_ops.op_id` to the tenant: a cross-tenant duplicate op id must never silently drop another tenant's op (QA round 1).

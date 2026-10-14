@@ -55,6 +55,7 @@ jobs:
       # Docker is preinstalled on GitHub's Ubuntu runners, so Testcontainers
       # can start real Postgres. test:int is uncacheable in turbo.json.
       - run: pnpm test:int
+      - run: pnpm test:contract
 
   audit:
     name: Dependency audit

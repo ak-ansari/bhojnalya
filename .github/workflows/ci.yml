@@ -1,0 +1,74 @@
+# Lint → typecheck → test on every push and pull request (TRD §15.2), then the
+# integration tests against real Postgres, plus a dependency audit (TRD §17).
+# No deploy job yet: it arrives with the VPS.
+name: CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+
+permissions:
+  contents: read
+
+# A newer push to the same branch or PR cancels the run it supersedes.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Tests assume a UTC process clock; IST is asserted explicitly where it matters.
+  TZ: UTC
+  TURBO_TELEMETRY_DISABLED: '1'
+
+jobs:
+  check:
+    name: Lint, typecheck, test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      # Reads the pnpm version from packageManager in package.json.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      # lint, typecheck and test each depend on ^build, so libraries build first.
+      - run: pnpm exec turbo run lint typecheck test
+
+  integration:
+    name: Integration tests (Testcontainers)
+    needs: check
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Docker is preinstalled on GitHub's Ubuntu runners, so Testcontainers
+      # can start real Postgres. test:int is uncacheable in turbo.json.
+      - run: pnpm test:int
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+      # Non-blocking for now: an advisory in a transitive dependency we can't
+      # upgrade yet shouldn't stop every merge. The finding stays visible in
+      # the job log and Dependabot opens the upgrade PRs. Make it blocking
+      # once the dependency tree settles.
+      - run: pnpm audit --prod
+        continue-on-error: true

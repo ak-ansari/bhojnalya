@@ -1,0 +1,29 @@
+# Weekly dependency updates (TRD §17), grouped so a week's bumps arrive as a
+# couple of PRs rather than dozens. Security updates aren't held to the weekly
+# schedule.
+version: 2
+updates:
+  # The npm ecosystem covers pnpm workspaces through pnpm-lock.yaml.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Asia/Kolkata
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: build
+      include: scope
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      timezone: Asia/Kolkata
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns: ['*']

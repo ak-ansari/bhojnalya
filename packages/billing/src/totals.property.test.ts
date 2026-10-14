@@ -9,7 +9,9 @@ import { computeInvoice } from './totals.js';
 
 const RUNS = { numRuns: 2000 };
 
-describe('computeInvoice properties', () => {
+// 2,000 runs per property take ~1 s idle but far longer on a loaded CI runner;
+// the default 5 s timeout made them flaky without any property failing.
+describe('computeInvoice properties', { timeout: 60_000 }, () => {
   it('reconciles: subtotal − discount + service charge + tax + round-off = grand total', () => {
     fc.assert(
       fc.property(anInvoice, (input) => {

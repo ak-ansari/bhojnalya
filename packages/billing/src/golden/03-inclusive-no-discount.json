@@ -1,0 +1,103 @@
+{
+  "description": "Tax Invoice, inclusive prices, two rates, no discount, no service charge; each line costs exactly its menu price",
+  "working": [
+    "Latte 180.00 incl. 5%: taxable round(18000 / 1.05 = 17142.857) = 171.43, tax 8.57 (CGST round(4.285) = 4.29, SGST 4.28)",
+    "Cookie 60.00 x 2 = 120.00 incl. 5%: taxable round(11428.571) = 114.29, tax 5.71 (2.86/2.85)",
+    "Juice 50.00 incl. 12%: taxable round(4464.286) = 44.64, tax 5.36 (2.68/2.68)",
+    "330.36 + 19.64 = 350.00 = the menu prices, round-off 0"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "latte",
+        "unitPrice": "18000",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      },
+      {
+        "name": "cookie",
+        "unitPrice": "6000",
+        "modifiers": [],
+        "quantity": 2,
+        "taxRateBp": 500
+      },
+      {
+        "name": "juice",
+        "unitPrice": "5000",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 1200
+      }
+    ],
+    "discount": null,
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "18000",
+        "taxableBeforeDiscount": "17143",
+        "discount": "0",
+        "taxable": "17143",
+        "taxRateBp": 500,
+        "tax": "857",
+        "cgst": "429",
+        "sgst": "428",
+        "total": "18000"
+      },
+      {
+        "gross": "12000",
+        "taxableBeforeDiscount": "11429",
+        "discount": "0",
+        "taxable": "11429",
+        "taxRateBp": 500,
+        "tax": "571",
+        "cgst": "286",
+        "sgst": "285",
+        "total": "12000"
+      },
+      {
+        "gross": "5000",
+        "taxableBeforeDiscount": "4464",
+        "discount": "0",
+        "taxable": "4464",
+        "taxRateBp": 1200,
+        "tax": "536",
+        "cgst": "268",
+        "sgst": "268",
+        "total": "5000"
+      }
+    ],
+    "subtotal": "33036",
+    "discount": "0",
+    "taxableValue": "33036",
+    "serviceCharge": null,
+    "taxSummary": [
+      {
+        "taxRateBp": 500,
+        "taxable": "28572",
+        "tax": "1428",
+        "cgst": "715",
+        "sgst": "713"
+      },
+      {
+        "taxRateBp": 1200,
+        "taxable": "4464",
+        "tax": "536",
+        "cgst": "268",
+        "sgst": "268"
+      }
+    ],
+    "tax": "1964",
+    "cgst": "983",
+    "sgst": "981",
+    "roundOff": "0",
+    "grandTotal": "35000"
+  }
+}

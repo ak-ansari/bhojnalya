@@ -1,0 +1,72 @@
+{
+  "description": "The invoice in the sync contract's push fixture (packages/contracts/fixtures/sync-push.json): inclusive 5%, chai 40.00 x 2 and a sandwich 120.00; the engine must agree with the totals the fixture says the till printed",
+  "working": [
+    "Chai 40.00 x 2 = 80.00 incl. 5%: taxable round(8000 / 1.05 = 7619.05) = 76.19, tax 3.81 (CGST round(1.905) = 1.91, SGST 1.90)",
+    "Sandwich 120.00 incl. 5%: taxable round(12000 / 1.05 = 11428.57) = 114.29, tax 5.71 (CGST round(2.855) = 2.86, SGST 2.85)",
+    "Taxable 76.19 + 114.29 = 190.48; CGST 1.91 + 2.86 = 4.77; SGST 1.90 + 2.85 = 4.75",
+    "190.48 + 9.52 = 200.00, round-off 0 (the fixture's taxableValue 19048, cgst 477, sgst 475, roundOff 0, grandTotal 20000)"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "Masala Chai",
+        "unitPrice": "4000",
+        "modifiers": [],
+        "quantity": 2,
+        "taxRateBp": 500
+      },
+      {
+        "name": "Veg Sandwich",
+        "unitPrice": "12000",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": null,
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "8000",
+        "taxableBeforeDiscount": "7619",
+        "discount": "0",
+        "taxable": "7619",
+        "taxRateBp": 500,
+        "tax": "381",
+        "cgst": "191",
+        "sgst": "190",
+        "total": "8000"
+      },
+      {
+        "gross": "12000",
+        "taxableBeforeDiscount": "11429",
+        "discount": "0",
+        "taxable": "11429",
+        "taxRateBp": 500,
+        "tax": "571",
+        "cgst": "286",
+        "sgst": "285",
+        "total": "12000"
+      }
+    ],
+    "subtotal": "19048",
+    "discount": "0",
+    "taxableValue": "19048",
+    "serviceCharge": null,
+    "taxSummary": [
+      { "taxRateBp": 500, "taxable": "19048", "tax": "952", "cgst": "477", "sgst": "475" }
+    ],
+    "tax": "952",
+    "cgst": "477",
+    "sgst": "475",
+    "roundOff": "0",
+    "grandTotal": "20000"
+  }
+}

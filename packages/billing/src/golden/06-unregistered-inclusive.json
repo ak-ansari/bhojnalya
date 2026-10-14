@@ -1,0 +1,50 @@
+{
+  "description": "Bill of Supply from an unregistered outlet with inclusive prices: the menu price is charged whole, no declaration; round-off -0.49",
+  "working": [
+    "Vada pav 24.49: no tax is extracted without registration, so taxable = 24.49",
+    "24.49 -> 24.00, round-off -0.49 (below a half rounds down)"
+  ],
+  "input": {
+    "taxMode": "unregistered",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "vada-pav",
+        "unitPrice": "2449",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": null,
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Bill of Supply",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "2449",
+        "taxableBeforeDiscount": "2449",
+        "discount": "0",
+        "taxable": "2449",
+        "taxRateBp": 0,
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0",
+        "total": "2449"
+      }
+    ],
+    "subtotal": "2449",
+    "discount": "0",
+    "taxableValue": "2449",
+    "serviceCharge": null,
+    "taxSummary": [],
+    "tax": "0",
+    "cgst": "0",
+    "sgst": "0",
+    "roundOff": "-49",
+    "grandTotal": "2400"
+  }
+}

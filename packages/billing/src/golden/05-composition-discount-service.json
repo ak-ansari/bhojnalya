@@ -1,0 +1,84 @@
+{
+  "description": "Bill of Supply from a composition outlet: no tax anywhere, even on a service charge asked to be taxed; declaration printed; round-off +0.50",
+  "working": [
+    "Samosa 20.00 x 4 = 80.00; tea 15.00 x 3 = 45.00; subtotal 125.00; flat discount 10.00",
+    "Shares 10.00 x 80/125 = 6.40 and 10.00 x 45/125 = 3.60, exact",
+    "Service charge 10% of 115.00 = 11.50; no GST without registration",
+    "125.00 - 10.00 + 11.50 = 126.50 -> 127.00, round-off +0.50 (a half rounds up)"
+  ],
+  "input": {
+    "taxMode": "composition",
+    "priceMode": "exclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "samosa",
+        "unitPrice": "2000",
+        "modifiers": [],
+        "quantity": 4,
+        "taxRateBp": 500
+      },
+      {
+        "name": "tea",
+        "unitPrice": "1500",
+        "modifiers": [],
+        "quantity": 3,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": {
+      "kind": "flat",
+      "amount": "1000"
+    },
+    "serviceCharge": {
+      "rateBp": 1000,
+      "taxed": true
+    }
+  },
+  "expected": {
+    "documentTitle": "Bill of Supply",
+    "compositionDeclaration": true,
+    "lines": [
+      {
+        "gross": "8000",
+        "taxableBeforeDiscount": "8000",
+        "discount": "640",
+        "taxable": "7360",
+        "taxRateBp": 0,
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0",
+        "total": "7360"
+      },
+      {
+        "gross": "4500",
+        "taxableBeforeDiscount": "4500",
+        "discount": "360",
+        "taxable": "4140",
+        "taxRateBp": 0,
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0",
+        "total": "4140"
+      }
+    ],
+    "subtotal": "12500",
+    "discount": "1000",
+    "taxableValue": "11500",
+    "serviceCharge": {
+      "rateBp": 1000,
+      "base": "11500",
+      "amount": "1150",
+      "taxRateBp": null,
+      "tax": "0",
+      "cgst": "0",
+      "sgst": "0"
+    },
+    "taxSummary": [],
+    "tax": "0",
+    "cgst": "0",
+    "sgst": "0",
+    "roundOff": "50",
+    "grandTotal": "12700"
+  }
+}

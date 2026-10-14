@@ -1,0 +1,120 @@
+{
+  "description": "Tax Invoice, inclusive prices, 10% discount on the taxable value with two leftover paise, service charge with no GST; round-off down",
+  "working": [
+    "Taxable before discount: pizza round(29900 / 1.05 = 28476.19) = 284.76; coffee 99.00 x 2 = 198.00 -> round(18857.14) = 188.57; water 20.00 at 18% -> round(1694.92) = 16.95",
+    "Subtotal 490.28; discount 10% = 49.028 -> 49.03",
+    "Shares 4903 x 28476 / 49028 = 2847 r 35112; 4903 x 18857 / 49028 = 1885 r 38091; 4903 x 1695 / 49028 = 169 r 24853; floors sum 4901",
+    "Two paise left: coffee (38091) then pizza (35112): 28.48, 18.86, 1.69",
+    "Discounted lines are taxed on what is left: pizza 256.28 x 5% = 12.814 -> 12.81 (CGST round(6.405) = 6.41, SGST 6.40); coffee 169.71 x 5% = 8.4855 -> 8.49 (4.25/4.24); water 15.26 x 18% = 2.7468 -> 2.75 (1.38/1.37)",
+    "Service charge 5% of 441.25 = 22.0625 -> 22.06, no GST",
+    "490.28 - 49.03 + 22.06 + 24.05 = 487.36 -> 487.00, round-off -0.36"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "pizza",
+        "unitPrice": "29900",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      },
+      {
+        "name": "coffee",
+        "unitPrice": "9900",
+        "modifiers": [],
+        "quantity": 2,
+        "taxRateBp": 500
+      },
+      {
+        "name": "water",
+        "unitPrice": "2000",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 1800
+      }
+    ],
+    "discount": {
+      "kind": "percent",
+      "rateBp": 1000
+    },
+    "serviceCharge": {
+      "rateBp": 500,
+      "taxed": false
+    }
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "29900",
+        "taxableBeforeDiscount": "28476",
+        "discount": "2848",
+        "taxable": "25628",
+        "taxRateBp": 500,
+        "tax": "1281",
+        "cgst": "641",
+        "sgst": "640",
+        "total": "26909"
+      },
+      {
+        "gross": "19800",
+        "taxableBeforeDiscount": "18857",
+        "discount": "1886",
+        "taxable": "16971",
+        "taxRateBp": 500,
+        "tax": "849",
+        "cgst": "425",
+        "sgst": "424",
+        "total": "17820"
+      },
+      {
+        "gross": "2000",
+        "taxableBeforeDiscount": "1695",
+        "discount": "169",
+        "taxable": "1526",
+        "taxRateBp": 1800,
+        "tax": "275",
+        "cgst": "138",
+        "sgst": "137",
+        "total": "1801"
+      }
+    ],
+    "subtotal": "49028",
+    "discount": "4903",
+    "taxableValue": "44125",
+    "serviceCharge": {
+      "rateBp": 500,
+      "base": "44125",
+      "amount": "2206",
+      "taxRateBp": null,
+      "tax": "0",
+      "cgst": "0",
+      "sgst": "0"
+    },
+    "taxSummary": [
+      {
+        "taxRateBp": 500,
+        "taxable": "42599",
+        "tax": "2130",
+        "cgst": "1066",
+        "sgst": "1064"
+      },
+      {
+        "taxRateBp": 1800,
+        "taxable": "1526",
+        "tax": "275",
+        "cgst": "138",
+        "sgst": "137"
+      }
+    ],
+    "tax": "2405",
+    "cgst": "1204",
+    "sgst": "1201",
+    "roundOff": "-36",
+    "grandTotal": "48700"
+  }
+}

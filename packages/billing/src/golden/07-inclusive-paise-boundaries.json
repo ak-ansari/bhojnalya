@@ -1,0 +1,84 @@
+{
+  "description": "Tax Invoice, inclusive prices at the paisa scale: an inclusive line still costs its menu price where rate x taxable would not, and the CGST/SGST halves differ by one paisa",
+  "working": [
+    "0.07 incl. 28%: taxable round(7 / 1.28 = 5.47) = 0.05, tax 0.07 - 0.05 = 0.02 (0.01/0.01); 28% of 0.05 would be 0.01, losing a paisa",
+    "1.05 incl. 5%: taxable round(105 / 1.05) = 1.00, tax 0.05 (CGST round(0.025) = 0.03, SGST 0.02)",
+    "1.05 + 0.07 tax = 1.12 -> 1.00, round-off -0.12"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "mint",
+        "unitPrice": "7",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 2800
+      },
+      {
+        "name": "toffee",
+        "unitPrice": "105",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": null,
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "7",
+        "taxableBeforeDiscount": "5",
+        "discount": "0",
+        "taxable": "5",
+        "taxRateBp": 2800,
+        "tax": "2",
+        "cgst": "1",
+        "sgst": "1",
+        "total": "7"
+      },
+      {
+        "gross": "105",
+        "taxableBeforeDiscount": "100",
+        "discount": "0",
+        "taxable": "100",
+        "taxRateBp": 500,
+        "tax": "5",
+        "cgst": "3",
+        "sgst": "2",
+        "total": "105"
+      }
+    ],
+    "subtotal": "105",
+    "discount": "0",
+    "taxableValue": "105",
+    "serviceCharge": null,
+    "taxSummary": [
+      {
+        "taxRateBp": 500,
+        "taxable": "100",
+        "tax": "5",
+        "cgst": "3",
+        "sgst": "2"
+      },
+      {
+        "taxRateBp": 2800,
+        "taxable": "5",
+        "tax": "2",
+        "cgst": "1",
+        "sgst": "1"
+      }
+    ],
+    "tax": "7",
+    "cgst": "4",
+    "sgst": "3",
+    "roundOff": "-12",
+    "grandTotal": "100"
+  }
+}

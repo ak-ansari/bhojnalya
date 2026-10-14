@@ -1,0 +1,73 @@
+{
+  "description": "Tax Invoice, exclusive prices, a 100% discount: nothing is taxable, the service charge and its GST are zero, and the bill is 0.00",
+  "working": [
+    "Sandwich 50.00, discount 100% = 50.00, taxable 0.00, tax 0.00",
+    "Service charge 10% of 0.00 = 0.00, GST 5% of 0.00 = 0.00",
+    "Grand total 0.00, round-off 0"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "exclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "sandwich",
+        "unitPrice": "5000",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": {
+      "kind": "percent",
+      "rateBp": 10000
+    },
+    "serviceCharge": {
+      "rateBp": 1000,
+      "taxed": true
+    }
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "5000",
+        "taxableBeforeDiscount": "5000",
+        "discount": "5000",
+        "taxable": "0",
+        "taxRateBp": 500,
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0",
+        "total": "0"
+      }
+    ],
+    "subtotal": "5000",
+    "discount": "5000",
+    "taxableValue": "0",
+    "serviceCharge": {
+      "rateBp": 1000,
+      "base": "0",
+      "amount": "0",
+      "taxRateBp": 500,
+      "tax": "0",
+      "cgst": "0",
+      "sgst": "0"
+    },
+    "taxSummary": [
+      {
+        "taxRateBp": 500,
+        "taxable": "0",
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0"
+      }
+    ],
+    "tax": "0",
+    "cgst": "0",
+    "sgst": "0",
+    "roundOff": "0",
+    "grandTotal": "0"
+  }
+}

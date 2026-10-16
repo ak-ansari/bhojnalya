@@ -21,3 +21,7 @@ Write one with the `test-case` skill.
 - [0004 Every API error reads as a code, a message and a request id](./0004-every-api-error-reads-as-a-code-a-message-and-a-request-id.md)
 - [0005 A socket event carries ids only, under its literal name](./0005-a-socket-event-carries-ids-only-under-its-literal-name.md)
 - [0006 The shared vocabularies are closed lists of literal values](./0006-the-shared-vocabularies-are-closed-lists-of-literal-values.md)
+
+## Sign-in and devices
+
+- [0007 A sign-in or device registration body is refused unless every field has its agreed shape](./0007-a-sign-in-or-device-registration-body-is-refused-unless-every-field-has-its-agreed-shape.md)

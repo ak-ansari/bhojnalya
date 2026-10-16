@@ -10,8 +10,9 @@
 import { createHash } from 'node:crypto';
 
 import { IDEMPOTENCY_KEY_HEADER, IdempotencyKey } from '@bhojnalya/contracts';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, SetMetadata } from '@nestjs/common';
 import type { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
 import type { Response } from 'express';
 import { from, lastValueFrom } from 'rxjs';
 import type { Observable } from 'rxjs';
@@ -24,14 +25,30 @@ import { claimKey, completeKey, findKey } from './idempotency-store.js';
 
 export const REPLAYED_HEADER = 'Idempotent-Replayed';
 
+const RESPONSE_HOLDS_SECRET = 'bhojnalya:response-holds-secret';
+
+// The response carries a secret the server keeps only as a hash (a device
+// token), so it is never stored for replay (ADR 0027). Such a route must be
+// safe to retry some other way, e.g. by a client-made id that refuses a repeat.
+export function ResponseHoldsSecret(): MethodDecorator {
+  return SetMetadata(RESPONSE_HOLDS_SECRET, true);
+}
+
 @Injectable()
 export class IdempotencyInterceptor implements NestInterceptor {
+  constructor(@Inject(Reflector) private readonly reflector: Reflector) {}
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const http = context.switchToHttp();
     const req = http.getRequest<ApiRequest>();
     const header = req.header(IDEMPOTENCY_KEY_HEADER);
     // Public routes have no tenant to scope a key to; reads need no key.
-    if (header === undefined || READ_METHODS.includes(req.method) || !req.principal) {
+    if (
+      header === undefined ||
+      READ_METHODS.includes(req.method) ||
+      !req.principal ||
+      this.reflector.get<boolean | undefined>(RESPONSE_HOLDS_SECRET, context.getHandler()) === true
+    ) {
       return next.handle();
     }
     const key = IdempotencyKey.safeParse(header);

@@ -5,6 +5,7 @@ import {
   KotStatus,
   OrderChannel,
   OrderType,
+  OutletRole,
   PaymentMethod,
   PriceMode,
   TaxMode,
@@ -19,6 +20,7 @@ describe('shared enums', () => {
     ['PriceMode', PriceMode.options, ['inclusive', 'exclusive']],
     ['DeviceRole', DeviceRole.options, ['pos', 'kds']],
     ['PaymentMethod', PaymentMethod.options, ['cash', 'upi', 'card', 'other']],
+    ['OutletRole', OutletRole.options, ['owner', 'manager', 'cashier', 'captain', 'kitchen']],
   ])('%s is exactly its literal values', (_name, options, literals) => {
     expect(options).toEqual(literals);
   });

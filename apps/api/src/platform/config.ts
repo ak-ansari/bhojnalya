@@ -10,6 +10,9 @@ export const ApiConfig = z.object({
   // TRD §15.2: 10 of Postgres's 50 connections.
   DB_POOL_SIZE: z.coerce.number().int().min(1).max(50).default(10),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+  // Signs access tokens and keys reset-code hashes (TRD §13). When unset, each
+  // process makes its own, so a restart only sends signed-in clients to refresh.
+  AUTH_TOKEN_SECRET: z.string().min(32).optional(),
 });
 export type ApiConfig = z.infer<typeof ApiConfig>;
 

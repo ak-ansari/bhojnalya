@@ -48,6 +48,9 @@ describe('ERROR_CODES', () => {
       'NOT_FOUND',
       'CONFLICT',
       'OUTLET_SUSPENDED',
+      'INVALID_CREDENTIALS',
+      'INVALID_RESET_CODE',
+      'DEVICE_CODES_EXHAUSTED',
       'INTERNAL_ERROR',
     ]);
   });

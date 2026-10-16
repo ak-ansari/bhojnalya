@@ -29,6 +29,13 @@
       "when": 1791962217908,
       "tag": "0003_api_idempotency_jobs",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791989587267,
+      "tag": "0004_password_reset_codes",
+      "breakpoints": true
     }
   ]
 }

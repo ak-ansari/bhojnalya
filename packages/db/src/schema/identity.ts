@@ -6,6 +6,8 @@ import {
   char,
   check,
   foreignKey,
+  index,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -155,4 +157,30 @@ export const platformAdmins = pgTable(
     updatedAt: updatedAt(),
   },
   (t) => [uniqueIndex('platform_admins_email_key').on(sql`lower(${t.email})`)],
+);
+
+// One-time codes for an owner's email password reset (TRD §13). Only a keyed
+// hash of the code is kept; a code is spent on use, after too many wrong
+// guesses, or when a newer one is issued.
+export const passwordResetCodes = pgTable(
+  'password_reset_codes',
+  {
+    id: uuid('id').primaryKey(),
+    tenantId: uuid('tenant_id').notNull(),
+    userId: uuid('user_id').notNull(),
+    codeHash: text('code_hash').notNull(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    failedAttempts: integer('failed_attempts').notNull().default(0),
+    consumedAt: timestamp('consumed_at', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    index('password_reset_codes_user_id_idx').on(t.userId, t.createdAt),
+    check('password_reset_codes_failed_attempts_check', sql`${t.failedAttempts} >= 0`),
+    foreignKey({
+      name: 'password_reset_codes_user_fk',
+      columns: [t.tenantId, t.userId],
+      foreignColumns: [users.tenantId, users.id],
+    }),
+  ],
 );

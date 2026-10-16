@@ -43,6 +43,7 @@ Proposed
 | price mode | `inclusive`, `exclusive` |
 | device role | `pos`, `kds` |
 | payment method | `cash`, `upi`, `card`, `other` |
+| outlet role | `owner`, `manager`, `cashier`, `captain`, `kitchen` |
 | `dine-in`, `served` | refused |
 
 ## Procedure

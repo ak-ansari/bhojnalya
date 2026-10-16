@@ -10,6 +10,10 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { Logger, LoggerModule } from 'nestjs-pino';
 import type { DestinationStream } from 'pino';
 
+import { AuthModule } from './modules/auth/auth.module.js';
+import { DevicesModule } from './modules/devices/devices.module.js';
+import { PlatformAuthModule } from './platform/auth/auth.module.js';
+import type { AuthOverrides } from './platform/auth/auth.module.js';
 import { API_CONFIG } from './platform/config.js';
 import type { ApiConfig } from './platform/config.js';
 import { DatabaseModule } from './platform/db/database.module.js';
@@ -32,6 +36,8 @@ export interface AppOptions {
   // Feature modules; the integration tests add their own probes here.
   imports?: ModuleMetadata['imports'];
   logDestination?: DestinationStream;
+  // Test doubles for the clock and the mail transport.
+  auth?: AuthOverrides;
 }
 
 export async function createApp(options: AppOptions): Promise<INestApplication> {
@@ -46,7 +52,7 @@ export async function createApp(options: AppOptions): Promise<INestApplication> 
 
 @Module({})
 export class AppModule {
-  static register({ config, imports = [], logDestination }: AppOptions): DynamicModule {
+  static register({ config, imports = [], logDestination, auth }: AppOptions): DynamicModule {
     return {
       module: AppModule,
       global: true,
@@ -55,6 +61,9 @@ export class AppModule {
         DiscoveryModule,
         DatabaseModule,
         JobsModule,
+        PlatformAuthModule.register(auth),
+        AuthModule,
+        DevicesModule,
         ...imports,
       ],
       controllers: [HealthController, OpenApiController],

@@ -6,6 +6,7 @@ import {
   KotStatus,
   OrderChannel,
   OrderType,
+  OutletRole,
   PaymentMethod,
   PriceMode,
   SYNC_OP_TYPES,
@@ -18,6 +19,7 @@ import {
   kotStatus,
   orderChannel,
   orderType,
+  outletRole,
   paymentMethod,
   priceMode,
   syncOpType,
@@ -33,6 +35,7 @@ describe('column enums', () => {
     ['price_mode', priceMode.enumValues, PriceMode.options],
     ['device_role', deviceRole.enumValues, DeviceRole.options],
     ['payment_method', paymentMethod.enumValues, PaymentMethod.options],
+    ['outlet_role', outletRole.enumValues, OutletRole.options],
     ['sync_op_type', syncOpType.enumValues, SYNC_OP_TYPES],
   ])('hold the same values as the contract for %s', (_name, column, contract) => {
     expect([...column]).toEqual([...contract]);

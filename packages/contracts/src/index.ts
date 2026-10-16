@@ -8,6 +8,7 @@ export {
   KotStatus,
   OrderChannel,
   OrderType,
+  OutletRole,
   PaymentMethod,
   PriceMode,
   TaxMode,
@@ -48,3 +49,18 @@ export {
   type SocketEventName,
   type SocketEventPayloads,
 } from './socket-events.js';
+export {
+  AccessClaims,
+  AuthSession,
+  CurrentDevice,
+  Device,
+  DeviceCode,
+  DeviceList,
+  DeviceListQuery,
+  LoginRequest,
+  NewPassword,
+  PasswordResetConfirm,
+  PasswordResetRequest,
+  RegisterDeviceRequest,
+  RegisteredDevice,
+} from './auth.js';

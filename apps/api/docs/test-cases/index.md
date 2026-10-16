@@ -17,6 +17,15 @@ Write one with the `test-case` skill.
 - [0001 Every signed-in request runs in one transaction for its own tenant and outlets](./0001-every-signed-in-request-runs-in-one-transaction-for-its-own-tenant-and-outlets.md)
 - [0004 A suspended outlet's changes are refused, but its reads and record-keeping are not](./0004-a-suspended-outlets-changes-are-refused-but-its-reads-and-record-keeping-are-not.md)
 
+## Sign-in and devices
+
+- [0009 An owner signs in with an email or phone and a password, and a failed sign-in reveals nothing](./0009-an-owner-signs-in-with-an-email-or-phone-and-a-password-and-a-failed-sign-in-reveals-nothing.md)
+- [0010 A refresh token works once, and a reused one ends that whole sign-in](./0010-a-refresh-token-works-once-and-a-reused-one-ends-that-whole-sign-in.md)
+- [0011 A password is reset only with the latest emailed code, within 10 minutes and 5 guesses](./0011-a-password-is-reset-only-with-the-latest-emailed-code-within-10-minutes-and-5-guesses.md)
+- [0012 A registered device gets its outlet's next unused code and a token the server keeps only as a hash](./0012-a-registered-device-gets-its-outlets-next-unused-code-and-a-token-the-server-keeps-only-as-a-hash.md)
+- [0013 A revoked or replaced device is refused on its next request, and a replaced one's last invoice number is kept](./0013-a-revoked-or-replaced-device-is-refused-on-its-next-request-and-a-replaced-ones-last-invoice-number-is-kept.md)
+- [0014 A signed-in request reaches only the outlets its person holds a role at, for 15 minutes](./0014-a-signed-in-request-reaches-only-the-outlets-its-person-holds-a-role-at-for-15-minutes.md)
+
 ## Idempotency
 
 - [0003 A retried change with the same key runs once and gets the first answer for 24 hours](./0003-a-retried-change-with-the-same-key-runs-once-and-gets-the-first-answer-for-24-hours.md)

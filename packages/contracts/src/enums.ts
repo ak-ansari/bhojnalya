@@ -29,3 +29,7 @@ export type DeviceRole = z.infer<typeof DeviceRole>;
 /** How a payment was received at the counter (PRD P6); recorded, never processed. */
 export const PaymentMethod = z.enum(['cash', 'upi', 'card', 'other']);
 export type PaymentMethod = z.infer<typeof PaymentMethod>;
+
+/** A person's role at one outlet. The MVP grants only `owner`; the rest are Phase 2 (TRD §13). */
+export const OutletRole = z.enum(['owner', 'manager', 'cashier', 'captain', 'kitchen']);
+export type OutletRole = z.infer<typeof OutletRole>;

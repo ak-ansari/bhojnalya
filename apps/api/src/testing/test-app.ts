@@ -1,7 +1,8 @@
-// The real API, built as main.ts builds it, plus two test-only pieces: a guard
-// standing in for the auth guard (ticket 13), which takes the principal from
-// the X-Test-Principal header, and probe routes that exercise the platform's
-// request pipeline. Also a tenant fixture, seeded as the superuser.
+// The real API, built as main.ts builds it (real auth guard included), plus two
+// test-only pieces: a second guard that takes a principal from the
+// X-Test-Principal header, so platform tests need not sign in, and probe routes
+// that exercise the request pipeline. Requests with a real bearer token go
+// through the real guard. Also a tenant fixture, seeded as the superuser.
 import { randomUUID } from 'node:crypto';
 import type { Server } from 'node:http';
 import { Writable } from 'node:stream';
@@ -18,6 +19,7 @@ import type TestAgent from 'supertest/lib/agent.js';
 import { z } from 'zod';
 
 import { createApp } from '../app.js';
+import type { AuthOverrides } from '../platform/auth/auth.module.js';
 import type { ApiRequest, Principal } from '../platform/http/api-request.js';
 import { AllowWhenSuspended } from '../platform/tenancy/public.decorator.js';
 import { TenantTx } from '../platform/tenancy/tenant-transaction.interceptor.js';
@@ -30,7 +32,10 @@ export interface TestApp {
   logs: Record<string, unknown>[];
 }
 
-export async function createTestApp(databaseUrl: string): Promise<TestApp> {
+export async function createTestApp(
+  databaseUrl: string,
+  auth: AuthOverrides = {},
+): Promise<TestApp> {
   const logs: Record<string, unknown>[] = [];
   const app = await createApp({
     config: {
@@ -41,6 +46,7 @@ export async function createTestApp(databaseUrl: string): Promise<TestApp> {
       LOG_LEVEL: 'info',
     },
     imports: [ProbeModule],
+    auth,
     logDestination: new Writable({
       write(chunk: Buffer, _encoding, done) {
         logs.push(JSON.parse(chunk.toString()) as Record<string, unknown>);

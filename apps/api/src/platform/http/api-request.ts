@@ -1,6 +1,7 @@
 // What the platform hangs on each request: its id (from the logger middleware),
 // the authenticated principal (from the auth guard) and the tenant transaction
 // (from the tenant interceptor).
+import type { OutletRole } from '@bhojnalya/contracts';
 import type { Tx } from '@bhojnalya/db';
 import type { Request } from 'express';
 
@@ -13,6 +14,14 @@ export interface Principal {
   outletId?: string;
   deviceId?: string;
   userId?: string;
+  // A signed-in person's role at each outlet they reach (TRD §13). A device
+  // has none: what it may do follows from being a device of its outlet.
+  roles?: readonly OutletRoleGrant[];
+}
+
+export interface OutletRoleGrant {
+  outletId: string;
+  role: OutletRole;
 }
 
 export interface ApiRequest extends Request {

@@ -1,5 +1,27 @@
 # Update Log
 
+## 2026-10-16 — owners sign in, devices register, and bills add up in any order
+
+- **Creation**: `apps/api` auth: owner sign-in (Argon2id), a 15-minute
+  access token, a rotating refresh cookie with reuse detection, an emailed
+  reset code, and device registration with never-reused codes. Retire,
+  replace and revoke are written to the audit log. `AuthGuard` sets the
+  principal; `X-Outlet-Id` narrows a request to one outlet (ticket 13).
+  Cases `api 0009`–`0014` and `contracts 0007`. ADR 0027.
+- **Creation**: `packages/db` migration `0004_password_reset_codes`.
+- **Change**: `packages/billing`: a tied leftover paisa goes by rate, then
+  value, then id, never by position, so totals don't depend on line order. A
+  discount above the subtotal is capped and flagged `discountCapped`. Unsafe
+  quantities and invalid clocks are refused. Property runs are bounded and
+  print their seed (ticket 27). Cases `billing 0007`–`0009`; `billing 0006`
+  is superseded. ADR 0028 amends ADR 0017.
+- **Change**: `InvoiceCreatePayload` carries `outletTaxRateBp`, the
+  service-charge rate snapshot, and the till sends it.
+- **Change**: `infra/docker-compose.yml` requires `AUTH_TOKEN_SECRET`. The
+  auth and device tests type their response bodies, and the slow 450-op
+  sync test has a 30 s timeout.
+- **Creation**: ticket 30 for QA round 2.
+
 ## 2026-10-14 — the till bills offline and syncs
 
 - **Creation**: `apps/app` local store (Dexie): outbox, per-year invoice

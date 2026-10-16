@@ -33,3 +33,8 @@ Invariants 2, 6, 7 on the server (TRD §8.3, §7). Load `api-code` and `billing-
 - **Concurrent duplicates:** two tabs can push the same `op_id` at once. Inserting a duplicate concurrently must answer `acked`, never 5xx (`INSERT ... ON CONFLICT (tenant_id, op_id) DO NOTHING` then read back).
 - Answer **every** op in a batch, with `reason` always a contract `ErrorCode`.
 - Pull (`GET /sync/pull?cursor=`) and its cursor are still unbuilt on the device. Build the server side here; the device side goes with ticket 18.
+
+## Notes from QA round 3
+
+- `/sync/push` must require a **POS** device (`@DeviceOnly('pos')`, from ticket 31). A KDS token must not push invoices.
+- A **revoked** device must still be able to push invoices it issued before revocation (invariant 7: synced data is never dropped). Decide in the sync ADR: accept a push from a revoked-but-not-replaced device for ops created before `revoked_at`, flag them for review.

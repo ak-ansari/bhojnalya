@@ -12,7 +12,7 @@ Date: 2026-10-14
 
 ## Status
 
-Proposed
+Proposed. Amended by [ADR 0028](0028-a-bill-adds-up-the-same-whatever-order-its-lines-are-in-and-a-discount-larger-than-the-bill-is-capped.md): a tie for a leftover paisa no longer goes to the earlier line.
 
 ## Context
 

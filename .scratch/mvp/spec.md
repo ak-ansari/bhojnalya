@@ -30,6 +30,7 @@ the work.
 | 7 | 20 QR ordering, 21 aggregators |
 | QA 1 | 27 billing (now), 25 db + 26 api + 29 admin (after 13), 28 POS shell (after 16) |
 | QA 2 | 30 POS sync robustness (after 28) |
+| QA 3 | 31 auth hardening (now) |
 
 ## Decisions so far
 
@@ -49,3 +50,5 @@ the work.
 - 08: interceptor order is tenant tx → suspension → idempotency; routes fail closed unless `@Public()`; an Idempotency-Key is optional server-side (POS/QR clients must still send one); pg-boss runs as `app_user` and is installed by the owner (ADR 0020). [ticket](issues/08-api-skeleton.md)
 - 24: all three apps use Tailwind v4 + the shared preset. The preset still lacks diet colours, `line.soft`, the guest page colour and `on-*` text tokens (see the ticket's Comments). [ticket](issues/24-align-tailwind-v4-tokens.md)
 - 16: the outbox stores ops in wire form (ADR 0025); a refused op is held for a person, so the server sees `deviceSeq` holes; clearing data unpairs the device; `assertOutboxEmpty` must guard any future logout. [ticket](issues/16-pos-local-store-outbox.md)
+- 13: the access token names only user and tenant; roles and device state are read per request (ADR 0027); `X-Outlet-Id` picks the acting outlet; device registration is never replayed; a reused refresh token ends the whole sign-in. Not built: rate limiting on login/reset, real email. [ticket](issues/13-api-auth-devices.md)
+- 27: tie-break is rate, then taxable value, then gross, then `orderItemId`; `discountCapped`; properties run 500 times, are time-bounded and print their seed (ADR 0028). [ticket](issues/27-billing-determinism-qa1.md)

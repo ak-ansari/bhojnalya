@@ -45,18 +45,24 @@ async function pairedDbWith(count: number) {
 }
 
 describe('syncRunner', () => {
-  it('pushes in batches of at most 200, in deviceSeq order, until the outbox is empty', async () => {
-    const db = await pairedDbWith(450);
-    const { bodies } = pushEndpoint();
+  // 450 ops through fake IndexedDB and MSW take ~1 s idle but well over the
+  // default 5 s on a loaded machine or CI runner.
+  it(
+    'pushes in batches of at most 200, in deviceSeq order, until the outbox is empty',
+    { timeout: 30_000 },
+    async () => {
+      const db = await pairedDbWith(450);
+      const { bodies } = pushEndpoint();
 
-    const round = await createSyncRunner({ db }).syncNow();
+      const round = await createSyncRunner({ db }).syncNow();
 
-    expect(round).toMatchObject({ status: 'done', acked: 450, rejected: 0 });
-    expect(bodies.map((body) => body.ops.length)).toEqual([200, 200, 50]);
-    const seqs = bodies.flatMap((body) => body.ops.map((op) => op.deviceSeq));
-    expect(seqs).toEqual(Array.from({ length: 450 }, (_, i) => i + 1));
-    expect(await db.outbox.count()).toBe(0);
-  });
+      expect(round).toMatchObject({ status: 'done', acked: 450, rejected: 0 });
+      expect(bodies.map((body) => body.ops.length)).toEqual([200, 200, 50]);
+      const seqs = bodies.flatMap((body) => body.ops.map((op) => op.deviceSeq));
+      expect(seqs).toEqual(Array.from({ length: 450 }, (_, i) => i + 1));
+      expect(await db.outbox.count()).toBe(0);
+    },
+  );
 
   it('sends a body the contract accepts, with the device id and an idempotency key', async () => {
     const db = await pairedDbWith(2);

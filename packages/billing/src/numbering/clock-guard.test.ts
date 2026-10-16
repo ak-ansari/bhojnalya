@@ -71,5 +71,11 @@ describe('assertClockNotBehind', () => {
     expect(() => {
       assertClockNotBehind(new Date(Number.NaN), lastInvoiceAt);
     }).toThrow(RangeError);
+    expect(() => {
+      assertClockNotBehind(new Date(Number.NaN), null);
+    }).toThrow(RangeError);
+    expect(() => {
+      assertClockNotBehind(new Date(), new Date(Number.NaN));
+    }).toThrow(RangeError);
   });
 });

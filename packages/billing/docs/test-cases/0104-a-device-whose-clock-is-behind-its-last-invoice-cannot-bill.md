@@ -34,7 +34,9 @@ Accepted
 - A device with no invoice yet passes at any time.
 - The check fails exactly when the clock is earlier than the last invoice,
   for any pair of times.
-- An invalid time is refused rather than passed.
+- An invalid time is refused rather than passed, for the clock or the last
+  invoice, even on a device with no invoice yet: a bill with no time has no
+  financial year.
 
 ## Variations
 
@@ -44,6 +46,8 @@ Accepted
 | 10:00:00.000 | 10:00:00.000 | passes |
 | 10:00:00.001 | 10:00:00.000 | passes |
 | any | none | passes |
+| invalid | 10:00:00.000 or none | refused |
+| 10:00:00.000 | invalid | refused |
 
 ## Procedure
 

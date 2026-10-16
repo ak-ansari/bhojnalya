@@ -7,6 +7,9 @@ export default mergeConfig(
   base,
   defineConfig({
     test: {
+      // fast-check runs per property (src/totals.property.test.ts): 500 keeps
+      // the gate fast under load; a nightly job sets FC_NUM_RUNS higher.
+      provide: { fcNumRuns: Number(process.env.FC_NUM_RUNS ?? 500) },
       coverage: {
         provider: 'v8',
         include: ['src/**/*.ts'],

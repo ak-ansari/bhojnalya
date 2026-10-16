@@ -3,7 +3,7 @@ type: Test Case
 title: "6. A bill no outlet could issue is refused, never clamped"
 description: Protects the printed bill from silently "fixed" input that would make it disagree with the order.
 tags: [test-cases, billing, validation]
-status: Accepted
+status: Superseded
 origin_repo: bhojnalya
 timestamp: 2026-10-14T00:00:00Z
 ---
@@ -14,7 +14,10 @@ Date: 2026-10-14
 
 ## Status
 
-Accepted
+Superseded by [billing 0007](./0007-a-bill-no-outlet-could-issue-is-refused.md)
+and [billing 0008](./0008-a-flat-discount-larger-than-the-bill-is-capped-at-its-taxable-value-and-the-bill-says-so.md):
+a flat discount above the subtotal is now capped, not refused, and an
+unsafe quantity is now refused.
 
 ## Given
 

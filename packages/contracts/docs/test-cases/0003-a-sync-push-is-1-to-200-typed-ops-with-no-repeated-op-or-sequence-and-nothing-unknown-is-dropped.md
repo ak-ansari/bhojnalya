@@ -46,6 +46,10 @@ Proposed
 - **A field nobody knows is refused, not dropped**, so data from a newer
   till stays in its outbox instead of being half-applied.
 - An amount sent as a JSON number is refused (contracts 0001).
+- **An invoice carries the outlet tax rate it was billed at** (the
+  fixture's is 5%), a whole number of basis points, so re-running it later
+  charges a taxed service charge at that rate, not the outlet's current one.
+  An invoice without it is refused.
 - A cancellation needs a reason. A payment is more than zero paise. An
   invoice number longer than 16 characters is refused. Every time is UTC.
 - The reply lists acked op ids and refused ops, each refusal with a
@@ -64,6 +68,7 @@ Proposed
 | an op id twice | refused at the second op's id |
 | invoice with an extra `tip` field | refused |
 | payment of `"0"` | refused |
+| invoice without its outlet tax rate, or at 5.005% | refused |
 | invoice number `BL0A/2627/0000042` (17 chars) | refused |
 | `createdAt` with `+05:30` | refused |
 
@@ -96,6 +101,7 @@ suites pass.
 - `SyncOp › refuses a cancellation without a reason` (unit)
 - `SyncOp › refuses a payment of zero paise` (unit)
 - `SyncOp › refuses an invoice number longer than 16 characters` (unit)
+- `SyncOp › refuses an invoice without the outlet tax rate it was billed at` (unit)
 - `SyncOp › refuses a time that is not UTC` (unit)
 - `SyncPushResponse › reads { acked, rejected[{ opId, reason }] }` (unit)
 - `SyncPullResponse › reads { changes, cursor }` (unit)
@@ -112,3 +118,4 @@ Command: `pnpm --filter @bhojnalya/contracts test`
 - [ADR 0006 The till is local-first; the kitchen and guests are online](../../../../docs/decisions/0006-the-till-is-local-first-the-kitchen-and-guests-are-online.md)
 - [ADR 0007 An invoice number comes from a device series](../../../../docs/decisions/0007-an-invoice-number-comes-from-a-device-series.md)
 - [ADR 0008 Financial records are append-only](../../../../docs/decisions/0008-financial-records-are-append-only.md)
+- [ADR 0017 A discount comes off the taxable value, and service charge is charged on what remains](../../../../docs/decisions/0017-a-discount-comes-off-the-taxable-value-and-service-charge-is-charged-on-what-remains.md)

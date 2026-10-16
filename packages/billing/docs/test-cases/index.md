@@ -14,7 +14,10 @@ Write one with the `test-case` skill.
 - [0003 An order discount comes off taxable value, and its line shares sum exactly to it](./0003-an-order-discount-comes-off-taxable-value-and-its-line-shares-sum-exactly-to-it.md)
 - [0004 A service charge is its own line on the discounted value, taxed only when asked](./0004-a-service-charge-is-its-own-line-on-the-discounted-value-taxed-only-when-asked.md)
 - [0005 A composition or unregistered outlet issues a Bill of Supply with no tax](./0005-a-composition-or-unregistered-outlet-issues-a-bill-of-supply-with-no-tax.md)
-- [0006 A bill no outlet could issue is refused, never clamped](./0006-a-bill-no-outlet-could-issue-is-refused-never-clamped.md)
+- [0006 A bill no outlet could issue is refused, never clamped](./0006-a-bill-no-outlet-could-issue-is-refused-never-clamped.md) (Superseded by 0007, 0008)
+- [0007 A bill no outlet could issue is refused](./0007-a-bill-no-outlet-could-issue-is-refused.md)
+- [0008 A flat discount larger than the bill is capped at its taxable value, and the bill says so](./0008-a-flat-discount-larger-than-the-bill-is-capped-at-its-taxable-value-and-the-bill-says-so.md)
+- [0009 A bill adds up the same whatever order its lines are in](./0009-a-bill-adds-up-the-same-whatever-order-its-lines-are-in.md)
 
 ## Invoice numbering and Indian dates
 

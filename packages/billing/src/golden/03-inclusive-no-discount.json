@@ -76,6 +76,7 @@
     ],
     "subtotal": "33036",
     "discount": "0",
+    "discountCapped": false,
     "taxableValue": "33036",
     "serviceCharge": null,
     "taxSummary": [

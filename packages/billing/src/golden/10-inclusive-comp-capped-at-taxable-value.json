@@ -1,0 +1,56 @@
+{
+  "description": "Tax Invoice, inclusive prices, a 105.00 item comped with 105.00 off: only 100.00 of it is taxable value, so the discount is capped there and the bill is 0.00",
+  "working": [
+    "Thali 105.00 incl. 5%: taxable round(10500 / 1.05) = 100.00",
+    "Flat discount 105.00 asked; the subtotal of taxable values is 100.00, so 100.00 comes off and the cap is reported",
+    "Taxable 0.00, tax 5% of 0.00 = 0.00",
+    "Grand total 0.00, round-off 0"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "inclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "name": "thali",
+        "unitPrice": "10500",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      }
+    ],
+    "discount": {
+      "kind": "flat",
+      "amount": "10500"
+    },
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "10500",
+        "taxableBeforeDiscount": "10000",
+        "discount": "10000",
+        "taxable": "0",
+        "taxRateBp": 500,
+        "tax": "0",
+        "cgst": "0",
+        "sgst": "0",
+        "total": "0"
+      }
+    ],
+    "subtotal": "10000",
+    "discount": "10000",
+    "discountCapped": true,
+    "taxableValue": "0",
+    "serviceCharge": null,
+    "taxSummary": [{ "taxRateBp": 500, "taxable": "0", "tax": "0", "cgst": "0", "sgst": "0" }],
+    "tax": "0",
+    "cgst": "0",
+    "sgst": "0",
+    "roundOff": "0",
+    "grandTotal": "0"
+  }
+}

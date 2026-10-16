@@ -111,6 +111,12 @@ export const InvoiceCreatePayload = z.strictObject({
   priceMode: PriceMode,
   /** GST state code, so IGST can be added without a schema change (TRD §6.1 rule 4). */
   placeOfSupply: z.string().regex(/^\d{2}$/, 'a two-digit GST state code'),
+  /**
+   * The outlet's default GST rate when the bill was issued: a taxed service
+   * charge is charged at it, so the server re-runs the bill at this rate, not
+   * the outlet's current one (invariant 5, ADR 0017).
+   */
+  outletTaxRateBp: RateBp,
   lines: z.array(InvoiceLine).min(1),
   discount: OrderDiscount.nullable(),
   serviceCharge: z.strictObject({ rateBp: RateBp, taxed: z.boolean() }).nullable(),

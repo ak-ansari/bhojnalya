@@ -75,6 +75,7 @@
         "taxMode": "regular",
         "priceMode": "inclusive",
         "placeOfSupply": "08",
+        "outletTaxRateBp": 500,
         "lines": [
           {
             "orderItemId": "01a1391a-8610-77ee-88e4-42f1ccc63bb8",

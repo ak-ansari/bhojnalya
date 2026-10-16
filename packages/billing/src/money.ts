@@ -19,12 +19,19 @@ export function roundHalfUp(numerator: bigint, denominator: bigint): bigint {
  * Splits `total` across `weights` in proportion to each weight, by the
  * largest-remainder method (TRD §6.1 rule 5): each share is first rounded
  * down, then the paise left over go one each to the shares with the largest
- * remainders. Ties go to the earlier weight, so the split is deterministic.
+ * remainders. Equal remainders are ordered by `tieBreak`, which compares two
+ * weights by index; by default the earlier weight goes first. A caller whose
+ * result must not depend on the order of the weights passes a `tieBreak` that
+ * looks at what the weights stand for, not where they sit (ADR 0028).
  *
  * The shares always sum exactly to `total`, and no share exceeds its weight
  * while `total` does not exceed the sum of the weights.
  */
-export function allocateLargestRemainder(total: bigint, weights: readonly bigint[]): bigint[] {
+export function allocateLargestRemainder(
+  total: bigint,
+  weights: readonly bigint[],
+  tieBreak: (a: number, b: number) => number = (a, b) => a - b,
+): bigint[] {
   const sum = weights.reduce((acc, weight) => acc + weight, 0n);
   if (total < 0n || total > sum || weights.some((weight) => weight < 0n)) {
     throw new RangeError(`cannot allocate ${String(total)} over weights summing to ${String(sum)}`);
@@ -35,17 +42,15 @@ export function allocateLargestRemainder(total: bigint, weights: readonly bigint
   const topUps = new Set(
     weights
       .map((weight, index) => ({ index, remainder: (total * weight) % sum }))
-      .sort(byRemainderThenIndex)
+      .sort((a, b) =>
+        a.remainder === b.remainder
+          ? tieBreak(a.index, b.index)
+          : a.remainder > b.remainder
+            ? -1
+            : 1,
+      )
       .slice(0, Number(leftover))
       .map(({ index }) => index),
   );
   return floors.map((share, index) => (topUps.has(index) ? share + 1n : share));
-}
-
-function byRemainderThenIndex(
-  a: { index: number; remainder: bigint },
-  b: { index: number; remainder: bigint },
-): number {
-  if (a.remainder !== b.remainder) return a.remainder > b.remainder ? -1 : 1;
-  return a.index - b.index;
 }

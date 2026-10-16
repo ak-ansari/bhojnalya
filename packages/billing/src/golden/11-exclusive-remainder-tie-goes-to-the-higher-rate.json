@@ -1,0 +1,81 @@
+{
+  "description": "Tax Invoice, exclusive prices, two 8.30 lines at 5% and 18% and 0.01 off: the remainders tie, and the paisa goes to the higher rate, whichever line is listed first",
+  "working": [
+    "Subtotal 8.30 + 8.30 = 16.60; discount 0.01",
+    "Shares 0.01 x 830/1660 = 0.005 each -> floors 0 + 0, one paisa left, remainders equal",
+    "Tie: the higher rate takes it, so the 18% line gets 0.01 and the 5% line 0.00",
+    "Coffee 8.30 at 5%: tax 0.415 -> 0.42 (0.21/0.21); total 8.72",
+    "Brownie 8.29 at 18%: tax 1.4922 -> 1.49 (CGST round(0.745) = 0.75, SGST 0.74); total 9.78",
+    "Taxable 16.59, tax 1.91 (CGST 0.96, SGST 0.95): 18.50 -> 19.00, round-off +0.50"
+  ],
+  "input": {
+    "taxMode": "regular",
+    "priceMode": "exclusive",
+    "outletTaxRateBp": 500,
+    "lines": [
+      {
+        "orderItemId": "01a1391a-8610-77ee-88e4-42f1ccc63bb8",
+        "name": "coffee",
+        "unitPrice": "830",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 500
+      },
+      {
+        "orderItemId": "01a1391a-89f8-7362-84a3-0c741bbc199b",
+        "name": "brownie",
+        "unitPrice": "830",
+        "modifiers": [],
+        "quantity": 1,
+        "taxRateBp": 1800
+      }
+    ],
+    "discount": {
+      "kind": "flat",
+      "amount": "1"
+    },
+    "serviceCharge": null
+  },
+  "expected": {
+    "documentTitle": "Tax Invoice",
+    "compositionDeclaration": false,
+    "lines": [
+      {
+        "gross": "830",
+        "taxableBeforeDiscount": "830",
+        "discount": "0",
+        "taxable": "830",
+        "taxRateBp": 500,
+        "tax": "42",
+        "cgst": "21",
+        "sgst": "21",
+        "total": "872"
+      },
+      {
+        "gross": "830",
+        "taxableBeforeDiscount": "830",
+        "discount": "1",
+        "taxable": "829",
+        "taxRateBp": 1800,
+        "tax": "149",
+        "cgst": "75",
+        "sgst": "74",
+        "total": "978"
+      }
+    ],
+    "subtotal": "1660",
+    "discount": "1",
+    "discountCapped": false,
+    "taxableValue": "1659",
+    "serviceCharge": null,
+    "taxSummary": [
+      { "taxRateBp": 500, "taxable": "830", "tax": "42", "cgst": "21", "sgst": "21" },
+      { "taxRateBp": 1800, "taxable": "829", "tax": "149", "cgst": "75", "sgst": "74" }
+    ],
+    "tax": "191",
+    "cgst": "96",
+    "sgst": "95",
+    "roundOff": "50",
+    "grandTotal": "1900"
+  }
+}

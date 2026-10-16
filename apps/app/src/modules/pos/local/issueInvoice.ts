@@ -96,6 +96,7 @@ export function issueInvoice(
       taxMode: bill.taxMode,
       priceMode: bill.priceMode,
       placeOfSupply: bill.placeOfSupply,
+      outletTaxRateBp: bill.outletTaxRateBp,
       lines,
       discount: bill.discount,
       serviceCharge: bill.serviceCharge,

@@ -12,6 +12,8 @@ import unregisteredInclusive from './golden/06-unregistered-inclusive.json' with
 import inclusivePaiseBoundaries from './golden/07-inclusive-paise-boundaries.json' with { type: 'json' };
 import exclusiveFullDiscount from './golden/08-exclusive-full-discount.json' with { type: 'json' };
 import syncPushFixtureInvoice from './golden/09-sync-push-fixture-invoice.json' with { type: 'json' };
+import inclusiveCompCapped from './golden/10-inclusive-comp-capped-at-taxable-value.json' with { type: 'json' };
+import remainderTieHigherRate from './golden/11-exclusive-remainder-tie-goes-to-the-higher-rate.json' with { type: 'json' };
 import type { InvoiceInput } from './totals.js';
 import { computeInvoice } from './totals.js';
 
@@ -25,6 +27,8 @@ const goldens = {
   '07 inclusive, paise boundaries': inclusivePaiseBoundaries,
   '08 exclusive, 100% discount': exclusiveFullDiscount,
   '09 the sync contract fixture invoice': syncPushFixtureInvoice,
+  '10 inclusive, a comp capped at the taxable value': inclusiveCompCapped,
+  '11 exclusive, a remainder tie goes to the higher rate': remainderTieHigherRate,
 };
 
 describe('computeInvoice golden files', () => {
@@ -32,6 +36,20 @@ describe('computeInvoice golden files', () => {
     const input = paise(golden.input) as InvoiceInput;
     expect(computeInvoice(input)).toEqual(paise(golden.expected));
   });
+
+  // The server may hold the lines in another order than the till did; the
+  // bill must not change with it (ADR 0028).
+  it.each(Object.entries(goldens))(
+    '%s gives the same invoice with its lines listed in reverse',
+    (_name, golden) => {
+      const input = paise(golden.input) as InvoiceInput;
+      const expected = paise(golden.expected) as { lines: unknown[] };
+      expect(computeInvoice({ ...input, lines: [...input.lines].reverse() })).toEqual({
+        ...expected,
+        lines: [...expected.lines].reverse(),
+      });
+    },
+  );
 });
 
 /** Golden files hold paise as integer strings (JSON has no bigint); turn them back. */

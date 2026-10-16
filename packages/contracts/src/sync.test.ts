@@ -49,6 +49,7 @@ describe('SyncPushRequest', () => {
     expect(invoice.entityId).toBe(INVOICE);
     expect(invoice.payload.invoiceNo).toBe('BL0A/2627/000042');
     expect(invoice.payload.lines[0]?.unitPrice).toBe(4000n);
+    expect(invoice.payload.outletTaxRateBp).toBe(500);
     expect(invoice.payload.totals).toEqual({
       taxableValue: 19048n,
       cgst: 477n,
@@ -149,6 +150,16 @@ describe('SyncOp', () => {
       payload: { ...fixtureInvoice.payload, invoiceNo: 'BL0A/2627/0000042' },
     };
     expect(SyncOp.safeParse(long).success).toBe(false);
+  });
+
+  it('refuses an invoice without the outlet tax rate it was billed at', () => {
+    const fixtureInvoice = fixture.ops[2];
+    if (!fixtureInvoice) throw new Error('fixture has an invoice op');
+    const withoutRate: Record<string, unknown> = { ...fixtureInvoice.payload };
+    delete withoutRate.outletTaxRateBp;
+    expect(SyncOp.safeParse({ ...fixtureInvoice, payload: withoutRate }).success).toBe(false);
+    const fractional = { ...fixtureInvoice.payload, outletTaxRateBp: 500.5 };
+    expect(SyncOp.safeParse({ ...fixtureInvoice, payload: fractional }).success).toBe(false);
   });
 
   it('refuses a time that is not UTC', () => {

@@ -53,6 +53,17 @@ describe('allocateLargestRemainder', () => {
     expect(allocateLargestRemainder(2n, [100n, 100n, 100n])).toEqual([1n, 1n, 0n]);
   });
 
+  it('orders a tie in remainders by the tie-break it is given, not by position', () => {
+    const lastFirst = (a: number, b: number) => b - a;
+    expect(allocateLargestRemainder(1n, [100n, 100n, 100n], lastFirst)).toEqual([0n, 0n, 1n]);
+    // Unequal remainders still go largest first, whatever the tie-break says.
+    expect(allocateLargestRemainder(2500n, [9000n, 14900n, 4500n], lastFirst)).toEqual([
+      792n,
+      1312n,
+      396n,
+    ]);
+  });
+
   it('gives nothing to a zero weight, and allocates zero over zero weights', () => {
     expect(allocateLargestRemainder(10n, [0n, 30n, 0n])).toEqual([0n, 10n, 0n]);
     expect(allocateLargestRemainder(0n, [0n, 0n])).toEqual([0n, 0n]);

@@ -23,9 +23,12 @@ export class ClockBehindError extends Error {
 
 /**
  * Throws `ClockBehindError` if `now` is earlier than `lastInvoiceAt`. The same
- * instant is allowed. `null` means the device has no invoice yet.
+ * instant is allowed. `null` means the device has no invoice yet. An invalid
+ * `Date` in either place throws a `RangeError`, even on a device with no
+ * invoice: a bill stamped with no time has no financial year.
  */
 export function assertClockNotBehind(now: Date, lastInvoiceAt: Date | null): void {
+  const nowMs = instantMs(now);
   if (lastInvoiceAt === null) return;
-  if (instantMs(now) < instantMs(lastInvoiceAt)) throw new ClockBehindError(now, lastInvoiceAt);
+  if (nowMs < instantMs(lastInvoiceAt)) throw new ClockBehindError(now, lastInvoiceAt);
 }

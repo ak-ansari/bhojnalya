@@ -1,12 +1,14 @@
 // Invoice totals: line tax, order discount, service charge and round-off
-// (TRD §6.1 rules 1–9, ADR 0003, ADR 0004, ADR 0017).
+// (TRD §6.1 rules 1–9, ADR 0003, ADR 0004, ADR 0017, ADR 0028).
 //
 // `computeInvoice` is pure and deterministic: no I/O, no clock, no floats.
 // The POS runs it to print the bill offline, and the server re-runs it on the
 // same input to compare. Amounts are integer paise (`bigint`); rates are
 // integer basis points (5% = 500) and quantities whole units, as in the sync
 // contract, so a synced invoice's lines can be passed straight in. A rate or
-// quantity that is not an integer is refused, never rounded.
+// quantity that is not an integer is refused, never rounded. The order of the
+// lines never changes an amount: the server may hold them in another order
+// than the till did (ADR 0028).
 
 import { allocateLargestRemainder, roundHalfUp } from './money.js';
 
@@ -21,7 +23,10 @@ export interface InvoiceInput {
   readonly priceMode: PriceMode;
   /** The outlet's default GST rate in basis points (TRD §6.1 rule 9); a taxed service charge follows it. */
   readonly outletTaxRateBp: number;
-  /** At least one line, as snapshotted on the order. Totals come back in the same order. */
+  /**
+   * At least one line, as snapshotted on the order. Totals come back in the
+   * same order, and are the same amounts whatever that order is.
+   */
   readonly lines: readonly LineInput[];
   /** Order-level discount (PRD P5), or `null` for none. */
   readonly discount: DiscountInput | null;
@@ -30,6 +35,12 @@ export interface InvoiceInput {
 }
 
 export interface LineInput {
+  /**
+   * The order item this line bills. Optional; when given, it settles which of
+   * two otherwise identical lines takes a leftover discount paisa, so each
+   * line's result, not just the totals, is independent of line order.
+   */
+  readonly orderItemId?: string;
   /** Menu price of one unit in paise: GST-inclusive when `priceMode` is `inclusive`. */
   readonly unitPrice: bigint;
   /** Each chosen modifier's price delta per unit, in paise. May be negative. */
@@ -63,6 +74,12 @@ export interface InvoiceTotals {
   readonly subtotal: bigint;
   /** The order discount, equal to Σ line discount. */
   readonly discount: bigint;
+  /**
+   * True when a flat discount asked for more than the subtotal and was cut to
+   * it (ADR 0028), so the till can tell the cashier the bill is ₹0.00 rather
+   * than the amount they keyed in.
+   */
+  readonly discountCapped: boolean;
   /** Σ line taxable value after discount: subtotal − discount. */
   readonly taxableValue: bigint;
   readonly serviceCharge: ServiceChargeTotals | null;
@@ -118,8 +135,10 @@ const BP = 10_000n;
 
 /**
  * Computes every amount on an invoice from its input. Throws a `RangeError`
- * on input no bill can have (no lines, a negative price, a fractional
- * quantity, a discount larger than the subtotal); it never clamps or guesses.
+ * on input no bill can have (no lines, a negative price, a fractional or
+ * unsafe quantity, a negative discount); it never clamps or guesses. The one
+ * exception is a flat discount above the subtotal, which is cut to the
+ * subtotal and reported as `discountCapped` (ADR 0028).
  */
 export function computeInvoice(input: InvoiceInput): InvoiceTotals {
   validate(input);
@@ -127,10 +146,11 @@ export function computeInvoice(input: InvoiceInput): InvoiceTotals {
 
   const priced = input.lines.map((line) => priceLine(line, input.priceMode, charged));
   const subtotal = sum(priced.map((line) => line.taxableBeforeDiscount));
-  const discount = discountAmount(input.discount, subtotal);
+  const { discount, discountCapped } = discountAmount(input.discount, subtotal);
   const shares = allocateLargestRemainder(
     discount,
     priced.map((line) => line.taxableBeforeDiscount),
+    (a, b) => byLine(priced[a] as PricedLine, priced[b] as PricedLine),
   );
   // One share per weight, in order, so every index is present.
   const lines = priced.map((line, index) =>
@@ -158,6 +178,7 @@ export function computeInvoice(input: InvoiceInput): InvoiceTotals {
     lines,
     subtotal,
     discount,
+    discountCapped,
     taxableValue,
     serviceCharge,
     taxSummary: charged ? summarise(taxed) : [],
@@ -173,6 +194,12 @@ function validate(input: InvoiceInput): void {
   if (input.lines.length === 0) throw new RangeError('an invoice needs at least one line');
   requireRate('outlet tax rate', input.outletTaxRateBp);
   input.lines.forEach((line, index) => {
+    // Above 2^53 a quantity is no longer the whole number that was typed.
+    if (!Number.isSafeInteger(line.quantity)) {
+      throw new RangeError(
+        `line ${String(index)} quantity ${String(line.quantity)} is not a safe integer`,
+      );
+    }
     requireRange(`line ${String(index)} quantity`, BigInt(line.quantity), 1n, null);
     requireRange(`line ${String(index)} unit price with modifiers`, unitPrice(line), 0n, null);
     requireRate(`line ${String(index)} tax rate`, line.taxRateBp);
@@ -202,6 +229,7 @@ interface PricedLine {
   readonly gross: bigint;
   readonly taxableBeforeDiscount: bigint;
   readonly taxRateBp: number;
+  readonly orderItemId: string | undefined;
 }
 
 /**
@@ -214,18 +242,42 @@ function priceLine(line: LineInput, priceMode: PriceMode, charged: boolean): Pri
   const taxRateBp = charged ? line.taxRateBp : 0;
   const taxableBeforeDiscount =
     priceMode === 'inclusive' ? roundHalfUp(gross * BP, BP + BigInt(taxRateBp)) : gross;
-  return { gross, taxableBeforeDiscount, taxRateBp };
+  return { gross, taxableBeforeDiscount, taxRateBp, orderItemId: line.orderItemId };
 }
 
-/** TRD §6.1 rule 5: a flat amount, or a percentage of the subtotal rounded once. */
-function discountAmount(discount: DiscountInput | null, subtotal: bigint): bigint {
-  if (discount === null) return 0n;
-  const amount =
-    discount.kind === 'flat'
-      ? discount.amount
-      : roundHalfUp(subtotal * BigInt(discount.rateBp), BP);
-  requireRange('discount', amount, 0n, subtotal);
-  return amount;
+/**
+ * ADR 0028: which of two lines with equal remainders takes a leftover
+ * discount paisa, decided by the lines themselves and never by their
+ * position. Higher rate first, then larger taxable value, then larger menu
+ * amount, then lower order item id. Lines equal on all four come out the
+ * same whichever gets the paisa, so the totals cannot depend on order.
+ */
+function byLine(a: PricedLine, b: PricedLine): number {
+  if (a.taxRateBp !== b.taxRateBp) return b.taxRateBp - a.taxRateBp;
+  if (a.taxableBeforeDiscount !== b.taxableBeforeDiscount) {
+    return a.taxableBeforeDiscount > b.taxableBeforeDiscount ? -1 : 1;
+  }
+  if (a.gross !== b.gross) return a.gross > b.gross ? -1 : 1;
+  const [x, y] = [a.orderItemId ?? '', b.orderItemId ?? ''];
+  return x < y ? -1 : x > y ? 1 : 0;
+}
+
+/**
+ * TRD §6.1 rule 5: a flat amount, or a percentage of the subtotal rounded
+ * once. ADR 0028: a flat amount above the subtotal (a comp keyed in at the
+ * menu price of an inclusive item) is cut to the subtotal and reported.
+ */
+function discountAmount(
+  discount: DiscountInput | null,
+  subtotal: bigint,
+): { discount: bigint; discountCapped: boolean } {
+  if (discount === null) return { discount: 0n, discountCapped: false };
+  if (discount.kind === 'percent') {
+    return { discount: roundHalfUp(subtotal * BigInt(discount.rateBp), BP), discountCapped: false };
+  }
+  requireRange('discount', discount.amount, 0n, null);
+  const discountCapped = discount.amount > subtotal;
+  return { discount: discountCapped ? subtotal : discount.amount, discountCapped };
 }
 
 /**
@@ -240,7 +292,17 @@ function taxLine(line: PricedLine, discount: bigint, priceMode: PriceMode): Line
     priceMode === 'inclusive' && discount === 0n
       ? line.gross - taxable
       : roundHalfUp(taxable * BigInt(line.taxRateBp), BP);
-  return { ...line, discount, taxable, tax, ...split(tax), total: taxable + tax };
+  const { gross, taxableBeforeDiscount, taxRateBp } = line;
+  return {
+    gross,
+    taxableBeforeDiscount,
+    discount,
+    taxable,
+    taxRateBp,
+    tax,
+    ...split(tax),
+    total: taxable + tax,
+  };
 }
 
 /** TRD §6.1 rule 4: CGST = round_half_up(tax / 2), SGST = tax − CGST. */

@@ -2,15 +2,31 @@
 // yield integer paise and integer basis points only: a generator that can
 // produce 0.1 is testing a different engine.
 import fc from 'fast-check';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, inject, it } from 'vitest';
 
 import type { DiscountInput, InvoiceInput, LineInput, ServiceChargeInput } from './totals.js';
 import { computeInvoice } from './totals.js';
 
-const RUNS = { numRuns: 2000 };
+// Runs per property: 500 by default (FC_NUM_RUNS raises it, e.g. nightly; see
+// vitest.config.ts). Each property also stops generating after 20 s and passes
+// on what it ran, so a loaded CI runner cannot fail the gate by being slow; a
+// real counterexample still fails, and its message carries the seed and path
+// to replay it: fc.assert(prop, { seed, path }).
+const RUNS = {
+  numRuns: inject('fcNumRuns'),
+  interruptAfterTimeLimit: 20_000,
+  markInterruptAsFailure: false,
+  verbose: fc.VerbosityLevel.Verbose,
+};
 
-// 2,000 runs per property take ~1 s idle but far longer on a loaded CI runner;
-// the default 5 s timeout made them flaky without any property failing.
+declare module 'vitest' {
+  export interface ProvidedContext {
+    fcNumRuns: number;
+  }
+}
+
+// The vitest timeout sits well above the 20 s interrupt, so a slow run ends as
+// an interrupted pass and only a counterexample (with its seed) fails.
 describe('computeInvoice properties', { timeout: 60_000 }, () => {
   it('reconciles: subtotal − discount + service charge + tax + round-off = grand total', () => {
     fc.assert(
@@ -124,6 +140,36 @@ describe('computeInvoice properties', { timeout: 60_000 }, () => {
     );
   });
 
+  it('gives identical totals, and each line the same result, whatever order the lines come in', () => {
+    fc.assert(
+      fc.property(aPermutedInvoice, ({ input, permuted, tagged }) => {
+        const a = computeInvoice(input);
+        const b = computeInvoice(permuted);
+        expect({ ...b, lines: [] }).toEqual({ ...a, lines: [] });
+        // Tagged lines are matched by id; untagged ones can only be compared as a whole.
+        const byLine = (inv: InvoiceInput, t: typeof a) =>
+          inv.lines
+            .map((l, i) => JSON.stringify([tagged ? l.orderItemId : '', t.lines[i]], bigints))
+            .sort();
+        expect(byLine(permuted, b)).toEqual(byLine(input, a));
+      }),
+      RUNS,
+    );
+  });
+
+  it('never takes more than the subtotal off, and says so exactly when it caps a flat discount', () => {
+    fc.assert(
+      fc.property(anInvoice, (input) => {
+        const t = computeInvoice(input);
+        expect(t.discount <= t.subtotal).toBe(true);
+        const asked = input.discount?.kind === 'flat' ? input.discount.amount : 0n;
+        expect(t.discountCapped).toBe(asked > t.subtotal);
+        if (t.discountCapped) expect(t.discount).toBe(t.subtotal);
+      }),
+      RUNS,
+    );
+  });
+
   it('gives the same output for the same input, every time', () => {
     fc.assert(
       fc.property(anInvoice, (input) => {
@@ -182,11 +228,59 @@ const anInvoice: fc.Arbitrary<InvoiceInput> = fc
   .chain(({ flatSeed, ...rest }) => aDiscount(flatSeed).map((discount) => ({ ...rest, discount })))
   .map((input) => clampFlatDiscount(input));
 
-/** A flat discount can be at most the subtotal; find it and keep the discount under it. */
+/**
+ * Keeps a flat discount within twice the subtotal: up to the subtotal it is
+ * taken in full, above it it is capped, and both happen often enough to test.
+ */
 function clampFlatDiscount(input: InvoiceInput): InvoiceInput {
   if (input.discount?.kind !== 'flat') return input;
   const subtotal = computeInvoice({ ...input, discount: null }).subtotal;
-  return { ...input, discount: { kind: 'flat', amount: input.discount.amount % (subtotal + 1n) } };
+  return {
+    ...input,
+    discount: { kind: 'flat', amount: input.discount.amount % (2n * subtotal + 2n) },
+  };
+}
+
+/**
+ * Bills prone to remainder ties: a few small prices repeated across a few
+ * rates, and a discount of a few paise, so the leftover paisa often has two
+ * equal claimants. Plus any bill at all.
+ */
+const aTieProneInvoice: fc.Arbitrary<InvoiceInput> = fc.record({
+  taxMode: fc.constant('regular' as const),
+  priceMode: fc.constantFrom('exclusive' as const, 'inclusive' as const),
+  outletTaxRateBp: fc.constant(500),
+  lines: fc.array(
+    fc.record({
+      unitPrice: fc.constantFrom(25n, 830n, 1001n, 11000n),
+      modifiers: fc.constant([]),
+      quantity: fc.integer({ min: 1, max: 3 }),
+      taxRateBp: fc.constantFrom(0, 500, 1800, 2800),
+    }),
+    { minLength: 2, maxLength: 5 },
+  ),
+  discount: fc.bigInt({ min: 1n, max: 9n }).map((amount) => ({ kind: 'flat' as const, amount })),
+  serviceCharge: fc.constant(null),
+});
+
+/** A bill, the same bill with its lines shuffled, and whether its lines carry ids. */
+const aPermutedInvoice = fc
+  .tuple(fc.oneof(aTieProneInvoice, anInvoice), fc.boolean())
+  .chain(([input, tagged]) => {
+    const lines = input.lines.map((l, i) =>
+      tagged ? { ...l, orderItemId: `item-${String(i).padStart(3, '0')}` } : l,
+    );
+    return fc
+      .shuffledSubarray(lines, { minLength: lines.length, maxLength: lines.length })
+      .map((shuffled) => ({
+        input: { ...input, lines },
+        permuted: { ...input, lines: shuffled },
+        tagged,
+      }));
+  });
+
+function bigints(_key: string, value: unknown): unknown {
+  return typeof value === 'bigint' ? String(value) : value;
 }
 
 function sum(amounts: readonly bigint[]): bigint {

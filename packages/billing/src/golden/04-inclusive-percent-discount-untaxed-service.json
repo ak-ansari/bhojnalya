@@ -85,6 +85,7 @@
     ],
     "subtotal": "49028",
     "discount": "4903",
+    "discountCapped": false,
     "taxableValue": "44125",
     "serviceCharge": {
       "rateBp": 500,

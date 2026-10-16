@@ -29,6 +29,7 @@ the work.
 | 6 | 19 KOT+KDS, 22 reports |
 | 7 | 20 QR ordering, 21 aggregators |
 | QA 1 | 27 billing (now), 25 db + 26 api + 29 admin (after 13), 28 POS shell (after 16) |
+| QA 2 | 30 POS sync robustness (after 28) |
 
 ## Decisions so far
 

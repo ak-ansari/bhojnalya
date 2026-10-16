@@ -26,3 +26,10 @@ Invariants 2, 6, 7 on the server (TRD §8.3, §7). Load `api-code` and `billing-
 - The device stores and pushes ops in wire form (ADR 0025). The pushed body for the fixture flow equals `packages/contracts/fixtures/sync-push.json` exactly; make the server's contract test parse that same file.
 - A refused op is held on the device until staff retry, so the server **will see holes in a device's `deviceSeq`**. Apply in order without requiring contiguity, and answer **every** op in a batch (acked or rejected).
 - Scope the idempotent skip on `sync_ops.op_id` to the tenant: a cross-tenant duplicate op id must never silently drop another tenant's op (QA round 1).
+
+## Notes from QA round 2
+
+- **Retried refused ops arrive out of `deviceSeq` order.** The device holds refused ops (ADR 0025) and pushes the rest; on retry, seqs 1–2 arrive after 5 was applied. Decide in an ADR: the server accepts late lower seqs (ops are idempotent; `order.upsert` is last-writer-wins on `updatedAt`, invoices and payments never conflict). Recommended, so the device never re-sequences.
+- **Concurrent duplicates:** two tabs can push the same `op_id` at once. Inserting a duplicate concurrently must answer `acked`, never 5xx (`INSERT ... ON CONFLICT (tenant_id, op_id) DO NOTHING` then read back).
+- Answer **every** op in a batch, with `reason` always a contract `ErrorCode`.
+- Pull (`GET /sync/pull?cursor=`) and its cursor are still unbuilt on the device. Build the server side here; the device side goes with ticket 18.

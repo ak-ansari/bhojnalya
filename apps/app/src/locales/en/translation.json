@@ -2,6 +2,11 @@
   "common": {
     "brand": "Bhojnalya",
     "loading": "Loading…",
+    "routeError": {
+      "title": "This screen didn't load.",
+      "body": "Nothing saved on this tablet was lost. Check the internet, then reload.",
+      "reload": "Reload"
+    },
     "offline": {
       "title": "You're offline."
     }

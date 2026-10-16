@@ -5,6 +5,8 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import { kdsBundleGuard } from './src/bundle/kdsBundleGuard';
+
 // The API (REST + Socket.io) in local dev; production serves both behind Caddy on one origin.
 const DEV_API_ORIGIN = 'http://localhost:3000';
 
@@ -12,6 +14,8 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    // The KDS never opens the till's database, so it must never download Dexie.
+    kdsBundleGuard(),
     VitePWA({
       // ADR 0022: a new version waits for the next launch, never reloads a till mid-bill.
       registerType: 'prompt',

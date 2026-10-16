@@ -15,8 +15,11 @@ export interface AppProvidersProps {
   queryClient: QueryClient;
   i18n: i18n;
   deviceStore: DeviceStore;
-  /** The till's local database; opened lazily, so a kitchen display never touches it. */
-  localDb: PosDb;
+  /**
+   * A local database for the POS screens to use instead of the device's own (tests).
+   * The app passes none: the POS route tree opens it, so a kitchen display never loads Dexie.
+   */
+  localDb?: PosDb;
   connectSocket: (() => StaffSocket) | null;
   children: ReactNode;
 }
@@ -33,7 +36,7 @@ export function AppProviders({
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={queryClient}>
         <DeviceStoreContext.Provider value={deviceStore}>
-          <LocalDbContext.Provider value={localDb}>
+          <LocalDbContext.Provider value={localDb ?? null}>
             <SocketProvider connect={connectSocket}>{children}</SocketProvider>
           </LocalDbContext.Provider>
         </DeviceStoreContext.Provider>

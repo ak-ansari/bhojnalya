@@ -35,9 +35,30 @@ export function createDeviceStore(
         name: DEVICE_STORAGE_KEY,
         storage: createJSONStorage(() => localStorage),
         partialize: (state) => ({ role: state.role }),
+        // Storage is outside the app's control: anything but a known role is unregistered.
+        // Nothing stored (`undefined`) keeps the role the store was created with.
+        merge: (persisted, current) =>
+          persisted === undefined ? current : { ...current, role: storedRole(persisted) },
       },
     ),
   );
+}
+
+function storedRole(persisted: unknown): DeviceRole | null {
+  if (typeof persisted !== 'object' || persisted === null) return null;
+  const { role } = persisted as { role?: unknown };
+  return isDeviceRole(role) ? role : null;
+}
+
+/**
+ * The contract's `DeviceRole` values, written out so the entry chunk every
+ * device loads does not pull in zod (about 26 KB gz). A unit test holds this
+ * list equal to the schema's.
+ */
+export const DEVICE_ROLES: readonly DeviceRole[] = ['pos', 'kds'];
+
+export function isDeviceRole(value: unknown): value is DeviceRole {
+  return DEVICE_ROLES.includes(value as DeviceRole);
 }
 
 export const DeviceStoreContext = createContext<DeviceStore | null>(null);

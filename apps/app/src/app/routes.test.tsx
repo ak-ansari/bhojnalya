@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 
+import { DEVICE_STORAGE_KEY } from '@/modules/device/store/deviceStore';
 import { renderApp } from '@/testing/renderWithProviders';
 
 describe('app routes', () => {
@@ -52,4 +53,17 @@ describe('app routes', () => {
     expect(await screen.findByText('No open orders yet.')).toBeInTheDocument();
     expect(router.state.location.pathname).toBe('/pos');
   });
+
+  it.each(['/kds', '/pos', '/'])(
+    'sends a device whose stored role is unknown to registration from %s, not a blank screen',
+    async (route) => {
+      localStorage.setItem(DEVICE_STORAGE_KEY, '{"state":{"role":"admin"},"version":0}');
+      const { router } = renderApp({ role: null, route });
+
+      expect(
+        await screen.findByRole('heading', { name: 'Set up this tablet once.' }),
+      ).toBeInTheDocument();
+      expect(router.state.location.pathname).toBe('/register');
+    },
+  );
 });

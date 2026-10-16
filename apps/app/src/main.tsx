@@ -1,5 +1,6 @@
 // Entry point: build the app's single instances, register the service worker,
-// render the role-based router.
+// render the role-based router. The till's database is not one of them: the
+// POS route tree opens it (LocalDbScope), so a kitchen display never loads Dexie.
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router';
@@ -10,7 +11,6 @@ import { appRoutes } from './app/routes';
 import './index.css';
 import { createQueryClient } from './libs/api/queryClient';
 import { createI18n } from './libs/i18n/i18n';
-import { PosDb } from './libs/local-db/db';
 import { connectStaffSocket } from './libs/socket/staffSocket';
 import { createDeviceStore } from './modules/device/store/deviceStore';
 
@@ -27,7 +27,6 @@ createRoot(rootElement).render(
       queryClient={createQueryClient()}
       i18n={createI18n()}
       deviceStore={createDeviceStore()}
-      localDb={new PosDb()}
       connectSocket={connectStaffSocket}
     >
       <RouterProvider router={router} />

@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
 import { RoleOption } from '../components/RoleOption';
-import { useDeviceStore } from '../store/deviceStore';
-
-const ROLES: readonly DeviceRole[] = ['pos', 'kds'];
+import { DEVICE_ROLES, useDeviceStore } from '../store/deviceStore';
 
 export function DeviceRegistrationPage() {
   const { t } = useTranslation();
@@ -34,7 +32,7 @@ export function DeviceRegistrationPage() {
         </div>
         <fieldset className="flex flex-col gap-3">
           <legend className="mb-3 text-body font-semibold">{t('device.register.question')}</legend>
-          {ROLES.map((role) => (
+          {DEVICE_ROLES.map((role) => (
             <RoleOption
               key={role}
               name={t(`device.register.${role}.name`)}

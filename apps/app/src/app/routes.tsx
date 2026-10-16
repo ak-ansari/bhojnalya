@@ -4,62 +4,70 @@ import { Navigate, type RouteObject } from 'react-router';
 
 import { ROUTES, roleHome } from './paths';
 import { RequireRole } from './RequireRole';
+import { RouteError } from './RouteError';
 import { RouteFallback } from './RouteFallback';
 
 import { DeviceRegistrationPage } from '@/modules/device/pages/DeviceRegistrationPage';
 import { useDeviceStore } from '@/modules/device/store/deviceStore';
 
 export const appRoutes: RouteObject[] = [
-  { path: '/', element: <HomeRedirect /> },
-  { path: ROUTES.REGISTER, element: <DeviceRegistrationPage /> },
-  {
-    path: ROUTES.POS,
-    element: <RequireRole role="pos" />,
-    hydrateFallbackElement: <RouteFallback />,
-    children: [
-      {
-        lazy: async () => ({
-          Component: (await import('@/modules/pos/components/PosLayout')).PosLayout,
-        }),
-        children: [
-          {
-            index: true,
-            lazy: async () => ({
-              Component: (await import('@/modules/pos/pages/PosHomePage')).PosHomePage,
-            }),
-          },
-          {
-            path: 'device',
-            lazy: async () => ({
-              Component: (await import('@/modules/pos/pages/PosDevicePage')).PosDevicePage,
-            }),
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: ROUTES.KDS,
-    element: <RequireRole role="kds" />,
-    hydrateFallbackElement: <RouteFallback />,
-    children: [
-      {
-        lazy: async () => ({
-          Component: (await import('@/modules/kds/components/KdsLayout')).KdsLayout,
-        }),
-        children: [
-          {
-            index: true,
-            lazy: async () => ({
-              Component: (await import('@/modules/kds/pages/KdsHomePage')).KdsHomePage,
-            }),
-          },
-        ],
-      },
-    ],
-  },
-  { path: '*', element: <Navigate to="/" replace /> },
+  // One boundary for every screen: a chunk that fails to load gets a reload, never the raw error.
+  { errorElement: <RouteError />, children: roleRoutes() },
 ];
+
+function roleRoutes(): RouteObject[] {
+  return [
+    { path: '/', element: <HomeRedirect /> },
+    { path: ROUTES.REGISTER, element: <DeviceRegistrationPage /> },
+    {
+      path: ROUTES.POS,
+      element: <RequireRole role="pos" />,
+      hydrateFallbackElement: <RouteFallback />,
+      children: [
+        {
+          lazy: async () => ({
+            Component: (await import('@/modules/pos/components/PosLayout')).PosLayout,
+          }),
+          children: [
+            {
+              index: true,
+              lazy: async () => ({
+                Component: (await import('@/modules/pos/pages/PosHomePage')).PosHomePage,
+              }),
+            },
+            {
+              path: 'device',
+              lazy: async () => ({
+                Component: (await import('@/modules/pos/pages/PosDevicePage')).PosDevicePage,
+              }),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      path: ROUTES.KDS,
+      element: <RequireRole role="kds" />,
+      hydrateFallbackElement: <RouteFallback />,
+      children: [
+        {
+          lazy: async () => ({
+            Component: (await import('@/modules/kds/components/KdsLayout')).KdsLayout,
+          }),
+          children: [
+            {
+              index: true,
+              lazy: async () => ({
+                Component: (await import('@/modules/kds/pages/KdsHomePage')).KdsHomePage,
+              }),
+            },
+          ],
+        },
+      ],
+    },
+    { path: '*', element: <Navigate to="/" replace /> },
+  ];
+}
 
 /** `/` sends a registered device to its role's screens, anything else to registration. */
 function HomeRedirect() {

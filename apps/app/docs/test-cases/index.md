@@ -21,3 +21,8 @@ Write one with the `test-case` skill.
 - [0204 Every till change reaches the server in order, and leaves the device only when acknowledged](./0204-every-till-change-reaches-the-server-in-order-and-leaves-the-device-only-when-acknowledged.md)
 - [0205 A till with unsynced changes cannot be cleared, and always says how many](./0205-a-till-with-unsynced-changes-cannot-be-cleared-and-always-says-how-many.md)
 - [0206 The till asks to keep its storage and warns when bills could be evicted](./0206-the-till-asks-to-keep-its-storage-and-warns-when-bills-could-be-evicted.md)
+
+## Shell robustness and download size
+
+- [0301 A screen that fails to load offers a reload and loses nothing saved on the device](./0301-a-screen-that-fails-to-load-offers-a-reload-and-loses-nothing-saved-on-the-device.md)
+- [0302 A kitchen display never downloads the till's local database](./0302-a-kitchen-display-never-downloads-the-tills-local-database.md)

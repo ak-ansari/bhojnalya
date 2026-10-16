@@ -90,6 +90,7 @@ services:
       PORT: 3000
       LOG_LEVEL: ${API_LOG_LEVEL:-info}
       DATABASE_URL: postgres://app_user:${APP_USER_PASSWORD}@postgres:5432/${DB_NAME:-bhojnalya}
+      AUTH_TOKEN_SECRET: ${AUTH_TOKEN_SECRET:?set AUTH_TOKEN_SECRET in infra/.env}
     healthcheck:
       test:
         - CMD

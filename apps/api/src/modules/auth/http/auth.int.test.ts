@@ -16,6 +16,17 @@ import type { OwnerFixture } from '../../../testing/auth-fixtures.js';
 import { agentFor, createTenant, createTestApp } from '../../../testing/test-app.js';
 import type { TenantFixture } from '../../../testing/test-app.js';
 
+/** The fields these tests read from login and probe responses. */
+interface Body {
+  accessToken: string;
+  outletIds: string;
+}
+
+/** Supertest types every body as `any`; the assertions still check the shape. */
+function bodyOf(res: { body: unknown }): Body {
+  return res.body as Body;
+}
+
 let app: INestApplication;
 let logs: Record<string, unknown>[];
 let http: TestAgent;
@@ -66,7 +77,7 @@ describe('POST /auth/login', () => {
         .map((outletId) => ({ outletId, role: 'owner' }))
         .sort((a, b) => a.outletId.localeCompare(b.outletId)),
     });
-    const ctx = await context(res.body.accessToken as string);
+    const ctx = await context(bodyOf(res).accessToken);
     expect(ctx.status).toBe(200);
     expect(ctx.body).toMatchObject({ currentUser: 'app_user', tenantId: tenant.tenantId });
   });
@@ -131,7 +142,7 @@ describe('POST /auth/login', () => {
     const written = JSON.stringify(logs);
     expect(written).not.toContain(owner.password);
     expect(written).not.toContain(token);
-    expect(written).not.toContain(res.body.accessToken as string);
+    expect(written).not.toContain(bodyOf(res).accessToken);
   });
 });
 
@@ -139,29 +150,29 @@ describe('access tokens', () => {
   it('stop working 15 minutes after they are issued', async () => {
     const owner = await createOwner(superuser, tenant);
     clock.set(new Date());
-    const { body } = await login(owner);
+    const body = bodyOf(await login(owner));
     clock.advance(15 * 60 * 1000 - 1000);
-    expect((await context(body.accessToken as string)).status).toBe(200);
+    expect((await context(body.accessToken)).status).toBe(200);
     clock.advance(1000);
-    const res = await context(body.accessToken as string);
+    const res = await context(body.accessToken);
     expect(res.status).toBe(401);
     expect(res.body).toMatchObject({ code: 'UNAUTHENTICATED' });
   });
 
   it('stop working on the next request once the account is disabled', async () => {
     const owner = await createOwner(superuser, tenant);
-    const { body } = await login(owner);
+    const body = bodyOf(await login(owner));
     await superuser.query("UPDATE users SET status = 'disabled' WHERE id = $1", [owner.userId]);
-    expect((await context(body.accessToken as string)).status).toBe(401);
+    expect((await context(body.accessToken)).status).toBe(401);
   });
 
   it("reach only the outlet named in X-Outlet-Id, and refuse one that is not the user's", async () => {
     const owner = await createOwner(superuser, tenant);
     const other = await createTenant(superuser);
-    const { body } = await login(owner);
-    const token = body.accessToken as string;
+    const body = bodyOf(await login(owner));
+    const token = body.accessToken;
     const both = await context(token);
-    expect((both.body.outletIds as string).split(',').sort()).toEqual([...tenant.outletIds].sort());
+    expect(bodyOf(both).outletIds.split(',').sort()).toEqual([...tenant.outletIds].sort());
     const one = await context(token).set('X-Outlet-Id', tenant.outletIds[1]);
     expect(one.body).toMatchObject({ outletIds: tenant.outletIds[1] });
     const foreign = await context(token).set('X-Outlet-Id', other.outletIds[0]);
@@ -194,7 +205,7 @@ describe('POST /auth/refresh', () => {
     const second = refreshCookieFrom(res.headers['set-cookie']);
     expect(second).toBeDefined();
     expect(second).not.toBe(first);
-    expect((await context(res.body.accessToken as string)).status).toBe(200);
+    expect((await context(bodyOf(res).accessToken)).status).toBe(200);
     expect((await refresh(second)).status).toBe(200);
   });
 
